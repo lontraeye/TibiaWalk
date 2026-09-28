@@ -129,6 +129,9 @@ final class MainWindow extends JFrame {
     private final JTextField search = new JTextField();
     private final JToggleButton male = new JToggleButton("♂ Masculino", true);
     private final JToggleButton female = new JToggleButton("♀ Feminino");
+    private final JToggleButton bossOnly = new JToggleButton("★ Só bosses");
+    /** Linha abaixo da categoria: sexo (outfits de player) ou "só bosses" (monstros). */
+    private final JPanel filterRow = new JPanel(new java.awt.CardLayout());
     private final DefaultListModel<Entry> listModel = new DefaultListModel<>();
     private final JList<Entry> list = new JList<>(listModel);
 
@@ -242,7 +245,14 @@ final class MainWindow extends JFrame {
                 return super.getListCellRendererComponent(l, text, index, selected, focus);
             }
         });
-        filter.addActionListener(e -> applyFilter());
+        // Trocar de categoria limpa a busca (como as abas do web); setText já refiltra se havia texto.
+        filter.addActionListener(e -> {
+            if (search.getText().isEmpty()) {
+                applyFilter();
+            } else {
+                search.setText("");
+            }
+        });
         search.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -275,10 +285,14 @@ final class MainWindow extends JFrame {
         JPanel sex = new JPanel(new GridLayout(1, 2, 4, 0));
         sex.add(male);
         sex.add(female);
+        bossOnly.setToolTipText("Mostrar só os bosses");
+        bossOnly.addActionListener(e -> applyFilter());
+        filterRow.add(sex, "sex");
+        filterRow.add(bossOnly, "boss");
 
         JPanel top = new JPanel(new GridLayout(0, 1, 4, 4));
         top.add(filter);
-        top.add(sex);
+        top.add(filterRow);
         top.add(search);
 
         JPanel panel = new JPanel(new BorderLayout(4, 4));
@@ -386,11 +400,12 @@ final class MainWindow extends JFrame {
         male.setEnabled(bySex);
         female.setEnabled(bySex);
         String sex = female.isSelected() ? "female" : "male";
+        ((java.awt.CardLayout) filterRow.getLayout()).show(filterRow, selected == Filter.MONSTERS ? "boss" : "sex");
+        Predicate<Entry> scope = scope(selected, bySex, sex);
 
         listModel.clear();
         entries.stream()
-                .filter(selected.test)
-                .filter(e -> !bySex || e.sex() == null || sex.equals(e.sex())) // sem sexo definido: nos dois
+                .filter(scope)
                 .filter(e -> query.isEmpty()
                         || e.name().toLowerCase(Locale.ROOT).contains(query)
                         || Integer.toString(e.looktype()).equals(query)
@@ -402,7 +417,7 @@ final class MainWindow extends JFrame {
                         : Comparator.comparing(Entry::name, String.CASE_INSENSITIVE_ORDER)
                                 .thenComparingInt(Entry::looktype))
                 .forEach(listModel::addElement);
-        updateListCount(selected, bySex, sex);
+        updateListCount(scope, bySex, sex);
 
         Entry counterpart = previous == null ? null : counterpart(previous);
         if (previous != null && listModel.contains(previous)) {
@@ -417,11 +432,19 @@ final class MainWindow extends JFrame {
         }
     }
 
+    /** Categoria + sexo (players) + "só bosses" (monstros): tudo menos a busca. */
+    private Predicate<Entry> scope(Filter selected, boolean bySex, String sex) {
+        boolean bosses = selected == Filter.MONSTERS && bossOnly.isSelected();
+        return selected.test
+                .and(e -> !bySex || e.sex() == null || sex.equals(e.sex())) // sem sexo definido: nos dois
+                .and(e -> !bosses || e.character().kind() == GameCharacter.Kind.BOSS);
+    }
+
     /** "Mostrando 12 de 142 (feminino)": o que está na lista contra o total da categoria/sexo. */
-    private void updateListCount(Filter selected, boolean bySex, String sex) {
-        long total = entries.stream().filter(selected.test)
-                .filter(e -> !bySex || e.sex() == null || sex.equals(e.sex())).count();
-        String suffix = bySex ? ("female".equals(sex) ? " (feminino)" : " (masculino)") : "";
+    private void updateListCount(Predicate<Entry> scope, boolean bySex, String sex) {
+        long total = entries.stream().filter(scope).count();
+        String suffix = bySex ? ("female".equals(sex) ? " (feminino)" : " (masculino)")
+                : bossOnly.isSelected() && filter.getSelectedItem() == Filter.MONSTERS ? " (bosses)" : "";
         listCount.setText(listModel.size() == total
                 ? total + " itens" + suffix
                 : "Mostrando " + listModel.size() + " de " + total + suffix);
