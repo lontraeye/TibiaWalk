@@ -154,6 +154,10 @@
     $("speed").disabled = !state.walking;
     $("speed-value").textContent = state.frameMs + " ms";
 
+    // Quem não tem versão montada (NPCs, monstros, objetos) nem mostra a caixa da montaria.
+    $("mount-box").hidden = !o.mountable;
+    document.querySelector(".previews").classList.toggle("single", !o.mountable);
+
     var mount = mounts.find(function (m) { return m.looktype === state.mount; });
     $("mount-on").disabled = !o.mountable || !mount;
     $("mount-on").checked = state.mountOn && o.mountable && !!mount;
@@ -278,6 +282,23 @@
       : shown === total ? total + " " + (what || "itens") : "Mostrando " + shown + " de " + total + (what ? " " + what : "");
   }
 
+  /** Tira o brilho de "carregando" da miniatura quando a imagem chega (ou falha). */
+  function watchThumb(img) {
+    var done = function () { img.classList.add("ready"); };
+    img.addEventListener("load", done);
+    img.addEventListener("error", done);
+  }
+
+  /** Mostra o "Gerando sprite…" no quadro enquanto o <tibia-outfit> carrega. */
+  function watchPreview(el, box) {
+    el.addEventListener("tibiawalk-loading", function () {
+      box.querySelector(".loading-text").textContent = "Gerando sprite…";
+      box.classList.add("busy");
+    });
+    el.addEventListener("tibiawalk-load", function () { box.classList.remove("busy"); });
+    el.addEventListener("tibiawalk-error", function () { box.classList.remove("busy"); });
+  }
+
   function renderCharacterTiles(list) {
     var q = $("search").value.trim().toLowerCase();
     var tiles = $("tiles");
@@ -303,6 +324,7 @@
       var img = document.createElement("img");
       img.loading = "lazy";
       img.alt = "";
+      watchThumb(img);
       img.src = TibiaWalk.url({
         looktype: c.looktype, addons: c.addons, head: c.head, body: c.body, legs: c.legs, feet: c.feet,
         idle: true, format: "png"
@@ -355,6 +377,7 @@
       var img = document.createElement("img");
       img.loading = "lazy";
       img.alt = "";
+      watchThumb(img);
       img.src = TibiaWalk.url({ looktype: row.looktype, idle: true, format: "png" });
       var label = document.createElement("span");
       label.textContent = row.name ? row.name + " (" + row.looktype + ")" : "#" + row.looktype;
@@ -419,7 +442,10 @@
       img.loading = "lazy";
       img.alt = "";
       if (id) {
+        watchThumb(img);
         img.src = TibiaWalk.url({ looktype: id, idle: true, format: "png" });
+      } else {
+        img.classList.add("ready"); // "Sem montaria" não tem imagem
       }
       var label = document.createElement("span");
       label.textContent = item.name;
@@ -541,6 +567,8 @@
       copy(new URL(TibiaWalk.url(params("gif")), location.href).href, "Link copiado");
     });
     $("preview").addEventListener("tibiawalk-error", function (e) { toast(e.detail); });
+    watchPreview($("preview"), $("preview-box"));
+    watchPreview($("mount-preview"), $("mount-preview-box"));
   }
 
   function showTabCounts() {
@@ -574,6 +602,7 @@
     render();
     renderTiles();
   }).catch(function (e) {
+    $("preview-box").classList.remove("busy");
     $("outfit-name").textContent = "Erro ao falar com o servidor: " + e.message;
   });
 })();

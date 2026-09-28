@@ -193,6 +193,68 @@ textarea:focus-visible {
   height: 216px;
 }
 
+/* Sem versão montada (NPC, monstro, objeto): a caixa da montaria some e o preview ocupa tudo. */
+.previews.single {
+  grid-template-columns: 1fr;
+}
+
+/* Carregando: só aparece se passar de 150 ms, para não piscar quando a imagem vem do cache. */
+.preview {
+  position: relative;
+}
+
+.loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  background: rgba(14, 12, 9, .55);
+  color: var(--accent);
+  font: 600 13px "Pixelify Sans", Verdana, sans-serif;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .15s, visibility 0s .15s;
+  pointer-events: none;
+}
+
+.preview.busy .loading {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .15s .15s, visibility 0s .15s;
+}
+
+/* Spinner em pixel: 4 quadrados que acendem em sequência, como os do cliente. */
+.spinner {
+  width: 24px;
+  height: 24px;
+  display: block;
+  background:
+    linear-gradient(var(--accent) 0 0) 0 0 / 10px 10px no-repeat,
+    linear-gradient(var(--accent) 0 0) 14px 0 / 10px 10px no-repeat,
+    linear-gradient(var(--accent) 0 0) 14px 14px / 10px 10px no-repeat,
+    linear-gradient(var(--accent) 0 0) 0 14px / 10px 10px no-repeat;
+  animation: spin-steps .8s steps(4) infinite;
+}
+
+@keyframes spin-steps {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  opacity: .9;
+  box-shadow: 0 0 0 2px var(--dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
 .cycle {
   display: flex;
   align-items: center;
@@ -405,6 +467,24 @@ textarea {
   width: 64px;
   height: 64px;
   image-rendering: pixelated;
+}
+
+/* Miniatura ainda chegando: brilho animado no lugar do quadrado vazio. */
+.tile img:not(.ready) {
+  background: linear-gradient(100deg, transparent 30%, rgba(232, 197, 107, .18) 50%, transparent 70%) 0 0 / 200% 100%;
+  animation: shimmer 1.1s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile img:not(.ready) {
+    animation: none;
+  }
 }
 
 .tile span {

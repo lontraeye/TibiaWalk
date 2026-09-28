@@ -10,6 +10,9 @@
  * Atributos: looktype (número ou nome) ou npc / monster (nome), female, addons (0-3), head/body/legs/feet (0-132 ou hex),
  * mount (número ou nome), direction (north/east/south/west), idle, frame-ms, format (gif/png),
  * scale (ampliação na tela) e server (endereço do servidor; padrão: de onde veio este script).
+ *
+ * Enquanto a imagem carrega, o elemento fica com aria-busy="true" e dispara "tibiawalk-loading";
+ * ao terminar, dispara "tibiawalk-load" (ou "tibiawalk-error", com a mensagem em event.detail).
  */
 (function () {
   "use strict";
@@ -55,7 +58,7 @@
         "img{image-rendering:pixelated;image-rendering:crisp-edges}</style>" +
         '<img part="image" alt="">';
       this._img = root.querySelector("img");
-      this._img.addEventListener("load", this._resize.bind(this));
+      this._img.addEventListener("load", this._loaded.bind(this));
       this._img.addEventListener("error", this._error.bind(this));
     }
 
@@ -97,10 +100,19 @@
       var next = url(this._params(), this.getAttribute("server"));
       if (this._img.getAttribute("src") !== next) {
         this._img.style.visibility = "";
+        // Carregando: aria-busy no elemento e evento, para quem usa mostrar um indicador.
+        this.setAttribute("aria-busy", "true");
+        this.dispatchEvent(new CustomEvent("tibiawalk-loading", { bubbles: true }));
         this._img.src = next;
       }
       var name = this.getAttribute("npc") || this.getAttribute("monster") || this.getAttribute("looktype");
       this._img.alt = "Outfit " + name;
+      this._resize();
+    }
+
+    _loaded() {
+      this.removeAttribute("aria-busy");
+      this.dispatchEvent(new CustomEvent("tibiawalk-load", { bubbles: true }));
       this._resize();
     }
 
@@ -114,6 +126,7 @@
 
     _error() {
       var self = this;
+      this.removeAttribute("aria-busy");
       this._img.style.visibility = "hidden"; // sem o ícone de imagem quebrada
       // Busca a mensagem de erro da API para quem estiver ouvindo o evento.
       fetch(this._img.src)

@@ -18,8 +18,9 @@
         <div class="previews">
           <div class="preview-box">
             <div class="preview-label" id="outfit-name">…</div>
-            <div class="preview inset checker">
-              <tibia-outfit id="preview" scale="3" looktype="128"></tibia-outfit>
+            <div class="preview inset checker busy" id="preview-box">
+              <tibia-outfit id="preview" scale="3"></tibia-outfit>
+              <div class="loading" aria-hidden="true"><span class="spinner"></span><span class="loading-text">Carregando dados…</span></div>
             </div>
             <div class="cycle">
               <button class="btn arrow" id="outfit-prev" aria-label="Outfit anterior">◀</button>
@@ -31,10 +32,11 @@
             </div>
           </div>
 
-          <div class="preview-box">
+          <div class="preview-box" id="mount-box">
             <div class="preview-label" id="mount-name">Sem montaria</div>
-            <div class="preview inset checker small">
+            <div class="preview inset checker small" id="mount-preview-box">
               <tibia-outfit id="mount-preview" scale="2" idle></tibia-outfit>
+              <div class="loading" aria-hidden="true"><span class="spinner"></span><span class="loading-text">Gerando sprite…</span></div>
             </div>
             <div class="cycle">
               <button class="btn arrow" id="mount-prev" aria-label="Montaria anterior">◀</button>
