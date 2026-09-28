@@ -4,7 +4,15 @@
 [versions]
 guava = "33.1.0-jre"
 junit-jupiter = "5.10.2"
+protobuf = "3.25.5"
+gradle-protobuf = "0.9.4"
+gson = "2.11.0"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+[plugins]
+protobuf = { id = "com.google.protobuf", version.ref = "gradle-protobuf" }
