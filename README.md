@@ -46,6 +46,39 @@ pergunta. Pode apontar para a pasta de instalação do launcher, não precisa se
 Lista com busca (por nome, alias ou número) e filtro por categoria, preview animado, addons, cores da paleta do jogo
 ou hex livre, montaria, direção, velocidade, botão "Aleatório" e exportação em GIF/PNG.
 
+## Web
+
+```bash
+./gradlew :web:fatJar                       # gera web/build/libs/tibiawalk-web.jar
+java -jar web/build/libs/tibiawalk-web.jar --assets "C:/.../Tibia/packages/Tibia/assets" --port 7070
+```
+
+Abra `http://localhost:7070/` para o outfitter (visual inspirado nas janelas do Tibia). O estado fica na URL,
+então dá para compartilhar o link de um outfit montado.
+
+### Colocar num site
+
+```html
+<script src="http://SEU-SERVIDOR:7070/tibiawalk.js"></script>
+<tibia-outfit looktype="Citizen" female addons="3" head="78" body="69" legs="58" feet="76"
+              mount="Widow Queen" direction="west" scale="2"></tibia-outfit>
+```
+
+Atributos: `looktype` (número ou nome), `female`, `addons`, `head`/`body`/`legs`/`feet` (0–132 ou hex), `mount`
+(número ou nome), `direction`, `idle`, `frame-ms`, `format` (`gif`/`png`), `scale` e `server`.
+Em caso de erro o elemento dispara o evento `tibiawalk-error` com a mensagem em `event.detail`.
+
+### API
+
+| Rota | O quê |
+|---|---|
+| `GET /api/outfit.gif?looktype=…` | GIF animado (mesmos parâmetros do componente; `frameMs` em vez de `frame-ms`) |
+| `GET /api/outfit.png?looktype=…` | PNG parado |
+| `GET /api/looktypes?kind=player\|mount\|creature\|unknown&sex=male\|female&q=…` | lista com nome e capacidades |
+| `GET /api/mounts`, `GET /api/palette`, `GET /api/info` | montarias, as 133 cores, versão dos dados |
+
+As imagens saem com `Cache-Control` de 1 dia e ficam em cache no servidor; CORS liberado para qualquer site.
+
 ## Nomes e categorias
 
 O cliente só sabe *desenhar* cada looktype; ele não diz o que é outfit de player, montaria ou criatura, nem os nomes.
@@ -67,3 +100,4 @@ Looktypes que ainda não estão no Canary continuam renderizando normalmente, s�
 - `core`: leitura do `catalog-content.json`, `appearances.dat` (protobuf) e das folhas `sprites-*.bmp.lzma`; renderização e GIF.
 - `cli`: linha de comando.
 - `desktop`: interface Swing.
+- `web`: servidor HTTP (Javalin), página de outfitter e o componente `<tibia-outfit>`.

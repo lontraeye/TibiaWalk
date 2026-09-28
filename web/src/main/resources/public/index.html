@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TibiaWalk Outfitter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <script src="tibiawalk.js"></script>
+</head>
+<body>
+  <main class="layout">
+    <section class="window outfit-window" aria-labelledby="outfit-title">
+      <header class="window-title" id="outfit-title">Selecionar outfit</header>
+      <div class="window-body">
+        <div class="previews">
+          <div class="preview-box">
+            <div class="preview-label" id="outfit-name">…</div>
+            <div class="preview inset checker">
+              <tibia-outfit id="preview" scale="3" looktype="128"></tibia-outfit>
+            </div>
+            <div class="cycle">
+              <button class="btn arrow" id="outfit-prev" aria-label="Outfit anterior">◀</button>
+              <div class="sex" role="group" aria-label="Sexo">
+                <button class="btn toggle" id="sex-male" aria-pressed="true">♂</button>
+                <button class="btn toggle" id="sex-female" aria-pressed="false">♀</button>
+              </div>
+              <button class="btn arrow" id="outfit-next" aria-label="Próximo outfit">▶</button>
+            </div>
+          </div>
+
+          <div class="preview-box">
+            <div class="preview-label" id="mount-name">Sem montaria</div>
+            <div class="preview inset checker small">
+              <tibia-outfit id="mount-preview" scale="2" idle></tibia-outfit>
+            </div>
+            <div class="cycle">
+              <button class="btn arrow" id="mount-prev" aria-label="Montaria anterior">◀</button>
+              <label class="check"><input type="checkbox" id="mount-on"> Montar</label>
+              <button class="btn arrow" id="mount-next" aria-label="Próxima montaria">▶</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="options">
+          <label class="check"><input type="checkbox" id="addon1"> Addon 1</label>
+          <label class="check"><input type="checkbox" id="addon2"> Addon 2</label>
+          <label class="check"><input type="checkbox" id="walking" checked> Andando</label>
+          <span class="rotate">
+            <button class="btn" id="rotate-left" aria-label="Girar à esquerda">⟲</button>
+            <button class="btn" id="rotate-right" aria-label="Girar à direita">⟳</button>
+          </span>
+        </div>
+
+        <div class="colors">
+          <div class="parts" role="tablist" aria-label="Parte do outfit">
+            <button class="btn part" data-part="0" role="tab"><i></i>Cabeça</button>
+            <button class="btn part" data-part="1" role="tab"><i></i>Corpo</button>
+            <button class="btn part" data-part="2" role="tab"><i></i>Pernas</button>
+            <button class="btn part" data-part="3" role="tab"><i></i>Pés</button>
+          </div>
+          <div class="palette inset" id="palette" aria-label="Paleta de cores"></div>
+          <label class="hex">Hex livre <input type="text" id="hex" maxlength="7" placeholder="#ff0000" spellcheck="false"></label>
+        </div>
+
+        <div class="actions">
+          <button class="btn" id="randomize">Aleatório</button>
+          <a class="btn" id="download-gif" download>Baixar GIF</a>
+          <a class="btn" id="download-png" download>Baixar PNG</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="window list-window" aria-labelledby="list-title">
+      <header class="window-title" id="list-title">Coleção</header>
+      <div class="window-body">
+        <div class="tabs" role="tablist">
+          <button class="btn tab" data-tab="outfits" role="tab" aria-selected="true">Outfits</button>
+          <button class="btn tab" data-tab="mounts" role="tab" aria-selected="false">Montarias</button>
+        </div>
+        <input type="search" class="search inset" id="search" placeholder="Buscar…" spellcheck="false">
+        <div class="tiles inset" id="tiles"></div>
+      </div>
+    </section>
+
+    <section class="window embed-window" aria-labelledby="embed-title">
+      <header class="window-title" id="embed-title">Usar no seu site</header>
+      <div class="window-body">
+        <p>Cole no HTML da sua página:</p>
+        <textarea class="code inset" id="embed-code" readonly rows="4" spellcheck="false"></textarea>
+        <div class="actions">
+          <button class="btn" id="copy-embed">Copiar código</button>
+          <button class="btn" id="copy-link">Copiar link do GIF</button>
+          <span class="toast" id="toast" role="status"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Tibia é marca registrada da CipSoft GmbH. Os sprites são lidos do cliente oficial; projeto de fã, sem afiliação.
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
