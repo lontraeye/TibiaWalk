@@ -34,7 +34,9 @@ import java.util.Map;
  *   <li>TibiaWiki: outfits (male_id/female_id) e montarias; costuma ser o mais atualizado;</li>
  *   <li>Canary (outfits.xml, mounts.xml): completa o que faltar e fornece o id interno da montaria;</li>
  *   <li>staticdata do cliente: monstros e bosses;</li>
- *   <li>heurística: looktype sem nome que tem versão montada e cores é outfit de player.</li>
+ *   <li>heurística: looktype sem nome que tem versão montada e cores é outfit de player;</li>
+ *   <li>monstros e NPCs do Canary (um .lua por criatura): nomeia o que o bestiário não cobre;</li>
+ *   <li>metadata-overrides.json: correções manuais.</li>
  * </ol>
  *
  * <p>Args: pastaAssets arquivoSaida [ref do Canary, padrão main]
@@ -72,6 +74,7 @@ public final class MetadataBuilder {
         int canaryMounts = readMounts(download(commit, "mounts.xml"), entries);
         int creatures = readCreatures(client, entries);
         List<Integer> guessed = guessPlayers(client, entries);
+        int[] fromLua = readCanaryCreatures(new CanaryLuaSource(http, CANARY_REPO).creatures(commit), entries);
         int overridden = applyOverrides(overrides, entries);
         guessed.removeIf(lt -> !"heuristic".equals(entries.get(lt).source()));
 
@@ -101,9 +104,12 @@ public final class MetadataBuilder {
             gson.newBuilder().setPrettyPrinting().create().toJson(root, writer);
         }
         System.out.printf("players: %d do TibiaWiki + %d só do Canary; mounts: %d do TibiaWiki + %d só do Canary; "
-                        + "creatures: %d; sem nome mas com cara de player: %d -> %d looktypes em %s%n",
-                wikiPlayers, canaryPlayers, wikiMounts, canaryMounts, creatures, guessed.size(),
-                entries.size(), output.toAbsolutePath());
+                        + "creatures: %d do staticdata + %d do Canary; NPCs: %d; sem nome mas com cara de player: %d "
+                        + "-> %d looktypes em %s%n",
+                wikiPlayers, canaryPlayers, wikiMounts, canaryMounts, creatures, fromLua[0], fromLua[1],
+                guessed.size(), entries.size(), output.toAbsolutePath());
+        long unnamed = client.outfits().stream().filter(o -> !entries.containsKey(o.looktype())).count();
+        System.out.println("Looktypes do cliente ainda sem nome: " + unnamed);
         if (overridden > 0) {
             System.out.println("Overrides aplicados: " + overridden);
         }
@@ -238,6 +244,38 @@ public final class MetadataBuilder {
             }
         }
         return guessed;
+    }
+
+    /**
+     * Monstros primeiro, depois NPCs. Looktype novo ganha nome; criatura/NPC já conhecido ganha alias.
+     * Player e montaria não recebem alias: NPCs vestindo Citizen, por exemplo, seriam centenas.
+     *
+     * @return {monstros novos, NPCs novos}
+     */
+    private int[] readCanaryCreatures(List<CanaryLuaSource.Creature> creatures, Map<Integer, LooktypeMeta> entries) {
+        int[] added = new int[2];
+        for (CanaryLuaSource.Type type : CanaryLuaSource.Type.values()) {
+            for (CanaryLuaSource.Creature c : creatures) {
+                if (c.type() != type) {
+                    continue;
+                }
+                LooktypeMeta existing = entries.get(c.looktype());
+                if (existing == null) {
+                    LooktypeKind kind = type == CanaryLuaSource.Type.NPC ? LooktypeKind.NPC : LooktypeKind.CREATURE;
+                    entries.put(c.looktype(), new LooktypeMeta(c.looktype(), kind, c.name(), null, false, null,
+                            null, "canary"));
+                    added[type.ordinal()]++;
+                } else if ((existing.kind() == LooktypeKind.CREATURE || existing.kind() == LooktypeKind.NPC)
+                        && !existing.name().equalsIgnoreCase(c.name())
+                        && existing.aliases().stream().noneMatch(a -> a.equalsIgnoreCase(c.name()))) {
+                    List<String> aliases = new ArrayList<>(existing.aliases());
+                    aliases.add(c.name());
+                    entries.put(c.looktype(), new LooktypeMeta(existing.looktype(), existing.kind(), existing.name(),
+                            existing.sex(), existing.premium(), existing.mountId(), aliases, existing.source()));
+                }
+            }
+        }
+        return added;
     }
 
     private static boolean sameShape(OutfitInfo a, OutfitInfo b) {

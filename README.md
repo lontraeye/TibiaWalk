@@ -89,9 +89,11 @@ Isso fica em `core/src/main/resources/org/tibiawalk/core/metadata.json`, gerado 
    da montaria. Se as fontes discordarem no sexo, vale o Canary (conferido nos sprites), a não ser que ele mesmo dê o
    mesmo sexo aos dois lados do par;
 3. `staticdata-*.dat` do cliente: monstros e bosses do Cyclopedia;
-4. heurística: looktype sem nome que tem versão montada e cores é outfit de player (`Outfit #1640/1641`); pares
+4. arquivos de monstros e NPCs do Canary (`*/monster/**.lua`, `*/npc/**.lua`): nomeia criaturas fora do bestiário e
+   NPCs (categoria própria, `list --npcs`);
+5. heurística: looktype sem nome que tem versão montada e cores é outfit de player (`Outfit #1640/1641`); pares
    consecutivos viram masculino/feminino (menor = masculino, provisório);
-5. [`core/metadata-overrides.json`](core/metadata-overrides.json): correções manuais, com prioridade sobre tudo.
+6. [`core/metadata-overrides.json`](core/metadata-overrides.json): correções manuais, com prioridade sobre tudo.
 
 Cada entrada guarda a fonte em `source`. Para nomear um outfit novo ou corrigir um sexo, edite o overrides:
 

@@ -14,7 +14,12 @@
       "aliases": [
         "Warlord Ruzad",
         "Baron Brute",
-        "Bibby Bloodbath"
+        "Bibby Bloodbath",
+        "Running Elite Orc Guard",
+        "Grimgor Guteater",
+        "Orc Armor",
+        "Orc Helmet",
+        "Orc Shield"
       ],
       "source": "staticdata"
     },
@@ -24,7 +29,8 @@
       "name": "war wolf",
       "premium": false,
       "aliases": [
-        "The Big Bad One"
+        "The Big Bad One",
+        "A Majestic Warwolf"
       ],
       "source": "staticdata"
     },
@@ -41,7 +47,10 @@
       "kind": "creature",
       "name": "orc",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Orc Sambackpack",
+        "Blind Orc"
+      ],
       "source": "staticdata"
     },
     {
@@ -51,7 +60,8 @@
       "premium": false,
       "aliases": [
         "orc cult priest",
-        "Kraknaknork"
+        "Kraknaknork",
+        "Scar Tribe Shaman"
       ],
       "source": "staticdata"
     },
@@ -61,7 +71,9 @@
       "name": "orc warrior",
       "premium": false,
       "aliases": [
-        "orc cultist"
+        "orc cultist",
+        "Scar Tribe Warrior",
+        "An Orc Guard"
       ],
       "source": "staticdata"
     },
@@ -72,7 +84,9 @@
       "premium": false,
       "aliases": [
         "orc cult inquisitor",
-        "The Axeorcist"
+        "The Axeorcist",
+        "Hacker",
+        "Furious Orc Berserker"
       ],
       "source": "staticdata"
     },
@@ -82,9 +96,22 @@
       "name": "necromancer",
       "premium": false,
       "aliases": [
-        "acolyte of darkness"
+        "acolyte of darkness",
+        "Necromancer Servant",
+        "Adrenius",
+        "Digger",
+        "Gundralph",
+        "Skjaar"
       ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 10,
+      "kind": "creature",
+      "name": "Yellow Butterfly",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 11,
@@ -92,7 +119,10 @@
       "name": "massive water elemental",
       "premium": false,
       "aliases": [
-        "Ice Overlord"
+        "Ice Overlord",
+        "Spirit of Water",
+        "Roaring Water Elemental",
+        "Spirit of Fertility"
       ],
       "source": "staticdata"
     },
@@ -116,7 +146,17 @@
         "Horadron",
         "Zavarash",
         "Terofar",
-        "Prince Drazzak"
+        "Prince Drazzak",
+        "Apocalypse",
+        "Freegoiz",
+        "Kraknaknork's Demon",
+        "Verminor",
+        "Weakened Demon",
+        "Zoralurk",
+        "Rift Lord",
+        "Rift Spawn",
+        "The Spellstealer",
+        "Stan"
       ],
       "source": "staticdata"
     },
@@ -146,7 +186,10 @@
       "name": "troll",
       "premium": false,
       "aliases": [
-        "Trollwut"
+        "Trollwut",
+        "Mountain Troll",
+        "Salamander Trainer",
+        "Young Troll"
       ],
       "source": "staticdata"
     },
@@ -163,7 +206,9 @@
       "kind": "creature",
       "name": "bonelord",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Wrinkled Bonelord"
+      ],
       "source": "staticdata"
     },
     {
@@ -172,7 +217,9 @@
       "name": "ghoul",
       "premium": false,
       "aliases": [
-        "undead prospector"
+        "undead prospector",
+        "Chatterbone",
+        "Ormuhn"
       ],
       "source": "staticdata"
     },
@@ -183,7 +230,9 @@
       "premium": false,
       "aliases": [
         "squidgy slime",
-        "son of verminor"
+        "son of verminor",
+        "Strange Slime",
+        "Snail Slime"
       ],
       "source": "staticdata"
     },
@@ -204,7 +253,10 @@
       "kind": "creature",
       "name": "rat",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Puffels",
+        "Rata'Mari"
+      ],
       "source": "staticdata"
     },
     {
@@ -212,7 +264,11 @@
       "kind": "creature",
       "name": "cyclops",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Juvenile Cyclops",
+        "Animated Cyclops",
+        "A Sweaty Cyclops"
+      ],
       "source": "staticdata"
     },
     {
@@ -222,7 +278,9 @@
       "premium": false,
       "aliases": [
         "minotaur cult prophet",
-        "Apprentice Sheng"
+        "Apprentice Sheng",
+        "Minotaur Occultist",
+        "Markwin"
       ],
       "source": "staticdata"
     },
@@ -231,7 +289,9 @@
       "kind": "creature",
       "name": "minotaur archer",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Minotaur Poacher"
+      ],
       "source": "staticdata"
     },
     {
@@ -240,7 +300,13 @@
       "name": "minotaur",
       "premium": false,
       "aliases": [
-        "minotaur cult follower"
+        "minotaur cult follower",
+        "Minotaur Bruiser",
+        "Depowered Minotaur",
+        "Bovinus",
+        "Boveas",
+        "Guard Saros",
+        "Maro"
       ],
       "source": "staticdata"
     },
@@ -250,7 +316,11 @@
       "name": "rotworm",
       "premium": false,
       "aliases": [
-        "Rottie the Rotworm"
+        "Rottie the Rotworm",
+        "Animated Rotworm",
+        "Lovely Rotworm",
+        "Earworm",
+        "Enpa Yolo"
       ],
       "source": "staticdata"
     },
@@ -270,7 +340,12 @@
       "kind": "creature",
       "name": "snake",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Sacred Snake",
+        "Lovely Snake",
+        "Basilisk",
+        "Ikassis"
+      ],
       "source": "staticdata"
     },
     {
@@ -280,7 +355,9 @@
       "premium": false,
       "aliases": [
         "minotaur invader",
-        "minotaur cult zealot"
+        "minotaur cult zealot",
+        "Asrak",
+        "Curos"
       ],
       "source": "staticdata"
     },
@@ -298,7 +375,8 @@
       "name": "deer",
       "premium": false,
       "aliases": [
-        "doom deer"
+        "doom deer",
+        "Lovely Deer"
       ],
       "source": "staticdata"
     },
@@ -308,7 +386,11 @@
       "name": "dog",
       "premium": false,
       "aliases": [
-        "hot dog"
+        "hot dog",
+        "Wild Dog",
+        "Dustrunner",
+        "Lightfoot",
+        "Noodles"
       ],
       "source": "staticdata"
     },
@@ -318,7 +400,11 @@
       "name": "skeleton",
       "premium": false,
       "aliases": [
-        "undead mine worker"
+        "undead mine worker",
+        "Brittle Skeleton",
+        "Party Skeleton",
+        "Lesser Death Minion",
+        "A Dead Bureaucrat"
       ],
       "source": "staticdata"
     },
@@ -329,7 +415,9 @@
       "premium": false,
       "aliases": [
         "Grand Mother Foulscale",
-        "Glitterscale"
+        "Glitterscale",
+        "Drasilla",
+        "Somewhat Beatable"
       ],
       "source": "staticdata"
     },
@@ -339,7 +427,17 @@
       "name": "demon",
       "premium": false,
       "aliases": [
-        "Ungreez"
+        "Ungreez",
+        "Bazir",
+        "Infernatil",
+        "Angry Demon",
+        "Enthralled Demon",
+        "Unbound Demon",
+        "Overcharged Demon",
+        "Demon Goblin",
+        "The Obliverator",
+        "Demon Slave",
+        "Invading Demon"
       ],
       "source": "staticdata"
     },
@@ -356,7 +454,11 @@
       "kind": "creature",
       "name": "demon skeleton",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Undead Minion",
+        "Skeleton Guard",
+        "Smiley"
+      ],
       "source": "staticdata"
     },
     {
@@ -365,7 +467,8 @@
       "name": "giant spider",
       "premium": false,
       "aliases": [
-        "Cave Spider"
+        "Cave Spider",
+        "Giant Spider Wyda"
       ],
       "source": "staticdata"
     },
@@ -374,7 +477,14 @@
       "kind": "creature",
       "name": "dragon lord",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dragon Servant",
+        "Unbeatable Dragon",
+        "A Dragon Lord",
+        "A Dragon Mother",
+        "An Old Dragonlord",
+        "Tamoril"
+      ],
       "source": "staticdata"
     },
     {
@@ -382,7 +492,10 @@
       "kind": "creature",
       "name": "fire devil",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Lesser Fire Devil",
+        "Malicious Minion"
+      ],
       "source": "staticdata"
     },
     {
@@ -398,7 +511,10 @@
       "kind": "creature",
       "name": "polar bear",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Lovely Polar Bear",
+        "Bloodpaw"
+      ],
       "source": "staticdata"
     },
     {
@@ -406,7 +522,10 @@
       "kind": "creature",
       "name": "scorpion",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dawn Scorpion",
+        "Lovely Scorpion"
+      ],
       "source": "staticdata"
     },
     {
@@ -458,7 +577,18 @@
       "name": "ghost",
       "premium": false,
       "aliases": [
-        "corrupted ghost"
+        "corrupted ghost",
+        "Rift Phantom",
+        "Tormented Ghost",
+        "Weak Soul",
+        "Weeping Soul",
+        "A Lost Soul",
+        "A Restless Soul",
+        "A Tainted Soul",
+        "A Tortured Soul",
+        "An Apparition",
+        "Riddler",
+        "Stricken Soul"
       ],
       "source": "staticdata"
     },
@@ -469,7 +599,13 @@
       "premium": false,
       "aliases": [
         "furious fire elemental",
-        "infernoid blob"
+        "infernoid blob",
+        "Fiery Blood",
+        "Flame of Omrafir",
+        "The Heat of Summer",
+        "Blazing Fire Elemental",
+        "Warm Fire",
+        "Spawn of Havoc"
       ],
       "source": "staticdata"
     },
@@ -488,7 +624,11 @@
       "kind": "creature",
       "name": "green djinn",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Baa'Leal",
+        "Ubaid",
+        "Zumtah"
+      ],
       "source": "staticdata"
     },
     {
@@ -496,7 +636,9 @@
       "kind": "creature",
       "name": "winter wolf",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Frostfur"
+      ],
       "source": "staticdata"
     },
     {
@@ -505,7 +647,11 @@
       "name": "frost troll",
       "premium": false,
       "aliases": [
-        "troll legionnaire"
+        "troll legionnaire",
+        "Frozen Minion",
+        "The Cold of Winter",
+        "Percht Minion",
+        "Biting Cold"
       ],
       "source": "staticdata"
     },
@@ -516,7 +662,10 @@
       "premium": false,
       "aliases": [
         "Yaga the Crone",
-        "Ekatrix"
+        "Ekatrix",
+        "Incredibly Old Witch",
+        "Ursula",
+        "Wyda"
       ],
       "source": "staticdata"
     },
@@ -526,7 +675,9 @@
       "name": "behemoth",
       "premium": false,
       "aliases": [
-        "Stonecracker"
+        "Stonecracker",
+        "The Pit Lord",
+        "A Behemoth"
       ],
       "source": "staticdata"
     },
@@ -545,7 +696,16 @@
       "kind": "creature",
       "name": "monk",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Monk of the Order",
+        "Cipfried",
+        "Costello",
+        "Lorbas",
+        "Loui",
+        "Norf",
+        "Oldrak",
+        "Quentin"
+      ],
       "source": "staticdata"
     },
     {
@@ -554,7 +714,11 @@
       "name": "priestess",
       "premium": false,
       "aliases": [
-        "bride of night"
+        "bride of night",
+        "The Dark Dancer",
+        "A Dark Priestess",
+        "Eliza",
+        "Elyen Ravenlock"
       ],
       "source": "staticdata"
     },
@@ -565,7 +729,8 @@
       "premium": false,
       "aliases": [
         "orc cult fanatic",
-        "Renegade Orc"
+        "Renegade Orc",
+        "Orcus the Cruel"
       ],
       "source": "staticdata"
     },
@@ -588,7 +753,10 @@
       "aliases": [
         "goblin leader",
         "grynch clan goblin",
-        "muglex clan footman"
+        "muglex clan footman",
+        "A Goblin Exile",
+        "An Imprisoned Goblin",
+        "Nibble"
       ],
       "source": "staticdata"
     },
@@ -597,7 +765,9 @@
       "kind": "creature",
       "name": "elf",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Faluae"
+      ],
       "source": "staticdata"
     },
     {
@@ -605,7 +775,17 @@
       "kind": "creature",
       "name": "elf arcanist",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of an Elf",
+        "Anerui",
+        "Edala",
+        "Elf Guard",
+        "Eroth",
+        "Eruaran",
+        "Finarfin",
+        "Llathriel",
+        "Maealil"
+      ],
       "source": "staticdata"
     },
     {
@@ -614,7 +794,9 @@
       "name": "elf scout",
       "premium": false,
       "aliases": [
-        "Mornenion"
+        "Mornenion",
+        "Elathriel",
+        "Irea"
       ],
       "source": "staticdata"
     },
@@ -625,7 +807,12 @@
       "premium": false,
       "aliases": [
         "elder mummy",
-        "Mahatheb"
+        "Mahatheb",
+        "Animated Mummy",
+        "Greater Death Minion",
+        "An Ancient Priest",
+        "Ishebad",
+        "Tothdral"
       ],
       "source": "staticdata"
     },
@@ -635,7 +822,22 @@
       "name": "dwarf geomancer",
       "premium": false,
       "aliases": [
-        "Mad Technomancer"
+        "Mad Technomancer",
+        "Brodrosch",
+        "Cael",
+        "Emperor Kruzak",
+        "Emperor Rehal",
+        "Etzel",
+        "Ferus",
+        "Gurbasch",
+        "Junkar",
+        "Kawill",
+        "Oiriz",
+        "Prezil",
+        "Robson",
+        "Tehlim",
+        "Thorgrin",
+        "Urks The Mute"
       ],
       "source": "staticdata"
     },
@@ -646,7 +848,9 @@
       "premium": false,
       "aliases": [
         "Shard of Corruption",
-        "Rocko"
+        "Rocko",
+        "Animated Stone Golem",
+        "Spirit of Earth"
       ],
       "source": "staticdata"
     },
@@ -657,7 +861,11 @@
       "premium": false,
       "aliases": [
         "bane of light",
-        "The Weakened Count"
+        "The Weakened Count",
+        "Armenius (Creature)",
+        "Memory of a Vampire",
+        "Soulless Minion",
+        "Vladruc"
       ],
       "source": "staticdata"
     },
@@ -666,7 +874,15 @@
       "kind": "creature",
       "name": "dwarf",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Crazed Dwarf",
+        "A Dwarven Ghost",
+        "Brom",
+        "Humgolf",
+        "Melfar",
+        "Sigurd",
+        "Uso"
+      ],
       "source": "staticdata"
     },
     {
@@ -676,7 +892,21 @@
       "premium": false,
       "aliases": [
         "Foreman Kneebiter",
-        "Elvira Hammerthrust"
+        "Elvira Hammerthrust",
+        "Memory of a Dwarf",
+        "Dukosch",
+        "Duria",
+        "Frok, The Guard",
+        "Hemor, the guard",
+        "Humnog, the guard",
+        "Jagran",
+        "Kihil, The Guard",
+        "Lukosch",
+        "Ongulf",
+        "Pukosch",
+        "Rehon",
+        "Shortsighted Dwarf",
+        "Xelvar"
       ],
       "source": "staticdata"
     },
@@ -685,7 +915,11 @@
       "kind": "creature",
       "name": "dwarf soldier",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Axeitus Headbanger",
+        "Esrik",
+        "Tulf"
+      ],
       "source": "staticdata"
     },
     {
@@ -704,7 +938,13 @@
       "kind": "creature",
       "name": "hero",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of a Hero",
+        "Abran Ironeye",
+        "Avar Tar",
+        "Daniel Steelsoul",
+        "Snake Eye"
+      ],
       "source": "staticdata"
     },
     {
@@ -713,7 +953,8 @@
       "name": "rabbit",
       "premium": false,
       "aliases": [
-        "killer rabbit"
+        "killer rabbit",
+        "The Halloween Hare"
       ],
       "source": "staticdata"
     },
@@ -749,7 +990,12 @@
       "kind": "creature",
       "name": "banshee",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of a Banshee",
+        "Nightmarish Dream",
+        "The Crone",
+        "The Queen Of The Banshees"
+      ],
       "source": "staticdata"
     },
     {
@@ -758,7 +1004,8 @@
       "name": "ancient scarab",
       "premium": false,
       "aliases": [
-        "Fleshcrawler"
+        "Fleshcrawler",
+        "Memory of a Scarab"
       ],
       "source": "staticdata"
     },
@@ -767,7 +1014,16 @@
       "kind": "creature",
       "name": "blue djinn",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Alesar",
+        "Bo'Ques",
+        "Fa'Hradin",
+        "Gabel",
+        "Haroun",
+        "Nah'Bob",
+        "Ocelus",
+        "Umar"
+      ],
       "source": "staticdata"
     },
     {
@@ -775,7 +1031,9 @@
       "kind": "creature",
       "name": "cobra",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Black Cobra"
+      ],
       "source": "staticdata"
     },
     {
@@ -783,7 +1041,12 @@
       "kind": "creature",
       "name": "larva",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Brain Parasite",
+        "Enraged Sand Brood",
+        "Sand Brood",
+        "Parasite"
+      ],
       "source": "staticdata"
     },
     {
@@ -791,7 +1054,9 @@
       "kind": "creature",
       "name": "scarab",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Burrowing Beetle"
+      ],
       "source": "staticdata"
     },
     {
@@ -799,7 +1064,9 @@
       "kind": "creature",
       "name": "Morguthis",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Superior Death Minion"
+      ],
       "source": "staticdata"
     },
     {
@@ -823,7 +1090,9 @@
       "kind": "creature",
       "name": "Dipthrah",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Arkhothep"
+      ],
       "source": "staticdata"
     },
     {
@@ -847,7 +1116,9 @@
       "kind": "creature",
       "name": "Omruc",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Menacing Mummy"
+      ],
       "source": "staticdata"
     },
     {
@@ -862,12 +1133,21 @@
       "source": "staticdata"
     },
     {
+      "looktype": 92,
+      "kind": "creature",
+      "name": "Mimic",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 93,
       "kind": "creature",
       "name": "pirate marauder",
       "premium": false,
       "aliases": [
-        "pirate navigator"
+        "pirate navigator",
+        "Jack Drone"
       ],
       "source": "staticdata"
     },
@@ -886,7 +1166,9 @@
       "kind": "creature",
       "name": "gargoyle",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Rocky"
+      ],
       "source": "staticdata"
     },
     {
@@ -895,7 +1177,12 @@
       "name": "pirate cutthroat",
       "premium": false,
       "aliases": [
-        "pirate cook"
+        "pirate cook",
+        "Captain Cookie",
+        "Captain Waverider",
+        "Hawkhurst",
+        "Klaus",
+        "Vulturenose"
       ],
       "source": "staticdata"
     },
@@ -905,7 +1192,8 @@
       "name": "pirate buccaneer",
       "premium": false,
       "aliases": [
-        "pirate gunner"
+        "pirate gunner",
+        "Memory of a Pirate"
       ],
       "source": "staticdata"
     },
@@ -917,7 +1205,8 @@
       "aliases": [
         "sea captain",
         "Brutus Bloodbeard",
-        "Dirtbeard"
+        "Dirtbeard",
+        "Captain Haba"
       ],
       "source": "staticdata"
     },
@@ -929,7 +1218,9 @@
       "aliases": [
         "death priest",
         "Koshei the Deathless",
-        "Gravelord Oshuran"
+        "Gravelord Oshuran",
+        "Goshnar's Megalomania Green",
+        "Chuckles"
       ],
       "source": "staticdata"
     },
@@ -939,7 +1230,9 @@
       "name": "crypt shambler",
       "premium": false,
       "aliases": [
-        "tomb servant"
+        "tomb servant",
+        "Retainer of Baeloc",
+        "Cursed Gladiator"
       ],
       "source": "staticdata"
     },
@@ -949,9 +1242,23 @@
       "name": "bonebeast",
       "premium": false,
       "aliases": [
-        "Ribstride"
+        "Ribstride",
+        "Greedbeast",
+        "Slim",
+        "Dreadbeast"
       ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 102,
+      "kind": "creature",
+      "name": "Whirling Blades",
+      "premium": false,
+      "aliases": [
+        "Deathslicer",
+        "Mechanical Fighter"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 103,
@@ -959,7 +1266,11 @@
       "name": "efreet",
       "premium": false,
       "aliases": [
-        "Merikh the Slaughterer"
+        "Merikh the Slaughterer",
+        "Kreebosh the Exile",
+        "Kais",
+        "Malor",
+        "Yaman"
       ],
       "source": "staticdata"
     },
@@ -969,7 +1280,9 @@
       "name": "marid",
       "premium": false,
       "aliases": [
-        "Fahim the Wise"
+        "Fahim the Wise",
+        "Asnarus",
+        "Jean Pierre"
       ],
       "source": "staticdata"
     },
@@ -986,7 +1299,9 @@
       "kind": "creature",
       "name": "skunk",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Animated Skunk"
+      ],
       "source": "staticdata"
     },
     {
@@ -1002,7 +1317,9 @@
       "kind": "creature",
       "name": "gazer",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Eye of the Seven"
+      ],
       "source": "staticdata"
     },
     {
@@ -1020,7 +1337,8 @@
       "premium": false,
       "aliases": [
         "berserker chicken",
-        "agrestic chicken"
+        "agrestic chicken",
+        "Agressive Chicken"
       ],
       "source": "staticdata"
     },
@@ -1040,7 +1358,8 @@
       "aliases": [
         "High Templar Cobrass",
         "Fatality",
-        "Menace"
+        "Menace",
+        "Zarak"
       ],
       "source": "staticdata"
     },
@@ -1049,7 +1368,11 @@
       "kind": "creature",
       "name": "lizard sentinel",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Rebel",
+        "Zizzle",
+        "Zurak"
+      ],
       "source": "staticdata"
     },
     {
@@ -1059,7 +1382,10 @@
       "premium": false,
       "aliases": [
         "lizard magistratus",
-        "lizard noble"
+        "lizard noble",
+        "Chrak",
+        "Sissek",
+        "Zalamon"
       ],
       "source": "staticdata"
     },
@@ -1069,7 +1395,8 @@
       "name": "kongra",
       "premium": false,
       "aliases": [
-        "Hairman the Huge"
+        "Hairman the Huge",
+        "The Hairy One"
       ],
       "source": "staticdata"
     },
@@ -1078,7 +1405,10 @@
       "kind": "creature",
       "name": "merlkin",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Hairycles",
+        "The Blind Prophet"
+      ],
       "source": "staticdata"
     },
     {
@@ -1086,7 +1416,9 @@
       "kind": "creature",
       "name": "sibang",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Moe"
+      ],
       "source": "staticdata"
     },
     {
@@ -1106,7 +1438,8 @@
       "premium": false,
       "aliases": [
         "Tiquandas Revenge",
-        "Deathbine"
+        "Deathbine",
+        "Angry Plant"
       ],
       "source": "staticdata"
     },
@@ -1116,7 +1449,9 @@
       "name": "hydra",
       "premium": false,
       "aliases": [
-        "The Many"
+        "The Many",
+        "Memory of a Hydra",
+        "Spawn of the Welter"
       ],
       "source": "staticdata"
     },
@@ -1125,7 +1460,9 @@
       "kind": "creature",
       "name": "bat",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dawn Bat"
+      ],
       "source": "staticdata"
     },
     {
@@ -1516,7 +1853,28 @@
       "premium": false,
       "aliases": [
         "elf overseer",
-        "misguided bully"
+        "misguided bully",
+        "Amarie",
+        "Ashari",
+        "Bashira",
+        "Brasith",
+        "Briasol",
+        "Dario",
+        "Elvith",
+        "Faloriel",
+        "Guide Thelandil",
+        "Jorge",
+        "Karith",
+        "Larfion The Shaman",
+        "Lavirias",
+        "Messenger of Santa",
+        "Nienna",
+        "Repenter",
+        "Shanar",
+        "Shiriel",
+        "Shirith",
+        "Tigo",
+        "Ukea"
       ],
       "source": "staticdata"
     },
@@ -1525,7 +1883,44 @@
       "kind": "creature",
       "name": "dwarf henchman",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dwarf Miner",
+        "Andrew Lyze",
+        "Bezil",
+        "Bolfona",
+        "Budrik",
+        "Drog",
+        "Elgar",
+        "Frafnar",
+        "Grodrik",
+        "Grombur",
+        "Harog",
+        "Isimov",
+        "Iwar",
+        "Jimbin",
+        "Klom Stonecutter",
+        "Kroox",
+        "Lardoc Bashsmite",
+        "Lokur",
+        "Maryza",
+        "Morpel",
+        "Murim",
+        "Nelliem",
+        "Nezil",
+        "Nokmir",
+        "Paolo",
+        "Pydar",
+        "Rapanaio",
+        "Rokyn",
+        "Santa Claus",
+        "Scutty",
+        "Storkus",
+        "Swolt",
+        "Talphion",
+        "Tezila",
+        "Uzgod",
+        "Xorlosh"
+      ],
       "source": "staticdata"
     },
     {
@@ -1555,7 +1950,8 @@
       "aliases": [
         "adept of the cult",
         "doomsday cultist",
-        "Wrathful Archivist"
+        "Wrathful Archivist",
+        "Asralius"
       ],
       "source": "staticdata"
     },
@@ -1564,7 +1960,9 @@
       "kind": "creature",
       "name": "pirate skeleton",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Spectral Scum"
+      ],
       "source": "staticdata"
     },
     {
@@ -1599,7 +1997,8 @@
       "name": "mammoth",
       "premium": false,
       "aliases": [
-        "The Bloodtusk"
+        "The Bloodtusk",
+        "Memory of a Mammoth"
       ],
       "source": "staticdata"
     },
@@ -1710,7 +2109,10 @@
       "kind": "creature",
       "name": "butterfly",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Pink Butterfly",
+        "Purple Butterfly"
+      ],
       "source": "staticdata"
     },
     {
@@ -1719,7 +2121,8 @@
       "name": "dworc voodoomaster",
       "premium": false,
       "aliases": [
-        "Oodok Witchmaster"
+        "Oodok Witchmaster",
+        "Pugwah"
       ],
       "source": "staticdata"
     },
@@ -1746,7 +2149,9 @@
       "premium": false,
       "aliases": [
         "demon parrot",
-        "cave parrot"
+        "cave parrot",
+        "Polly",
+        "Skip"
       ],
       "source": "staticdata"
     },
@@ -1755,7 +2160,9 @@
       "kind": "creature",
       "name": "terror bird",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Tame Terror Bird"
+      ],
       "source": "staticdata"
     },
     {
@@ -1765,7 +2172,8 @@
       "premium": false,
       "aliases": [
         "sacred spider",
-        "Hide"
+        "Hide",
+        "Spider Queen"
       ],
       "source": "staticdata"
     },
@@ -1777,7 +2185,8 @@
       "aliases": [
         "The Noxious Spawn",
         "The Keeper",
-        "Srezz Yellow Eyes"
+        "Srezz Yellow Eyes",
+        "Snake Thing"
       ],
       "source": "staticdata"
     },
@@ -1804,7 +2213,9 @@
       "kind": "creature",
       "name": "seagull",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Tooth Fairy"
+      ],
       "source": "staticdata"
     },
     {
@@ -1814,7 +2225,9 @@
       "premium": false,
       "aliases": [
         "infernal frog",
-        "The Frog Prince"
+        "The Frog Prince",
+        "A Confused Frog",
+        "A Frog"
       ],
       "source": "staticdata"
     },
@@ -1823,7 +2236,9 @@
       "kind": "creature",
       "name": "dark monk",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Yberius"
+      ],
       "source": "staticdata"
     },
     {
@@ -1834,7 +2249,8 @@
       "aliases": [
         "coral frog",
         "crimson frog",
-        "orchid frog"
+        "orchid frog",
+        "Deathspawn"
       ],
       "source": "staticdata"
     },
@@ -1843,7 +2259,9 @@
       "kind": "creature",
       "name": "butterfly",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Blue Butterfly"
+      ],
       "source": "staticdata"
     },
     {
@@ -1851,7 +2269,9 @@
       "kind": "creature",
       "name": "butterfly",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Red Butterfly"
+      ],
       "source": "staticdata"
     },
     {
@@ -1859,7 +2279,9 @@
       "kind": "creature",
       "name": "Ferumbras",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Ferumbras Mortal Shell"
+      ],
       "source": "staticdata"
     },
     {
@@ -1881,7 +2303,12 @@
         "haunted dragon",
         "Dracola",
         "Pythius the Rotten",
-        "Zanakeph"
+        "Zanakeph",
+        "Bones",
+        "Death Dragon",
+        "Deathbringer",
+        "Fallen Challenger",
+        "Awarness Of The Emperor"
       ],
       "source": "staticdata"
     },
@@ -1890,7 +2317,9 @@
       "kind": "creature",
       "name": "lost soul",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Damned Soul"
+      ],
       "source": "staticdata"
     },
     {
@@ -1911,7 +2340,9 @@
       "aliases": [
         "grave guard",
         "Mr. Punish",
-        "The Dreadorian"
+        "The Dreadorian",
+        "Eclipse Knight",
+        "The Masked Marauder"
       ],
       "source": "staticdata"
     },
@@ -1920,7 +2351,9 @@
       "kind": "creature",
       "name": "spectre",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Fetter"
+      ],
       "source": "staticdata"
     },
     {
@@ -1940,7 +2373,11 @@
       "premium": false,
       "aliases": [
         "The Imperor",
-        "Mephiles"
+        "Mephiles",
+        "Minishabaal",
+        "Imp Intruder",
+        "Mean Minion",
+        "Redward"
       ],
       "source": "staticdata"
     },
@@ -1950,7 +2387,11 @@
       "name": "defiler",
       "premium": false,
       "aliases": [
-        "The Plasmother"
+        "The Plasmother",
+        "Disgusting Ooze",
+        "Unbound Defiler",
+        "Regenerating Mass",
+        "The Orc King"
       ],
       "source": "staticdata"
     },
@@ -1971,7 +2412,8 @@
       "premium": false,
       "aliases": [
         "Kerberos",
-        "Mozradek"
+        "Mozradek",
+        "Fluffy"
       ],
       "source": "staticdata"
     },
@@ -1981,7 +2423,8 @@
       "name": "phantasm",
       "premium": false,
       "aliases": [
-        "Countess Sorrow"
+        "Countess Sorrow",
+        "Phantasm Summon"
       ],
       "source": "staticdata"
     },
@@ -1992,7 +2435,11 @@
       "premium": false,
       "aliases": [
         "raging fire",
-        "infernoid soul"
+        "infernoid soul",
+        "Unchained Fire",
+        "Spirit of Fire",
+        "Blistering Fire Elemental",
+        "Pyromental"
       ],
       "source": "staticdata"
     },
@@ -2005,7 +2452,8 @@
         "infernoid spiritual",
         "Fire Overlord",
         "Lord of the Elements",
-        "Incineron"
+        "Incineron",
+        "Rage of Mazoran"
       ],
       "source": "staticdata"
     },
@@ -2035,7 +2483,9 @@
       "kind": "creature",
       "name": "blightwalker",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Unbound Blightwalker"
+      ],
       "source": "staticdata"
     },
     {
@@ -2051,7 +2501,9 @@
       "kind": "creature",
       "name": "frost dragon",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dragon Essence"
+      ],
       "source": "staticdata"
     },
     {
@@ -2095,7 +2547,9 @@
       "kind": "creature",
       "name": "barbarian headsplitter",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Colerian the Barbarian"
+      ],
       "source": "staticdata"
     },
     {
@@ -2103,7 +2557,10 @@
       "kind": "creature",
       "name": "barbarian skullhunter",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Svoren the Mad",
+        "Cruleo"
+      ],
       "source": "staticdata"
     },
     {
@@ -2111,7 +2568,9 @@
       "kind": "creature",
       "name": "barbarian bloodwalker",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Darakan the Executioner"
+      ],
       "source": "staticdata"
     },
     {
@@ -2120,7 +2579,8 @@
       "name": "braindeath",
       "premium": false,
       "aliases": [
-        "Evil Mastermind"
+        "Evil Mastermind",
+        "Dreadeye"
       ],
       "source": "staticdata"
     },
@@ -2129,7 +2589,9 @@
       "kind": "creature",
       "name": "frost giant",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Norgle Glacierbeard"
+      ],
       "source": "staticdata"
     },
     {
@@ -2137,7 +2599,9 @@
       "kind": "creature",
       "name": "husky",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Starving Dog"
+      ],
       "source": "staticdata"
     },
     {
@@ -2155,7 +2619,9 @@
       "kind": "creature",
       "name": "chakoya windcaller",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Sinatuki"
+      ],
       "source": "staticdata"
     },
     {
@@ -2169,7 +2635,11 @@
         "Coldheart",
         "Hirintror",
         "Melting Frozen Horror",
-        "Solid Frozen Horror"
+        "Solid Frozen Horror",
+        "Avalanche",
+        "Brother Chill",
+        "Brother Freeze",
+        "Frost Servant"
       ],
       "source": "staticdata"
     },
@@ -2178,7 +2648,9 @@
       "kind": "creature",
       "name": "silver rabbit",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Desperate Soul"
+      ],
       "source": "staticdata"
     },
     {
@@ -2187,7 +2659,9 @@
       "name": "crystal spider",
       "premium": false,
       "aliases": [
-        "The Bloodweb"
+        "The Bloodweb",
+        "Webster",
+        "Lucifuga Aranea"
       ],
       "source": "staticdata"
     },
@@ -2197,7 +2671,9 @@
       "name": "barbarian brutetamer",
       "premium": false,
       "aliases": [
-        "Barbaria"
+        "Barbaria",
+        "The Hag",
+        "Iriana"
       ],
       "source": "staticdata"
     },
@@ -2247,7 +2723,8 @@
       "name": "dragon hatchling",
       "premium": false,
       "aliases": [
-        "titano dragon"
+        "titano dragon",
+        "Baby Dragon"
       ],
       "source": "staticdata"
     },
@@ -2275,7 +2752,11 @@
       "kind": "creature",
       "name": "squirrel",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Enraged Squirrel",
+        "Thieving Squirrel",
+        "A Fluffy Squirrel"
+      ],
       "source": "staticdata"
     },
     {
@@ -2293,7 +2774,9 @@
       "kind": "creature",
       "name": "cat",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Guide Edna"
+      ],
       "source": "staticdata"
     },
     {
@@ -2302,7 +2785,8 @@
       "name": "cyclops smith",
       "premium": false,
       "aliases": [
-        "The Old Whopper"
+        "The Old Whopper",
+        "A Grumpy Cyclops"
       ],
       "source": "staticdata"
     },
@@ -2342,7 +2826,9 @@
       "aliases": [
         "furious troll",
         "troll guard",
-        "Big Boss Trolliver"
+        "Big Boss Trolliver",
+        "Troll Marauder",
+        "Chief Grarkharok"
       ],
       "source": "staticdata"
     },
@@ -2363,13 +2849,24 @@
       "source": "staticdata"
     },
     {
+      "looktype": 284,
+      "kind": "creature",
+      "name": "Cockroach",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 285,
       "kind": "creature",
       "name": "massive earth elemental",
       "premium": false,
       "aliases": [
         "Earth Overlord",
-        "Tremorak"
+        "Tremorak",
+        "Jagged Earth Elemental",
+        "Dr Merlay",
+        "Zirkon"
       ],
       "source": "staticdata"
     },
@@ -2378,7 +2875,9 @@
       "kind": "creature",
       "name": "water elemental",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Slick Water Elemental"
+      ],
       "source": "staticdata"
     },
     {
@@ -2425,7 +2924,14 @@
       "name": "massive energy elemental",
       "premium": false,
       "aliases": [
-        "Energy Overlord"
+        "Energy Overlord",
+        "Rift Invader",
+        "Depolarized Crackler",
+        "Frenzy",
+        "Overcharge",
+        "Unstable Spark",
+        "Rift Brood",
+        "Overcharged Energy Elemental"
       ],
       "source": "staticdata"
     },
@@ -2434,7 +2940,9 @@
       "kind": "creature",
       "name": "wyrm",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Wyrm"
+      ],
       "source": "staticdata"
     },
     {
@@ -2451,7 +2959,12 @@
       "name": "energy elemental",
       "premium": false,
       "aliases": [
-        "high voltage elemental"
+        "high voltage elemental",
+        "Charger",
+        "Crackler",
+        "Greed",
+        "Charged Energy Elemental",
+        "Wild Knowledge"
       ],
       "source": "staticdata"
     },
@@ -2460,7 +2973,13 @@
       "kind": "creature",
       "name": "wisp",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Freed Soul",
+        "Stolen Soul",
+        "Ferumbras Essence",
+        "Energy Pulse",
+        "..."
+      ],
       "source": "staticdata"
     },
     {
@@ -2469,7 +2988,10 @@
       "name": "Rotworm Queen",
       "premium": false,
       "aliases": [
-        "Brother Worm"
+        "Brother Worm",
+        "Versperoth",
+        "Tremor Worm",
+        "Rift Worm"
       ],
       "source": "staticdata"
     },
@@ -2489,7 +3011,11 @@
       "name": "goblin scavenger",
       "premium": false,
       "aliases": [
-        "Muglex Clan Chief"
+        "Muglex Clan Chief",
+        "Muglex Clan Scavenger",
+        "Lunch",
+        "Woblin",
+        "Znozel"
       ],
       "source": "staticdata"
     },
@@ -2527,7 +3053,11 @@
       "premium": false,
       "aliases": [
         "duskbringer",
-        "Boogey"
+        "Boogey",
+        "Soul Scourge",
+        "Rift Scythe",
+        "Dreadful Harvester",
+        "Mind-Wrecking Dream"
       ],
       "source": "staticdata"
     },
@@ -2536,7 +3066,9 @@
       "kind": "creature",
       "name": "earth elemental",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Muddy Earth Elemental"
+      ],
       "source": "staticdata"
     },
     {
@@ -2545,7 +3077,8 @@
       "name": "worker golem",
       "premium": false,
       "aliases": [
-        "damaged worker golem"
+        "damaged worker golem",
+        "Telas Golem"
       ],
       "source": "staticdata"
     },
@@ -2566,7 +3099,9 @@
       "name": "undead gladiator",
       "premium": false,
       "aliases": [
-        "undead elite gladiator"
+        "undead elite gladiator",
+        "Risen Soldier",
+        "Squire of Nictros"
       ],
       "source": "staticdata"
     },
@@ -2598,7 +3133,14 @@
       "kind": "creature",
       "name": "Azerus",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of a Yalahari",
+        "Zarcorix Of Yalahar",
+        "Azerus2",
+        "Yalahari",
+        "The Devourer of Secrets",
+        "Yalahari Despoiler"
+      ],
       "source": "staticdata"
     },
     {
@@ -2608,7 +3150,9 @@
       "premium": false,
       "aliases": [
         "bane bringer",
-        "Bane Lord"
+        "Bane Lord",
+        "Possessed Tree",
+        "Plant Abomination"
       ],
       "source": "staticdata"
     },
@@ -2617,7 +3161,9 @@
       "kind": "creature",
       "name": "zombie",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Mr Brandon"
+      ],
       "source": "staticdata"
     },
     {
@@ -2650,7 +3196,12 @@
       "name": "death blob",
       "premium": false,
       "aliases": [
-        "midnight spawn"
+        "midnight spawn",
+        "Essence of Darkness",
+        "Condensed Sin",
+        "Condensed Sins",
+        "Horrible Dream",
+        "Concentrated Death"
       ],
       "source": "staticdata"
     },
@@ -2685,7 +3236,9 @@
       "premium": false,
       "aliases": [
         "herald of gloom",
-        "Haunter"
+        "Haunter",
+        "Sin Devourer",
+        "Shadow Fiend"
       ],
       "source": "staticdata"
     },
@@ -2694,7 +3247,9 @@
       "kind": "creature",
       "name": "nightmare scion",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Nightmare Scion"
+      ],
       "source": "staticdata"
     },
     {
@@ -2739,7 +3294,11 @@
       "kind": "creature",
       "name": "war golem",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Security Golem",
+        "War Servant",
+        "Golem Guardian"
+      ],
       "source": "staticdata"
     },
     {
@@ -2767,9 +3326,27 @@
       "premium": false,
       "aliases": [
         "Gorgo",
-        "Gorga"
+        "Gorga",
+        "Alyxo",
+        "Saideh"
       ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 331,
+      "kind": "npc",
+      "name": "Queen Eloise",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 332,
+      "kind": "npc",
+      "name": "King Tibianus",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 333,
@@ -2786,7 +3363,8 @@
       "premium": false,
       "aliases": [
         "Tirecz",
-        "Zulazza the Corruptor"
+        "Zulazza the Corruptor",
+        "Gate Guardian"
       ],
       "source": "staticdata"
     },
@@ -2813,7 +3391,9 @@
       "kind": "creature",
       "name": "lizard high guard",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of a Lizard"
+      ],
       "source": "staticdata"
     },
     {
@@ -2821,7 +3401,11 @@
       "kind": "creature",
       "name": "lizard legionnaire",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Chartan",
+        "Izsh",
+        "Lizard Tunnel Guard"
+      ],
       "source": "staticdata"
     },
     {
@@ -2830,7 +3414,11 @@
       "name": "lizard dragon priest",
       "premium": false,
       "aliases": [
-        "Flamecaller Zazrak"
+        "Flamecaller Zazrak",
+        "Cranky Lizard Crone",
+        "Ezean",
+        "Sessek",
+        "Zlak"
       ],
       "source": "staticdata"
     },
@@ -2840,7 +3428,8 @@
       "name": "draken spellweaver",
       "premium": false,
       "aliases": [
-        "Chizzoron the Distorter"
+        "Chizzoron the Distorter",
+        "Ztiss"
       ],
       "source": "staticdata"
     },
@@ -2860,7 +3449,8 @@
       "name": "orc marauder",
       "premium": false,
       "aliases": [
-        "Cublarc the Plunderer"
+        "Cublarc the Plunderer",
+        "Clubarc The Plunderer"
       ],
       "source": "staticdata"
     },
@@ -2926,7 +3516,9 @@
       "name": "insect swarm",
       "premium": false,
       "aliases": [
-        "berrypest"
+        "berrypest",
+        "Vermin Swarm",
+        "Unpleasant Dream"
       ],
       "source": "staticdata"
     },
@@ -2946,7 +3538,12 @@
       "aliases": [
         "Hatebreeder",
         "Ethershreck",
-        "Essence Of Malice"
+        "Essence Of Malice",
+        "Dragon Wrath",
+        "Fury of the Emperor",
+        "Scorn of the Emperor",
+        "Spite of the Emperor",
+        "Wrath of the Emperor"
       ],
       "source": "staticdata"
     },
@@ -2973,8 +3570,20 @@
       "kind": "creature",
       "name": "souleater",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Lovely Souleater",
+        "Corrupted Soul",
+        "Ghost Of A Priest"
+      ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 356,
+      "kind": "creature",
+      "name": "Snake God Essence",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 357,
@@ -3037,6 +3646,14 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 364,
+      "kind": "creature",
+      "name": "Lizard Abomination",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 366,
@@ -3178,7 +3795,8 @@
       "name": "stampor",
       "premium": false,
       "aliases": [
-        "Tromphonyte"
+        "Tromphonyte",
+        "Arkarra"
       ],
       "source": "staticdata"
     },
@@ -3195,7 +3813,9 @@
       "kind": "creature",
       "name": "crustacea gigantica",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Guardian of the Deep Seas"
+      ],
       "source": "staticdata"
     },
     {
@@ -3203,7 +3823,9 @@
       "kind": "creature",
       "name": "undead cavebear",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Bone Jaw"
+      ],
       "source": "staticdata"
     },
     {
@@ -3288,7 +3910,9 @@
       "kind": "creature",
       "name": "Mad Mage",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Sane Mage"
+      ],
       "source": "staticdata"
     },
     {
@@ -3297,7 +3921,8 @@
       "name": "iron servant",
       "premium": false,
       "aliases": [
-        "iron servant replica"
+        "iron servant replica",
+        "Broken Servant Sentry"
       ],
       "source": "staticdata"
     },
@@ -3307,7 +3932,8 @@
       "name": "golden servant",
       "premium": false,
       "aliases": [
-        "golden servant replica"
+        "golden servant replica",
+        "Servant Sentry"
       ],
       "source": "staticdata"
     },
@@ -3337,7 +3963,11 @@
       "kind": "creature",
       "name": "white deer",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Desperate White Deer",
+        "Enraged White Deer",
+        "Alkestios"
+      ],
       "source": "staticdata"
     },
     {
@@ -3365,7 +3995,8 @@
       "premium": false,
       "aliases": [
         "insectoid worker",
-        "Mindmasher"
+        "Mindmasher",
+        "Memory of an Insectoid"
       ],
       "source": "staticdata"
     },
@@ -3408,7 +4039,9 @@
       "kind": "creature",
       "name": "yielothax",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Lovely Yielothax"
+      ],
       "source": "staticdata"
     },
     {
@@ -3505,6 +4138,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 423,
+      "kind": "creature",
+      "name": "Energized Raging Mage",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 425,
       "kind": "creature",
       "name": "feverish citizen",
@@ -3573,7 +4214,9 @@
       "kind": "creature",
       "name": "horse",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Grey Horse"
+      ],
       "source": "staticdata"
     },
     {
@@ -3589,7 +4232,9 @@
       "kind": "creature",
       "name": "horse",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Brown Horse"
+      ],
       "source": "staticdata"
     },
     {
@@ -3616,7 +4261,8 @@
       "name": "deepling warrior",
       "premium": false,
       "aliases": [
-        "deepling elite"
+        "deepling elite",
+        "Neutral Deepling Warrior"
       ],
       "source": "staticdata"
     },
@@ -3653,7 +4299,9 @@
       "kind": "creature",
       "name": "Obujos",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Reflection of Obujos"
+      ],
       "source": "staticdata"
     },
     {
@@ -3758,7 +4406,8 @@
       "aliases": [
         "spidris elite",
         "Fleshslicer",
-        "The Manhunter"
+        "The Manhunter",
+        "Spidris Elite Summon"
       ],
       "source": "staticdata"
     },
@@ -3775,11 +4424,22 @@
       "source": "staticdata"
     },
     {
+      "looktype": 459,
+      "kind": "creature",
+      "name": "Floor Blob",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 460,
       "kind": "creature",
       "name": "swarmer",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Lesser Swarmer",
+        "Swarmer Hatchling"
+      ],
       "source": "staticdata"
     },
     {
@@ -3868,6 +4528,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 473,
+      "kind": "creature",
+      "name": "Poodle",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 486,
       "kind": "creature",
       "name": "stone devourer",
@@ -3888,7 +4556,9 @@
       "kind": "creature",
       "name": "humongous fungus",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of a Fungus"
+      ],
       "source": "staticdata"
     },
     {
@@ -3914,7 +4584,9 @@
       "kind": "creature",
       "name": "lava golem",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Minion of Versperoth"
+      ],
       "source": "staticdata"
     },
     {
@@ -3922,8 +4594,43 @@
       "kind": "creature",
       "name": "magma crawler",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Gnome Pack Crawler"
+      ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 493,
+      "kind": "creature",
+      "name": "Lost Gnome",
+      "premium": false,
+      "aliases": [
+        "Doctor Gnomedix",
+        "Gnomad",
+        "Gnomadness",
+        "Gnomailion",
+        "Gnomaticus",
+        "Gnombold",
+        "Gnome",
+        "Gnome Trooper",
+        "Gnomejam",
+        "Gnomelvis",
+        "Gnomeral",
+        "Gnomerik",
+        "Gnomerrow",
+        "Gnomespector",
+        "Gnomewart",
+        "Gnomillion",
+        "Gnominer",
+        "Gnominus",
+        "Gnomish Operative",
+        "Gnomission",
+        "Gnommander",
+        "Gnomole",
+        "Gnomus",
+        "Gnomux"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 494,
@@ -3962,7 +4669,9 @@
       "kind": "creature",
       "name": "ironblight",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Ember Beast"
+      ],
       "source": "staticdata"
     },
     {
@@ -4025,12 +4734,29 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 507,
+      "kind": "npc",
+      "name": "Gnomally",
+      "premium": false,
+      "aliases": [
+        "Gnomargery",
+        "Gnomegica",
+        "Gnomenursey",
+        "Gnomercy",
+        "Gnomette",
+        "Gnomilly",
+        "Gnomincia"
+      ],
+      "source": "canary"
+    },
+    {
       "looktype": 508,
       "kind": "creature",
       "name": "enraged crystal golem",
       "premium": false,
       "aliases": [
-        "damaged crystal golem"
+        "damaged crystal golem",
+        "Auron"
       ],
       "source": "staticdata"
     },
@@ -4039,7 +4765,9 @@
       "kind": "creature",
       "name": "vulcongra",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Vulcongra"
+      ],
       "source": "staticdata"
     },
     {
@@ -4109,6 +4837,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 517,
+      "kind": "creature",
+      "name": "Humorless Fungus",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 521,
       "kind": "mount",
       "name": "Crimson Ray",
@@ -4148,7 +4884,9 @@
       "kind": "creature",
       "name": "drillworm",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Drillworm"
+      ],
       "source": "staticdata"
     },
     {
@@ -4156,7 +4894,9 @@
       "kind": "creature",
       "name": "emerald damselfly",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dawnfly"
+      ],
       "source": "staticdata"
     },
     {
@@ -4164,7 +4904,9 @@
       "kind": "creature",
       "name": "salamander",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Troll-Trained Salamander"
+      ],
       "source": "staticdata"
     },
     {
@@ -4172,7 +4914,9 @@
       "kind": "creature",
       "name": "marsh stalker",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Meadow Strider"
+      ],
       "source": "staticdata"
     },
     {
@@ -4189,7 +4933,8 @@
       "name": "corym charlatan",
       "premium": false,
       "aliases": [
-        "little corym charlatan"
+        "little corym charlatan",
+        "Squeekquek"
       ],
       "source": "staticdata"
     },
@@ -4198,7 +4943,14 @@
       "kind": "creature",
       "name": "corym skirmisher",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Corym Butler",
+        "Corym Footman",
+        "Corym Ratter",
+        "Corym Servant",
+        "Corym Slave",
+        "Corym Worker"
+      ],
       "source": "staticdata"
     },
     {
@@ -4206,7 +4958,10 @@
       "kind": "creature",
       "name": "corym vanguard",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Cheese Thief",
+        "Elite Pirat"
+      ],
       "source": "staticdata"
     },
     {
@@ -4214,7 +4969,9 @@
       "kind": "creature",
       "name": "swampling",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Woodling"
+      ],
       "source": "staticdata"
     },
     {
@@ -4223,7 +4980,8 @@
       "name": "lost husher",
       "premium": false,
       "aliases": [
-        "lost exile"
+        "lost exile",
+        "A Lost Husher"
       ],
       "source": "staticdata"
     },
@@ -4232,7 +4990,10 @@
       "kind": "creature",
       "name": "lost basher",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Captured Dwarf",
+        "A Lost Basher"
+      ],
       "source": "staticdata"
     },
     {
@@ -4240,8 +5001,18 @@
       "kind": "creature",
       "name": "lost thrower",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "A Lost Thrower"
+      ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 540,
+      "kind": "npc",
+      "name": "Rafzan",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 541,
@@ -4304,7 +5075,9 @@
       "kind": "creature",
       "name": "shadow pupil",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "The Gate Keeper"
+      ],
       "source": "staticdata"
     },
     {
@@ -4312,7 +5085,9 @@
       "kind": "creature",
       "name": "blood hand",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Oblivion"
+      ],
       "source": "staticdata"
     },
     {
@@ -4320,7 +5095,9 @@
       "kind": "creature",
       "name": "blood priest",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Tomruk The Ruddy"
+      ],
       "source": "staticdata"
     },
     {
@@ -4328,7 +5105,9 @@
       "kind": "creature",
       "name": "vicious manbat",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Mutated Visco"
+      ],
       "source": "staticdata"
     },
     {
@@ -4379,7 +5158,11 @@
       "kind": "creature",
       "name": "white shade",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Time Keeper",
+        "Frozen Soul",
+        "Zarifan"
+      ],
       "source": "staticdata"
     },
     {
@@ -4419,7 +5202,9 @@
       "kind": "creature",
       "name": "Shlorg",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Weakened Shlorg"
+      ],
       "source": "staticdata"
     },
     {
@@ -4427,7 +5212,9 @@
       "kind": "creature",
       "name": "tarnished spirit",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Strong Soul"
+      ],
       "source": "staticdata"
     },
     {
@@ -4435,8 +5222,20 @@
       "kind": "creature",
       "name": "leaf golem",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Plant Attendant"
+      ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 568,
+      "kind": "creature",
+      "name": "Enraged Soul",
+      "premium": false,
+      "aliases": [
+        "Powerful Soul"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 569,
@@ -4444,7 +5243,8 @@
       "name": "forest fury",
       "premium": false,
       "aliases": [
-        "elder forest fury"
+        "elder forest fury",
+        "A Weakened Forest Fury"
       ],
       "source": "staticdata"
     },
@@ -4455,7 +5255,8 @@
       "premium": false,
       "aliases": [
         "noble lion",
-        "Zomba"
+        "Zomba",
+        "Wildness of Urmahlullu"
       ],
       "source": "staticdata"
     },
@@ -4545,7 +5346,9 @@
       "kind": "creature",
       "name": "sight of surrender",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Guilt"
+      ],
       "source": "staticdata"
     },
     {
@@ -4553,7 +5356,9 @@
       "kind": "creature",
       "name": "guzzlemaw",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Animated Guzzlemaw"
+      ],
       "source": "staticdata"
     },
     {
@@ -4579,7 +5384,9 @@
       "kind": "creature",
       "name": "terrorsleep",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Nightmare of Gaz'haragoth"
+      ],
       "source": "staticdata"
     },
     {
@@ -4595,7 +5402,10 @@
       "kind": "creature",
       "name": "demon outcast",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Unbound Demon Outcast",
+        "Minion of Gaz'haragoth"
+      ],
       "source": "staticdata"
     },
     {
@@ -4605,6 +5415,14 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 592,
+      "kind": "creature",
+      "name": "Shiversleep",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 593,
@@ -4620,7 +5438,9 @@
       "name": "frazzlemaw",
       "premium": false,
       "aliases": [
-        "weakened frazzlemaw"
+        "weakened frazzlemaw",
+        "Memory of a Frazzlemaw",
+        "Lovely Frazzlemaw"
       ],
       "source": "staticdata"
     },
@@ -4629,8 +5449,26 @@
       "kind": "creature",
       "name": "Mawhawk",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Reflection of Mawhawk"
+      ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 598,
+      "kind": "creature",
+      "name": "Canopic Jar",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 599,
+      "kind": "creature",
+      "name": "Greater Canopic Jar",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 600,
@@ -4638,7 +5476,11 @@
       "name": "glooth golem",
       "premium": false,
       "aliases": [
-        "Glooth Fairy"
+        "Glooth Fairy",
+        "Memory of a Golem",
+        "Glooth Masher",
+        "Glooth Slasher",
+        "Glooth Trasher"
       ],
       "source": "staticdata"
     },
@@ -4699,7 +5541,9 @@
       "name": "moohtant",
       "premium": false,
       "aliases": [
-        "Bullwark"
+        "Bullwark",
+        "Glooth Powered Minotaur",
+        "Animated Moohtant"
       ],
       "source": "staticdata"
     },
@@ -4735,7 +5579,8 @@
       "premium": false,
       "aliases": [
         "General Murius",
-        "Mooh'Tah Master"
+        "Mooh'Tah Master",
+        "Fallen Mooh'tah Master Ghar"
       ],
       "source": "staticdata"
     },
@@ -4768,7 +5613,9 @@
       "kind": "creature",
       "name": "rot elemental",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Aggressive Matter"
+      ],
       "source": "staticdata"
     },
     {
@@ -4776,7 +5623,9 @@
       "kind": "creature",
       "name": "devourer",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Organic Matter"
+      ],
       "source": "staticdata"
     },
     {
@@ -5032,6 +5881,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 668,
+      "kind": "npc",
+      "name": "Strange Pipe",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 669,
       "kind": "mount",
       "name": "Golden Dragonfly",
@@ -5102,12 +5959,44 @@
       "source": "staticdata"
     },
     {
+      "looktype": 677,
+      "kind": "creature",
+      "name": "Empowered Glooth Horror",
+      "premium": false,
+      "aliases": [
+        "Feeble Glooth Horror",
+        "Glooth Horror",
+        "Strong Glooth Horror",
+        "Weakened Glooth Horror"
+      ],
+      "source": "canary"
+    },
+    {
       "looktype": 679,
       "kind": "creature",
       "name": "Professor Maxxen",
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 680,
+      "kind": "creature",
+      "name": "Glooth Bomb",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 681,
+      "kind": "creature",
+      "name": "Shadow Tentacle",
+      "premium": false,
+      "aliases": [
+        "Tentacle of the Deep Terror",
+        "Nightmare Tendril"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 682,
@@ -5286,7 +6175,10 @@
       "kind": "creature",
       "name": "redeemed soul",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Dark Soul",
+        "Messenger of Heaven"
+      ],
       "source": "staticdata"
     },
     {
@@ -5294,7 +6186,9 @@
       "kind": "creature",
       "name": "gloom wolf",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Feroxa4"
+      ],
       "source": "staticdata"
     },
     {
@@ -5302,7 +6196,9 @@
       "kind": "creature",
       "name": "omnivora",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Thorn Minion"
+      ],
       "source": "staticdata"
     },
     {
@@ -5381,7 +6277,9 @@
       "kind": "creature",
       "name": "ghost wolf",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Ghostly Wolf"
+      ],
       "source": "staticdata"
     },
     {
@@ -5389,7 +6287,10 @@
       "kind": "creature",
       "name": "Feroxa",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Feroxa2",
+        "Feroxa5"
+      ],
       "source": "staticdata"
     },
     {
@@ -5561,11 +6462,21 @@
       "source": "staticdata"
     },
     {
+      "looktype": 843,
+      "kind": "creature",
+      "name": "Ferumbras Soul Splinter",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 844,
       "kind": "creature",
       "name": "Ascending Ferumbras",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Destabilized Ferumbras"
+      ],
       "source": "staticdata"
     },
     {
@@ -5671,7 +6582,12 @@
       "kind": "creature",
       "name": "ogre brute",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of an Ogre",
+        "Animated Ogre Brute",
+        "Grubokk",
+        "Vuzrog"
+      ],
       "source": "staticdata"
     },
     {
@@ -5679,7 +6595,10 @@
       "kind": "creature",
       "name": "ogre savage",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Animated Ogre Savage",
+        "Mugruu"
+      ],
       "source": "staticdata"
     },
     {
@@ -5687,7 +6606,10 @@
       "kind": "creature",
       "name": "ogre shaman",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Animated Ogre Shaman",
+        "Ghorza"
+      ],
       "source": "staticdata"
     },
     {
@@ -5695,7 +6617,9 @@
       "kind": "creature",
       "name": "clomp",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Animated Clomp"
+      ],
       "source": "staticdata"
     },
     {
@@ -5705,9 +6629,21 @@
       "premium": false,
       "aliases": [
         "Zamulosh",
-        "Plagirath"
+        "Plagirath",
+        "Zamulosh2",
+        "Zamulosh3"
       ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 863,
+      "kind": "creature",
+      "name": "Bone Capsule",
+      "premium": false,
+      "aliases": [
+        "Soul Cage"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 868,
@@ -5764,7 +6700,13 @@
         "Eradicator",
         "World Devourer",
         "The Souldespoiler",
-        "The Scourge Of Oblivion"
+        "The Scourge Of Oblivion",
+        "The Corruptor of Souls",
+        "The Remorseless Corruptor",
+        "Eradicator2",
+        "Foreshock",
+        "Rift Breacher",
+        "The Scion of Havoc"
       ],
       "source": "staticdata"
     },
@@ -5775,7 +6717,12 @@
       "premium": false,
       "aliases": [
         "Charged Anomaly",
-        "Outburst"
+        "Outburst",
+        "Charging Outburst",
+        "The Destruction",
+        "The Hunger",
+        "The Rage",
+        "Ravenous Beyondling"
       ],
       "source": "staticdata"
     },
@@ -5796,7 +6743,10 @@
       "premium": false,
       "aliases": [
         "instable breach brood",
-        "Burster"
+        "Burster",
+        "Soul Reaper",
+        "Voidshard",
+        "Knowledge Raider"
       ],
       "source": "staticdata"
     },
@@ -5807,7 +6757,9 @@
       "premium": false,
       "aliases": [
         "stabilizing reality reaver",
-        "Dreadful Disruptor"
+        "Dreadful Disruptor",
+        "Bound Astral Power",
+        "Spark of Destruction"
       ],
       "source": "staticdata"
     },
@@ -5817,7 +6769,9 @@
       "name": "dread intruder",
       "premium": false,
       "aliases": [
-        "stabilizing dread intruder"
+        "stabilizing dread intruder",
+        "Dread Minion",
+        "Rift Minion"
       ],
       "source": "staticdata"
     },
@@ -5939,6 +6893,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 904,
+      "kind": "creature",
+      "name": "Icicle",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 905,
       "kind": "mount",
       "name": "Jackalope",
@@ -5984,11 +6946,80 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 910,
+      "kind": "creature",
+      "name": "Old Giant Spider",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 918,
+      "kind": "creature",
+      "name": "Memory of a Wolf",
+      "premium": false,
+      "aliases": [
+        "Old Wolf"
+      ],
+      "source": "canary"
+    },
+    {
+      "looktype": 919,
+      "kind": "creature",
+      "name": "Old Bear",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 920,
+      "kind": "creature",
+      "name": "Old Bug",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 921,
+      "kind": "creature",
+      "name": "Old Pig",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 922,
+      "kind": "creature",
+      "name": "Old Spider",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 923,
+      "kind": "creature",
+      "name": "Old Wasp",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 924,
+      "kind": "creature",
+      "name": "Old Beholder",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 925,
       "kind": "creature",
       "name": "An Observer Eye",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "An Observer Eye (imune)",
+        "A Greedy Eye"
+      ],
       "source": "staticdata"
     },
     {
@@ -6023,7 +7054,8 @@
       "name": "broken shaper",
       "premium": false,
       "aliases": [
-        "twisted shaper"
+        "twisted shaper",
+        "Memory of a Shaper"
       ],
       "source": "staticdata"
     },
@@ -6056,7 +7088,9 @@
       "kind": "creature",
       "name": "stone rhino",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Animated Stone Rhino"
+      ],
       "source": "staticdata"
     },
     {
@@ -6095,6 +7129,22 @@
       "source": "staticdata"
     },
     {
+      "looktype": 943,
+      "kind": "creature",
+      "name": "The Freezing Time Guardian",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 944,
+      "kind": "creature",
+      "name": "The Blazing Time Guardian",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 945,
       "kind": "creature",
       "name": "The Time Guardian",
@@ -6111,7 +7161,8 @@
         "The First Dragon",
         "Gelidrazah the Frozen",
         "Kalyassa",
-        "Tazhadur"
+        "Tazhadur",
+        "Dragon Warden"
       ],
       "source": "staticdata"
     },
@@ -6344,7 +7395,9 @@
       "kind": "creature",
       "name": "pooka",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Peaceful Pooka"
+      ],
       "source": "staticdata"
     },
     {
@@ -6360,7 +7413,12 @@
       "kind": "creature",
       "name": "The Source Of Corruption",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Sphere of Wrath",
+        "Magical Sphere",
+        "Soul Sphere",
+        "Supercharged Mazzinor"
+      ],
       "source": "staticdata"
     },
     {
@@ -6371,7 +7429,9 @@
       "aliases": [
         "dark faun",
         "arctic faun",
-        "Raxias"
+        "Raxias",
+        "Memory of a Faun",
+        "Taegen"
       ],
       "source": "staticdata"
     },
@@ -6388,7 +7448,10 @@
       "kind": "creature",
       "name": "pixie",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Myzzi",
+        "Talila"
+      ],
       "source": "staticdata"
     },
     {
@@ -6400,11 +7463,29 @@
       "source": "staticdata"
     },
     {
+      "looktype": 985,
+      "kind": "creature",
+      "name": "Misguided Shadow",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 986,
+      "kind": "creature",
+      "name": "Liquor Spirit",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 987,
       "kind": "creature",
       "name": "The Unarmored Voidborn",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "The Armored Voidborn"
+      ],
       "source": "staticdata"
     },
     {
@@ -6420,7 +7501,10 @@
       "kind": "creature",
       "name": "nymph",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Maelyrra",
+        "Nymph Challenging"
+      ],
       "source": "staticdata"
     },
     {
@@ -6429,16 +7513,62 @@
       "name": "barkless devotee",
       "premium": false,
       "aliases": [
-        "barkless fanatic"
+        "barkless fanatic",
+        "Farhilorn Of The Winter Court",
+        "Shirtalis Of The Summer Court"
       ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 991,
+      "kind": "creature",
+      "name": "Knight familiar",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 992,
+      "kind": "creature",
+      "name": "Paladin familiar",
+      "premium": false,
+      "aliases": [
+        "Emberwing"
+      ],
+      "source": "canary"
+    },
+    {
+      "looktype": 993,
+      "kind": "creature",
+      "name": "Druid familiar",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 994,
+      "kind": "creature",
+      "name": "Sorcerer familiar",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 1011,
+      "kind": "creature",
+      "name": "Minotaur Idol",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1013,
       "kind": "creature",
       "name": "The Sandking",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "The Sandking Fake"
+      ],
       "source": "staticdata"
     },
     {
@@ -6633,7 +7763,11 @@
       "name": "lava lurker",
       "premium": false,
       "aliases": [
-        "ravenous lava lurker"
+        "ravenous lava lurker",
+        "Aggressive Lava",
+        "Lava Lurker Attendant",
+        "Vampiric Blood",
+        "Demon Blood"
       ],
       "source": "staticdata"
     },
@@ -6668,7 +7802,9 @@
       "kind": "creature",
       "name": "The Baron From Below",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "The Hungry Baron from Below"
+      ],
       "source": "staticdata"
     },
     {
@@ -6684,7 +7820,9 @@
       "kind": "creature",
       "name": "The Duke Of The Depths",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "The Fire Empowered Duke"
+      ],
       "source": "staticdata"
     },
     {
@@ -6799,7 +7937,9 @@
       "kind": "creature",
       "name": "flying book",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Memory of a Book"
+      ],
       "source": "staticdata"
     },
     {
@@ -6810,7 +7950,14 @@
       "aliases": [
         "burning book",
         "icecold book",
-        "energetic book"
+        "energetic book",
+        "The Book of Death",
+        "Dark Knowledge",
+        "Stolen Knowledge of Armor",
+        "Stolen Knowledge of Healing",
+        "Stolen Knowledge of Lifesteal",
+        "Stolen Knowledge of Spells",
+        "Stolen Knowledge of Summoning"
       ],
       "source": "staticdata"
     },
@@ -6822,7 +7969,8 @@
       "aliases": [
         "Gorzindel",
         "Mazzinor",
-        "Ghulosh"
+        "Ghulosh",
+        "Lokathmor Stuck"
       ],
       "source": "staticdata"
     },
@@ -6833,7 +7981,8 @@
       "premium": false,
       "aliases": [
         "guardian of tales",
-        "energuardian of tales"
+        "energuardian of tales",
+        "Ghulosh' Deathgaze"
       ],
       "source": "staticdata"
     },
@@ -6852,7 +8001,9 @@
       "kind": "creature",
       "name": "knowledge elemental",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "The Librarian"
+      ],
       "source": "staticdata"
     },
     {
@@ -6862,6 +8013,16 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1067,
+      "kind": "creature",
+      "name": "Librarian",
+      "premium": false,
+      "aliases": [
+        "Cerebrir"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 1068,
@@ -6907,7 +8068,8 @@
         "falcon paladin",
         "Grand Chaplain Gaunder",
         "Grand Commander Soeren",
-        "Grand Canon Dominus"
+        "Grand Canon Dominus",
+        "Ancient Lion Knight"
       ],
       "source": "staticdata"
     },
@@ -7156,7 +8318,9 @@
         "soul-broken harbinger",
         "Izcandar the Banished",
         "Izcandar Champion of Summer",
-        "Izcandar Champion of Winter"
+        "Izcandar Champion of Winter",
+        "Undal",
+        "Vanys"
       ],
       "source": "staticdata"
     },
@@ -7181,7 +8345,9 @@
       "kind": "creature",
       "name": "Maxxenius",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Training Machine"
+      ],
       "source": "staticdata"
     },
     {
@@ -7261,11 +8427,21 @@
       "source": "staticdata"
     },
     {
+      "looktype": 1158,
+      "kind": "creature",
+      "name": "Bonny Bunny",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 1159,
       "kind": "creature",
       "name": "animated snowman",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Frosty"
+      ],
       "source": "staticdata"
     },
     {
@@ -7448,7 +8624,8 @@
       "name": "feral sphinx",
       "premium": false,
       "aliases": [
-        "sphinx"
+        "sphinx",
+        "The Empress"
       ],
       "source": "staticdata"
     },
@@ -7458,7 +8635,8 @@
       "name": "manticore",
       "premium": false,
       "aliases": [
-        "Enusat the Onyx Wing"
+        "Enusat the Onyx Wing",
+        "Memory of a Manticore"
       ],
       "source": "staticdata"
     },
@@ -7486,7 +8664,9 @@
       "kind": "creature",
       "name": "adult goanna",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Sun-Marked Goanna"
+      ],
       "source": "staticdata"
     },
     {
@@ -7505,7 +8685,8 @@
       "name": "Urmahlullu the Immaculate",
       "premium": false,
       "aliases": [
-        "Urmahlullu the Weakened"
+        "Urmahlullu the Weakened",
+        "Urmahlullu the Tamed"
       ],
       "source": "staticdata"
     },
@@ -7515,7 +8696,16 @@
       "name": "priestess of the wild sun",
       "premium": false,
       "aliases": [
-        "Sister Hetai"
+        "Sister Hetai",
+        "Guard Inurta",
+        "Guide Meruka",
+        "Kallimae",
+        "Narsai",
+        "Ninev",
+        "Ramina",
+        "Shimun",
+        "Tanyt",
+        "Tefrit"
       ],
       "source": "staticdata"
     },
@@ -7524,7 +8714,17 @@
       "kind": "creature",
       "name": "black sphinx acolyte",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Wisdom of Urmahlullu",
+        "Atur",
+        "Captain Harava",
+        "Eshaya",
+        "Guard Bazaya",
+        "Guard Senet",
+        "Iptar-Sin",
+        "Ninos",
+        "Yonan"
+      ],
       "source": "staticdata"
     },
     {
@@ -7664,6 +8864,25 @@
       "source": "staticdata"
     },
     {
+      "looktype": 1218,
+      "kind": "creature",
+      "name": "Ugly Monster",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 1219,
+      "kind": "creature",
+      "name": "Azaram's Soul",
+      "premium": false,
+      "aliases": [
+        "Tainted Soul Splinter",
+        "Flickering Soul"
+      ],
+      "source": "canary"
+    },
+    {
       "looktype": 1220,
       "kind": "creature",
       "name": "gryphon",
@@ -7678,7 +8897,10 @@
       "premium": false,
       "aliases": [
         "Duke Krule",
-        "Blight Mariner"
+        "Blight Mariner",
+        "Magnor Mournbringer",
+        "Rewar The Bloody",
+        "Shard of Magnor"
       ],
       "source": "staticdata"
     },
@@ -7688,7 +8910,8 @@
       "name": "Sir Nictros",
       "premium": false,
       "aliases": [
-        "Sir Baeloc"
+        "Sir Baeloc",
+        "Nargol The Impaler"
       ],
       "source": "staticdata"
     },
@@ -7699,7 +8922,8 @@
       "premium": false,
       "aliases": [
         "Earl Osam",
-        "Channeling Earl Osam"
+        "Channeling Earl Osam",
+        "The Red Knight"
       ],
       "source": "staticdata"
     },
@@ -7955,7 +9179,13 @@
         "evil prospector",
         "Irgix the Flimsy",
         "Unaz the Mean",
-        "Vok the Freakish"
+        "Vok the Freakish",
+        "Malicious Soul",
+        "Hateful Soul",
+        "Greater Splinter of Madness",
+        "Lesser Splinter of Madness",
+        "Mighty Splinter of Madness",
+        "Soulsnatcher"
       ],
       "source": "staticdata"
     },
@@ -7993,6 +9223,14 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1275,
+      "kind": "creature",
+      "name": "Wormling",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1276,
@@ -8139,7 +9377,9 @@
       "kind": "creature",
       "name": "bony sea devil",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Mean Maw"
+      ],
       "source": "staticdata"
     },
     {
@@ -8147,7 +9387,9 @@
       "kind": "creature",
       "name": "cloak of terror",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Spiteful Spitter"
+      ],
       "source": "staticdata"
     },
     {
@@ -8155,7 +9397,9 @@
       "kind": "creature",
       "name": "many faces",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Poor Soul"
+      ],
       "source": "staticdata"
     },
     {
@@ -8175,7 +9419,8 @@
         "capricious phantom",
         "infernal phantom",
         "mould phantom",
-        "distorted phantom"
+        "distorted phantom",
+        "Hazardous Phantom"
       ],
       "source": "staticdata"
     },
@@ -8204,7 +9449,8 @@
       "name": "werelion",
       "premium": false,
       "aliases": [
-        "werelioness"
+        "werelioness",
+        "Memory of a Werelion"
       ],
       "source": "staticdata"
     },
@@ -8237,7 +9483,9 @@
       "kind": "creature",
       "name": "Goshnar's Malice",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Aspect of Power"
+      ],
       "source": "staticdata"
     },
     {
@@ -8253,7 +9501,9 @@
       "kind": "creature",
       "name": "Goshnar's Megalomania",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Goshnar's Megalomania Purple"
+      ],
       "source": "staticdata"
     },
     {
@@ -8319,7 +9569,14 @@
       "premium": false,
       "aliases": [
         "usurper archer",
-        "usurper warlock"
+        "usurper warlock",
+        "Hardened Usurper Archer",
+        "Hardened Usurper Warlock",
+        "Lion Archer",
+        "Lion Warlock",
+        "Ancient Lion Archer",
+        "Ancient Lion Warlock",
+        "Augustin"
       ],
       "source": "staticdata"
     },
@@ -8329,7 +9586,12 @@
       "name": "Drume",
       "premium": false,
       "aliases": [
-        "Fugue"
+        "Fugue",
+        "Hardened Usurper Knight",
+        "Lion Knight",
+        "Kesar",
+        "Lion Commander",
+        "Usurper Commander"
       ],
       "source": "staticdata"
     },
@@ -8442,6 +9704,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 1337,
+      "kind": "creature",
+      "name": "Goshnar's Megalomania Blue",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 1338,
       "kind": "player",
       "name": "Moth Cape",
@@ -8475,7 +9745,9 @@
       "aliases": [
         "pirat scoundrel",
         "pirat bombardier",
-        "pirat mate"
+        "pirat mate",
+        "Pirat Artillerist",
+        "Captain Jack Rat"
       ],
       "source": "staticdata"
     },
@@ -8749,6 +10021,17 @@
       "source": "staticdata"
     },
     {
+      "looktype": 1414,
+      "kind": "creature",
+      "name": "Lava Creature",
+      "premium": false,
+      "aliases": [
+        "Bloodshade Rotten",
+        "Bloodshade Sacrifice"
+      ],
+      "source": "canary"
+    },
+    {
       "looktype": 1415,
       "kind": "player",
       "name": "Forest Warden",
@@ -8782,9 +10065,18 @@
       "premium": false,
       "aliases": [
         "poisonous carnisylvan",
-        "dark carnisylvan"
+        "dark carnisylvan",
+        "Memory of a Carnisylvan"
       ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1419,
+      "kind": "creature",
+      "name": "Carnisylvan Sapling",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1430,
@@ -9128,15 +10420,31 @@
       "kind": "creature",
       "name": "naga archer",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Amra",
+        "Isika"
+      ],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1538,
+      "kind": "creature",
+      "name": "Corrupt Naga",
+      "premium": false,
+      "aliases": [
+        "Asphota"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 1539,
       "kind": "creature",
       "name": "naga warrior",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Giri",
+        "Nipuna"
+      ],
       "source": "staticdata"
     },
     {
@@ -9146,6 +10454,16 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1543,
+      "kind": "creature",
+      "name": "Rogue Naga",
+      "premium": false,
+      "aliases": [
+        "Sundara"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 1546,
@@ -9208,7 +10526,9 @@
       "kind": "creature",
       "name": "hulking prehemoth",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Beast Hulking Prehemoth"
+      ],
       "source": "staticdata"
     },
     {
@@ -9218,6 +10538,14 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1555,
+      "kind": "creature",
+      "name": "Fungosaurus",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1556,
@@ -9292,6 +10620,14 @@
       "source": "staticdata"
     },
     {
+      "looktype": 1567,
+      "kind": "creature",
+      "name": "Plunder Patriarch",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 1568,
       "kind": "player",
       "name": "Fire-Fighter",
@@ -9308,6 +10644,14 @@
       "premium": true,
       "aliases": [],
       "source": "tibiawiki"
+    },
+    {
+      "looktype": 1570,
+      "kind": "creature",
+      "name": "The End of Days",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1575,
@@ -9544,6 +10888,14 @@
       "source": "tibiawiki"
     },
     {
+      "looktype": 1611,
+      "kind": "creature",
+      "name": "Doctor Marrow",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 1612,
       "kind": "player",
       "name": "Frost Tracer",
@@ -9669,6 +11021,14 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1628,
+      "kind": "creature",
+      "name": "Elder Bloodjaw",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1632,
@@ -9887,6 +11247,26 @@
       "premium": false,
       "aliases": [],
       "source": "staticdata"
+    },
+    {
+      "looktype": 1669,
+      "kind": "creature",
+      "name": "Echo Of Ichgahal",
+      "premium": false,
+      "aliases": [
+        "Echo Of Murcion"
+      ],
+      "source": "canary"
+    },
+    {
+      "looktype": 1670,
+      "kind": "creature",
+      "name": "Echo Of Chagorz",
+      "premium": false,
+      "aliases": [
+        "Echo Of Vemiath"
+      ],
+      "source": "canary"
     },
     {
       "looktype": 1671,
@@ -10478,6 +11858,14 @@
       "source": "staticdata"
     },
     {
+      "looktype": 1773,
+      "kind": "creature",
+      "name": "Mushroom",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 1774,
       "kind": "player",
       "name": "Rootwalker",
@@ -10585,6 +11973,14 @@
       "source": "staticdata"
     },
     {
+      "looktype": 1802,
+      "kind": "creature",
+      "name": "Arbaziloth",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
       "looktype": 1803,
       "kind": "creature",
       "name": "Rotrender",
@@ -10646,6 +12042,45 @@
       "premium": false,
       "aliases": [],
       "source": "tibiawiki"
+    },
+    {
+      "looktype": 1816,
+      "kind": "npc",
+      "name": "Ambassador Manop",
+      "premium": false,
+      "aliases": [
+        "Bodh The Kan",
+        "Dajcho The Monk",
+        "Enpa Rudra",
+        "Saih The Guardian"
+      ],
+      "source": "canary"
+    },
+    {
+      "looktype": 1817,
+      "kind": "npc",
+      "name": "Chesa The Guardian",
+      "premium": false,
+      "aliases": [
+        "Enpa-Deia Pema"
+      ],
+      "source": "canary"
+    },
+    {
+      "looktype": 1818,
+      "kind": "creature",
+      "name": "Monk familiar",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
+    },
+    {
+      "looktype": 1820,
+      "kind": "npc",
+      "name": "Dahr-Enpa Rahng",
+      "premium": false,
+      "aliases": [],
+      "source": "canary"
     },
     {
       "looktype": 1824,
@@ -10763,7 +12198,10 @@
       "kind": "creature",
       "name": "Spirit Overlord",
       "premium": false,
-      "aliases": [],
+      "aliases": [
+        "Flickering Spirit Elemental",
+        "Psychic Spirit Elemental"
+      ],
       "source": "staticdata"
     },
     {

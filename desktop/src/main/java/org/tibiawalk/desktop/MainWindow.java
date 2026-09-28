@@ -87,6 +87,7 @@ final class MainWindow extends JFrame {
         PLAYERS("Outfits de player", e -> kind(e, LooktypeKind.PLAYER)),
         MOUNTS("Montarias", e -> kind(e, LooktypeKind.MOUNT)),
         CREATURES("Criaturas", e -> kind(e, LooktypeKind.CREATURE)),
+        NPCS("NPCs", e -> kind(e, LooktypeKind.NPC)),
         UNKNOWN("Sem nome", e -> e.meta().isEmpty()),
         ALL("Todos", e -> true);
 

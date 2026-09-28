@@ -5,6 +5,8 @@ public enum LooktypeKind {
     PLAYER,
     /** Montaria (mounts.xml). */
     MOUNT,
-    /** Monstro ou boss do Cyclopedia (staticdata). */
-    CREATURE
+    /** Monstro ou boss (staticdata do cliente, ou arquivos de monstro do Canary). */
+    CREATURE,
+    /** NPC (arquivos de NPC do Canary). */
+    NPC
 }

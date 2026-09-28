@@ -36,6 +36,9 @@ final class ListCommand implements Callable<Integer> {
         @Option(names = "--creatures", description = "Só monstros e bosses.")
         boolean creatures;
 
+        @Option(names = "--npcs", description = "Só NPCs.")
+        boolean npcs;
+
         @Option(names = "--unknown", description = "Só looktypes sem nome conhecido.")
         boolean unknown;
     }
@@ -81,6 +84,8 @@ final class ListCommand implements Callable<Integer> {
                 rows = rows.filter(r -> is(r, LooktypeKind.MOUNT));
             } else if (kind.creatures) {
                 rows = rows.filter(r -> is(r, LooktypeKind.CREATURE));
+            } else if (kind.npcs) {
+                rows = rows.filter(r -> is(r, LooktypeKind.NPC));
             } else if (kind.unknown) {
                 rows = rows.filter(r -> r.meta().isEmpty());
             }
