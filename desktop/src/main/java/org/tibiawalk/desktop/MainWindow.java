@@ -2,6 +2,7 @@ package org.tibiawalk.desktop;
 
 import org.tibiawalk.core.assets.ClientAssets;
 import org.tibiawalk.core.assets.OutfitInfo;
+import org.tibiawalk.core.metadata.GameCharacter;
 import org.tibiawalk.core.metadata.LooktypeKind;
 import org.tibiawalk.core.metadata.LooktypeMeta;
 import org.tibiawalk.core.metadata.Metadata;
@@ -63,22 +64,29 @@ import java.util.function.Predicate;
 /** Janela principal: lista de looktypes, preview animado e opções do outfit. */
 final class MainWindow extends JFrame {
 
-    /** Um item da lista (ou da caixa de montarias). */
-    private record Entry(OutfitInfo info, Optional<LooktypeMeta> meta) {
+    /**
+     * Um item da lista: um looktype, ou um personagem (NPC/monstro/boss) com o outfit completo dele.
+     *
+     * @param character null para itens que são só looktype
+     */
+    private record Entry(OutfitInfo info, Optional<LooktypeMeta> meta, GameCharacter character) {
         int looktype() {
             return info.looktype();
         }
 
         String name() {
-            return meta.map(LooktypeMeta::name).orElse("");
+            return character != null ? character.name() : meta.map(LooktypeMeta::name).orElse("");
         }
 
         String sex() {
-            return meta.map(LooktypeMeta::sex).orElse(null);
+            return character != null ? null : meta.map(LooktypeMeta::sex).orElse(null);
         }
 
         @Override
         public String toString() {
+            if (character != null) {
+                return name() + (character.kind() == GameCharacter.Kind.BOSS ? " ★" : "") + "  (" + looktype() + ")";
+            }
             return meta.isEmpty() ? "#" + looktype() : name() + "  (" + looktype() + ")";
         }
     }
@@ -86,10 +94,10 @@ final class MainWindow extends JFrame {
     private enum Filter {
         PLAYERS("Outfits de player", e -> kind(e, LooktypeKind.PLAYER)),
         MOUNTS("Montarias", e -> kind(e, LooktypeKind.MOUNT)),
-        CREATURES("Criaturas", e -> kind(e, LooktypeKind.CREATURE)),
-        NPCS("NPCs", e -> kind(e, LooktypeKind.NPC)),
-        UNKNOWN("Sem nome", e -> e.meta().isEmpty()),
-        ALL("Todos", e -> true);
+        MONSTERS("Monstros e bosses", e -> e.character() != null && e.character().kind() != GameCharacter.Kind.NPC),
+        NPCS("NPCs", e -> e.character() != null && e.character().kind() == GameCharacter.Kind.NPC),
+        UNKNOWN("Sem nome", e -> e.character() == null && e.meta().isEmpty()),
+        ALL("Todos os looktypes", e -> e.character() == null);
 
         final String label;
         final Predicate<Entry> test;
@@ -105,7 +113,7 @@ final class MainWindow extends JFrame {
         }
 
         private static boolean kind(Entry e, LooktypeKind kind) {
-            return e.meta().map(m -> m.kind() == kind).orElse(false);
+            return e.character() == null && e.meta().map(m -> m.kind() == kind).orElse(false);
         }
     }
 
@@ -151,7 +159,13 @@ final class MainWindow extends JFrame {
         Metadata metadata = Metadata.bundled();
         for (OutfitInfo info : assets.outfits()) {
             if (info.idle() != null) {
-                entries.add(new Entry(info, metadata.get(info.looktype())));
+                entries.add(new Entry(info, metadata.get(info.looktype()), null));
+            }
+        }
+        for (GameCharacter character : metadata.characters()) {
+            OutfitInfo info = assets.outfit(character.looktype());
+            if (info != null && info.idle() != null) {
+                entries.add(new Entry(info, metadata.get(character.looktype()), character));
             }
         }
 
@@ -375,7 +389,8 @@ final class MainWindow extends JFrame {
                 .filter(e -> query.isEmpty()
                         || e.name().toLowerCase(Locale.ROOT).contains(query)
                         || Integer.toString(e.looktype()).equals(query)
-                        || e.meta().map(m -> m.aliases().stream()
+                        // aliases são do looktype; para personagem, só o nome dele conta
+                        || e.character() == null && e.meta().map(m -> m.aliases().stream()
                         .anyMatch(a -> a.toLowerCase(Locale.ROOT).contains(query))).orElse(false))
                 .sorted(selected == Filter.ALL || selected == Filter.UNKNOWN
                         ? Comparator.comparingInt(Entry::looktype)
@@ -409,7 +424,7 @@ final class MainWindow extends JFrame {
 
     /** O item da lista atual com o mesmo nome e categoria (a versão do outro sexo). */
     private Entry counterpart(Entry entry) {
-        if (entry.meta().isEmpty()) {
+        if (entry.character() != null || entry.meta().isEmpty()) {
             return null;
         }
         for (int i = 0; i < listModel.size(); i++) {
@@ -441,8 +456,23 @@ final class MainWindow extends JFrame {
         for (ColorButton button : List.of(head, body, legs, feet)) {
             button.setEnabled(info.colorable());
         }
+        if (entry.character() != null) {
+            applyPreset(entry.character(), info);
+        }
         adjusting = false;
         refresh();
+    }
+
+    /** Veste o outfit do NPC/monstro: cores, addons e montaria (dá para mexer depois). */
+    private void applyPreset(GameCharacter character, OutfitInfo info) {
+        addon1.setSelected(addon1.isEnabled() && (character.addons() & 1) != 0);
+        addon2.setSelected(addon2.isEnabled() && (character.addons() & 2) != 0);
+        head.setColor(TibiaColor.palette(character.head()));
+        body.setColor(TibiaColor.palette(character.body()));
+        legs.setColor(TibiaColor.palette(character.legs()));
+        feet.setColor(TibiaColor.palette(character.feet()));
+        mountLooktype = info.mountable() ? character.mount() : 0;
+        updateMountButton();
     }
 
     private OutfitRequest request() {
@@ -494,8 +524,14 @@ final class MainWindow extends JFrame {
     private static String describe(Entry entry, OutfitRequest request, List<OutfitRenderer.Frame> frames) {
         OutfitInfo info = entry.info();
         StringBuilder text = new StringBuilder("looktype ").append(info.looktype());
-        entry.meta().ifPresent(m -> text.append(" · ").append(m.name())
-                .append(" · ").append(m.kind().name().toLowerCase(Locale.ROOT)));
+        if (entry.character() != null) {
+            text.append(" · ").append(entry.character().name()).append(" · ")
+                    .append(entry.character().kind().name().toLowerCase(Locale.ROOT));
+            entry.meta().ifPresent(m -> text.append(" (visual: ").append(m.name()).append(')'));
+        } else {
+            entry.meta().ifPresent(m -> text.append(" · ").append(m.name())
+                    .append(" · ").append(m.kind().name().toLowerCase(Locale.ROOT)));
+        }
         text.append(" · ").append(info.addonCount()).append(" addon(s)");
         if (info.mountable()) {
             text.append(" · montável");
@@ -515,8 +551,16 @@ final class MainWindow extends JFrame {
         // A seleção dispara onOutfitSelected, que já habilita/desabilita addons e montaria para o novo outfit.
         list.setSelectedIndex(random.nextInt(listModel.size()));
         list.ensureIndexIsVisible(list.getSelectedIndex());
-        OutfitInfo info = list.getSelectedValue().info();
+        Entry picked = list.getSelectedValue();
+        OutfitInfo info = picked.info();
         adjusting = true;
+        if (picked.character() != null) {
+            // NPC/monstro sorteado mantém a roupa dele; só a direção varia.
+            directions.get(Direction.values()[random.nextInt(4)]).setSelected(true);
+            adjusting = false;
+            refresh();
+            return;
+        }
         addon1.setSelected(addon1.isEnabled() && random.nextBoolean());
         addon2.setSelected(addon2.isEnabled() && random.nextBoolean());
         for (ColorButton button : List.of(head, body, legs, feet)) {
@@ -563,8 +607,8 @@ final class MainWindow extends JFrame {
 
     private String suggestedName(OutfitRequest r) {
         Entry entry = list.getSelectedValue();
-        String base = entry.meta().map(m -> m.name().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "_"))
-                .orElse(Integer.toString(r.looktype()));
+        String base = entry.name().isEmpty() ? Integer.toString(r.looktype())
+                : entry.name().toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "_");
         return base + "_" + r.looktype() + "_a" + r.addons() + (r.mount() > 0 ? "_m" + r.mount() : "")
                 + "_" + r.direction().name().toLowerCase(Locale.ROOT);
     }

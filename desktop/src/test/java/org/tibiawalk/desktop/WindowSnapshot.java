@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * Depuração: abre a janela e executa ações, para conferir a interface sem clicar à mão.
  * Args: pastaAssets ação...
- * Ações: click:&lt;texto do botão&gt;, type:&lt;texto na busca do diálogo&gt;, wait:&lt;ms&gt;,
+ * Ações: click:&lt;texto do botão&gt;, type:&lt;texto na busca&gt;, select:&lt;categoria&gt;, wait:&lt;ms&gt;,
  * shot:&lt;arquivo.png&gt; (janela principal), dialog:&lt;arquivo.png&gt; (diálogo aberto).
  */
 public final class WindowSnapshot {
@@ -58,6 +58,17 @@ public final class WindowSnapshot {
                     }
                 });
                 Thread.sleep(500);
+            } else if (action.startsWith("select:")) {
+                // escolhe o item do combo de categoria cujo texto contém o valor
+                SwingUtilities.invokeAndWait(() -> {
+                    javax.swing.JComboBox<?> combo = find(ref.get().getContentPane(), javax.swing.JComboBox.class, null);
+                    for (int k = 0; k < combo.getItemCount(); k++) {
+                        if (String.valueOf(combo.getItemAt(k)).contains(value)) {
+                            combo.setSelectedIndex(k);
+                        }
+                    }
+                });
+                Thread.sleep(800);
             } else if (action.startsWith("wait:")) {
                 Thread.sleep(Long.parseLong(value));
             } else if (action.startsWith("shot:")) {
