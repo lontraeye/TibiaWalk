@@ -120,11 +120,18 @@ então o servidor só gera cada GIF uma vez por dia (ou por hora, se a URL usar 
 
 ## Atualizar depois
 
-- **Código novo** (só o jar): `./gradlew :web:deployBundle`, envie `tibiawalk-web.jar`, e na VM
-  `sudo bash install.sh tibiawalk-web.jar`.
-- **Patch do Tibia**: atualize o cliente no PC, rode `./gradlew updateAll` (nomes novos) e
-  `./gradlew :web:deployBundle -Passets=...`, envie o jar e o `tibia-assets.tar.gz`, e na VM
-  `sudo bash install.sh tibiawalk-web.jar tibia-assets.tar.gz`.
+Do seu PC, na raiz do projeto (Git Bash), com a chave em `~/.ssh/oracle_tibiawalk`:
+
+```bash
+deploy/update.sh             # código novo: gera o jar, envia, reinstala e confere o site
+deploy/update.sh --assets    # depois de um patch do Tibia: também envia os assets (precisa de TIBIA_ASSETS)
+```
+
+Num patch do Tibia, rode antes `./gradlew updateAll` para os nomes novos entrarem no jar. Outra VM ou chave:
+`TIBIAWALK_HOST=usuario@ip TIBIAWALK_KEY=caminho deploy/update.sh`.
+
+Na mão, sem o script: `./gradlew :web:deployBundle [-Passets=...]`, envie os arquivos de `generated/deploy`
+para `~/tibiawalk` na VM e rode `sudo bash install.sh tibiawalk-web.jar [tibia-assets.tar.gz]`.
 
 ## Comandos úteis na VM
 
