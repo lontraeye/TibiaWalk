@@ -149,7 +149,12 @@ final class MainWindow extends JFrame {
     private final JButton mountButton = new JButton();
     private final MountPicker mountPicker;
     private final List<MountPicker.Option> mountOptions = new ArrayList<>();
+    /** Montaria escolhida; só é usada se "Montar" estiver marcado (como no web). */
     private int mountLooktype;
+    private final JCheckBox mountOn = new JCheckBox("Montar");
+    private final PreviewPanel mountPreview = new PreviewPanel();
+    private int mountGeneration;
+    private final ThumbnailCache<Entry> thumbnails = new ThumbnailCache<>(36, list::repaint);
     private final Map<Direction, JRadioButton> directions = new EnumMap<>(Direction.class);
     private final JCheckBox walking = new JCheckBox("Andando", true);
     private final JSlider speed = new JSlider(40, 400, 100);
@@ -180,6 +185,7 @@ final class MainWindow extends JFrame {
                 .sorted(Comparator.comparing(Entry::name, String.CASE_INSENSITIVE_ORDER))
                 .forEach(e -> mountOptions.add(new MountPicker.Option(e.looktype(), e.name())));
         mountPicker = new MountPicker(mountOptions, looktype -> renderer.still(OutfitRequest.of(looktype)));
+        mountLooktype = mountOptions.size() > 1 ? mountOptions.get(1).looktype() : 0;
 
         countCategories();
 
@@ -190,7 +196,7 @@ final class MainWindow extends JFrame {
         JPanel root = new JPanel(new BorderLayout(8, 8));
         root.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         root.add(buildListPanel(), BorderLayout.WEST);
-        root.add(preview, BorderLayout.CENTER);
+        root.add(buildPreviewPanel(), BorderLayout.CENTER);
         root.add(buildControls(), BorderLayout.EAST);
         root.add(status, BorderLayout.SOUTH);
         setContentPane(root);
@@ -202,6 +208,7 @@ final class MainWindow extends JFrame {
         applyFilter();
         mountPicker.onThumbnail(this::updateMountButton);
         mountPicker.preload();
+        refreshMount();
 
         pack();
         setMinimumSize(getSize());
@@ -271,6 +278,21 @@ final class MainWindow extends JFrame {
         });
         search.setToolTipText("Buscar por nome ou número");
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // Largura e altura fixas: sem isso o Swing chama o renderer de todos os itens para medir a lista,
+        // o que pediria miniatura de todos (1740 monstros) em vez de só dos visíveis.
+        list.setFixedCellHeight(40);
+        list.setFixedCellWidth(236);
+        list.setCellRenderer(new javax.swing.DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> l, Object value, int index,
+                                                          boolean selected, boolean focus) {
+                super.getListCellRendererComponent(l, value, index, selected, focus);
+                Entry entry = (Entry) value;
+                setIcon(thumbnails.get(entry, () -> renderer.still(thumbnailRequest(entry))));
+                setIconTextGap(8);
+                return this;
+            }
+        });
         list.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 onOutfitSelected();
@@ -321,13 +343,22 @@ final class MainWindow extends JFrame {
         mountButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         mountButton.setToolTipText("Escolher montaria");
         mountButton.addActionListener(e -> mountPicker.open(mountButton, mountLooktype, this::setMount));
-        JButton noMount = new JButton("✕");
-        noMount.setToolTipText("Remover montaria");
-        noMount.addActionListener(e -> setMount(0));
-        JPanel mountRow = new JPanel(new BorderLayout(4, 0));
+        JButton mountPrev = arrow("◀", "Montaria anterior", () -> cycleMount(-1));
+        JButton mountNext = arrow("▶", "Próxima montaria", () -> cycleMount(1));
+        JPanel mountRow = new JPanel(new BorderLayout(2, 0));
+        mountRow.add(mountPrev, BorderLayout.WEST);
         mountRow.add(mountButton, BorderLayout.CENTER);
-        mountRow.add(noMount, BorderLayout.EAST);
-        panel.add(section("Montaria", mountRow));
+        mountRow.add(mountNext, BorderLayout.EAST);
+        mountOn.addActionListener(e -> refresh());
+        mountPreview.setPreferredSize(new Dimension(200, 100));
+        JPanel mountSection = new JPanel(new BorderLayout(2, 4));
+        mountSection.setBorder(BorderFactory.createTitledBorder("Montaria"));
+        mountSection.add(mountRow, BorderLayout.NORTH);
+        mountSection.add(mountPreview, BorderLayout.CENTER);
+        mountSection.add(mountOn, BorderLayout.SOUTH);
+        mountSection.setAlignmentX(Component.LEFT_ALIGNMENT);
+        mountSection.setMaximumSize(new Dimension(Integer.MAX_VALUE, mountSection.getPreferredSize().height));
+        panel.add(mountSection);
 
         ButtonGroup group = new ButtonGroup();
         JPanel dirs = new JPanel(new GridLayout(2, 2));
@@ -340,11 +371,15 @@ final class MainWindow extends JFrame {
         }
         panel.add(section("Direção", dirs));
 
-        walking.addActionListener(e -> refresh());
+        walking.addActionListener(e -> {
+            refresh();
+            refreshMount();
+        });
         speed.setToolTipText("Duração de cada frame (ms)");
         speed.addChangeListener(e -> {
             if (!speed.getValueIsAdjusting()) {
                 refresh();
+                refreshMount();
             }
         });
         panel.add(section("Animação", walking, new JLabel("Velocidade (ms por frame)"), speed));
@@ -375,10 +410,104 @@ final class MainWindow extends JFrame {
         return panel;
     }
 
+    /** Preview principal com as setas para passar de outfit sem usar a lista. */
+    private JComponent buildPreviewPanel() {
+        JButton prev = arrow("◀", "Item anterior da lista", () -> step(-1));
+        JButton next = arrow("▶", "Próximo item da lista", () -> step(1));
+        JPanel bar = new JPanel(new BorderLayout(4, 0));
+        bar.add(prev, BorderLayout.WEST);
+        bar.add(next, BorderLayout.EAST);
+        JPanel panel = new JPanel(new BorderLayout(0, 4));
+        panel.add(preview, BorderLayout.CENTER);
+        panel.add(bar, BorderLayout.SOUTH);
+        return panel;
+    }
+
+    private static JButton arrow(String text, String tooltip, Runnable action) {
+        JButton button = new JButton(text);
+        button.setToolTipText(tooltip);
+        button.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        button.addActionListener(e -> action.run());
+        return button;
+    }
+
+    /** Anda na lista atual, dando a volta nas pontas. */
+    private void step(int delta) {
+        if (listModel.isEmpty()) {
+            return;
+        }
+        int index = list.getSelectedIndex();
+        int next = Math.floorMod((index < 0 ? 0 : index + delta), listModel.size());
+        list.setSelectedIndex(next);
+        list.ensureIndexIsVisible(next);
+    }
+
+    private void cycleMount(int delta) {
+        if (mountOptions.size() <= 1) {
+            return;
+        }
+        // Pula a opção "Sem montaria" (índice 0): quem desliga é a caixa "Montar".
+        int index = 0;
+        for (int i = 1; i < mountOptions.size(); i++) {
+            if (mountOptions.get(i).looktype() == mountLooktype) {
+                index = i;
+            }
+        }
+        int count = mountOptions.size() - 1;
+        int next = 1 + Math.floorMod((index == 0 ? 0 : index - 1) + delta, count);
+        setMount(mountOptions.get(next).looktype());
+    }
+
+    /** Looktype da miniatura: personagem com as cores dele; o resto com as cores padrão. */
+    private static OutfitRequest thumbnailRequest(Entry entry) {
+        GameCharacter c = entry.character();
+        if (c != null) {
+            return OutfitRequest.of(c.looktype()).withAddons(c.addons())
+                    .withColors(TibiaColor.palette(c.head()), TibiaColor.palette(c.body()),
+                            TibiaColor.palette(c.legs()), TibiaColor.palette(c.feet()));
+        }
+        return OutfitRequest.of(entry.looktype()).withColors(TibiaColor.palette(78), TibiaColor.palette(69),
+                TibiaColor.palette(58), TibiaColor.palette(76));
+    }
+
+    /** Escolher uma montaria já monta; "Sem montaria" no seletor só desmarca "Montar". */
     private void setMount(int looktype) {
-        mountLooktype = looktype;
+        if (looktype > 0) {
+            mountLooktype = looktype;
+        }
+        mountOn.setSelected(looktype > 0);
         updateMountButton();
         refresh();
+        refreshMount();
+    }
+
+    /** Preview só da montaria, na mesma animação e velocidade do principal. */
+    private void refreshMount() {
+        if (mountLooktype <= 0) {
+            mountPreview.showMessage("Sem montaria");
+            return;
+        }
+        OutfitRequest request = OutfitRequest.of(mountLooktype);
+        AnimationType type = walking.isSelected() ? AnimationType.MOVING : AnimationType.IDLE;
+        int frameMs = walking.isSelected() ? speed.getValue() : 0;
+        int generation = ++mountGeneration;
+        new SwingWorker<List<OutfitRenderer.Frame>, Void>() {
+            @Override
+            protected List<OutfitRenderer.Frame> doInBackground() {
+                return renderer.frames(request, type, frameMs);
+            }
+
+            @Override
+            protected void done() {
+                if (generation == mountGeneration) {
+                    try {
+                        mountPreview.show(get());
+                    } catch (Exception e) {
+                        mountPreview.showMessage("Erro");
+                    }
+                }
+            }
+        }.execute();
     }
 
     private void updateMountButton() {
@@ -480,7 +609,7 @@ final class MainWindow extends JFrame {
         if (!addon2.isEnabled()) {
             addon2.setSelected(false);
         }
-        mountButton.setEnabled(info.mountable());
+        mountOn.setEnabled(info.mountable());
         for (ColorButton button : List.of(head, body, legs, feet)) {
             button.setEnabled(info.colorable());
         }
@@ -539,8 +668,12 @@ final class MainWindow extends JFrame {
         body.setColor(TibiaColor.palette(character.body()));
         legs.setColor(TibiaColor.palette(character.legs()));
         feet.setColor(TibiaColor.palette(character.feet()));
-        mountLooktype = info.mountable() ? character.mount() : 0;
+        if (character.mount() > 0) {
+            mountLooktype = character.mount();
+        }
+        mountOn.setSelected(info.mountable() && character.mount() > 0);
         updateMountButton();
+        refreshMount();
     }
 
     private OutfitRequest request() {
@@ -551,7 +684,7 @@ final class MainWindow extends JFrame {
         return OutfitRequest.of(entry.looktype())
                 .withAddons(addons)
                 .withColors(head.color(), body.color(), legs.color(), feet.color())
-                .withMount(entry.info().mountable() ? mountLooktype : 0)
+                .withMount(entry.info().mountable() && mountOn.isSelected() ? mountLooktype : 0)
                 .withDirection(direction);
     }
 
@@ -634,9 +767,12 @@ final class MainWindow extends JFrame {
         for (ColorButton button : List.of(head, body, legs, feet)) {
             button.setColor(TibiaColor.palette(random.nextInt(TibiaColor.PALETTE_SIZE)));
         }
-        mountLooktype = info.mountable() && mountOptions.size() > 1 && random.nextBoolean()
-                ? mountOptions.get(1 + random.nextInt(mountOptions.size() - 1)).looktype() : 0;
+        if (mountOptions.size() > 1) {
+            mountLooktype = mountOptions.get(1 + random.nextInt(mountOptions.size() - 1)).looktype();
+        }
+        mountOn.setSelected(info.mountable() && random.nextBoolean());
         updateMountButton();
+        refreshMount();
         directions.get(Direction.values()[random.nextInt(4)]).setSelected(true);
         adjusting = false;
         refresh();

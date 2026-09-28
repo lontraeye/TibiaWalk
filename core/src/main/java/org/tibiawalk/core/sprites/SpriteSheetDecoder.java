@@ -22,6 +22,7 @@ import java.nio.file.Path;
 public final class SpriteSheetDecoder {
 
     public static final int SHEET_SIZE = 384;
+    private static final int MAX_DICT = 1 << 20;
 
     private SpriteSheetDecoder() {
     }
@@ -47,6 +48,9 @@ public final class SpriteSheetDecoder {
                 | (data[pos + 4] & 0xFF) << 24;
         pos += 1 + 4 + 8; // props + dicionário + tamanho descomprimido (ignorado)
 
+        // O cabeçalho pede um dicionário de 32 MB, mas a folha descomprimida tem ~590 KB: nenhuma referência
+        // passa disso, então 1 MB basta e evita alocar 32 MB a cada folha.
+        dictSize = Math.min(dictSize, MAX_DICT);
         InputStream raw = new ByteArrayInputStream(data, pos, data.length - pos);
         ByteArrayOutputStream out = new ByteArrayOutputStream(SHEET_SIZE * SHEET_SIZE * 4 + 256);
         try (LZMAInputStream lzma = new LZMAInputStream(raw, -1, props, dictSize)) {

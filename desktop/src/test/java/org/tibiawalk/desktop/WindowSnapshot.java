@@ -107,7 +107,8 @@ public final class WindowSnapshot {
     private static <T extends Component> T find(Container root, Class<T> type, String text) {
         for (Component c : root.getComponents()) {
             if (type.isInstance(c) && (text == null
-                    || (c instanceof AbstractButton b && b.getText() != null && b.getText().contains(text)))) {
+                    || (c instanceof AbstractButton b && ((b.getText() != null && b.getText().contains(text))
+                    || (b.getToolTipText() != null && b.getToolTipText().contains(text)))))) {
                 return type.cast(c);
             }
             if (c instanceof Container child) {

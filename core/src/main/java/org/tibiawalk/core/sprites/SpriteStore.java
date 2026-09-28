@@ -8,14 +8,23 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ConcurrentHashMap;
 
-/** Entrega sprites pelo ID, decodificando as folhas sob demanda e mantendo as mais recentes em cache. */
+/**
+ * Entrega sprites pelo ID, decodificando as folhas sob demanda e mantendo as mais recentes em cache.
+ *
+ * <p>Seguro para várias threads: folhas diferentes são decodificadas em paralelo, e duas threads pedindo
+ * a mesma folha esperam uma única decodificação.
+ */
 public final class SpriteStore {
 
     private static final int DEFAULT_CACHED_SHEETS = 64;
 
     private final AssetCatalog catalog;
     private final Map<String, BufferedImage> sheetCache;
+    private final Map<String, CompletableFuture<BufferedImage>> decoding = new ConcurrentHashMap<>();
 
     public SpriteStore(AssetCatalog catalog) {
         this(catalog, DEFAULT_CACHED_SHEETS);
@@ -50,13 +59,45 @@ public final class SpriteStore {
         return sprite;
     }
 
-    public synchronized BufferedImage sheet(SpriteSheet sheet) {
-        return sheetCache.computeIfAbsent(sheet.file(), file -> {
-            try {
-                return SpriteSheetDecoder.decode(catalog.assetsDir().resolve(file));
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
+    public BufferedImage sheet(SpriteSheet sheet) {
+        String file = sheet.file();
+        synchronized (sheetCache) {
+            BufferedImage cached = sheetCache.get(file);
+            if (cached != null) {
+                return cached;
             }
-        });
+        }
+
+        // Fora da trava do cache: só quem criou o future decodifica; os outros esperam o mesmo resultado.
+        CompletableFuture<BufferedImage> mine = new CompletableFuture<>();
+        CompletableFuture<BufferedImage> pending = decoding.putIfAbsent(file, mine);
+        if (pending != null) {
+            return join(pending);
+        }
+        try {
+            BufferedImage image = SpriteSheetDecoder.decode(catalog.assetsDir().resolve(file));
+            synchronized (sheetCache) {
+                sheetCache.put(file, image);
+            }
+            mine.complete(image);
+            return image;
+        } catch (IOException | RuntimeException e) {
+            mine.completeExceptionally(e);
+            throw e instanceof IOException io ? new UncheckedIOException(io) : (RuntimeException) e;
+        } finally {
+            decoding.remove(file, mine);
+        }
+    }
+
+    private static BufferedImage join(CompletableFuture<BufferedImage> future) {
+        try {
+            return future.join();
+        } catch (CompletionException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof IOException io) {
+                throw new UncheckedIOException(io);
+            }
+            throw cause instanceof RuntimeException r ? r : e;
+        }
     }
 }
