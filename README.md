@@ -104,11 +104,22 @@ Cada entrada guarda a fonte em `source`. Para nomear um outfit novo ou corrigir 
 ]
 ```
 
-Para atualizar (por exemplo, depois de uma atualização do Tibia):
+## Atualizar depois de um patch do Tibia
 
-```bash
-./gradlew :core:updateMetadata -Passets="C:/.../Tibia/packages/Tibia/assets"
-```
+1. Abra o launcher e deixe ele atualizar o cliente. Os sprites são lidos direto da pasta `assets`, não há nada a
+   copiar: outfits novos já renderizam, só que sem nome.
+2. Rode, na raiz do projeto:
+
+   ```bash
+   ./gradlew updateAll -Passets="C:/.../Tibia/packages/Tibia/assets"    # ou com TIBIA_ASSETS definida
+   ```
+
+   Isso regenera o `metadata.json` com todas as fontes e regras acima e gera de novo os três jars (o JSON vai
+   embutido neles). No fim sai um relatório: conflitos de sexo e qual fonte venceu, outfits provisórios, quantos
+   looktypes seguem sem nome e **o que mudou** em relação ao arquivo anterior (ganharam nome, mudaram, perderam nome).
+3. Revise o relatório, ajuste o `core/metadata-overrides.json` se precisar e commite o `metadata.json`.
+
+Só o metadata, sem gerar os jars: `./gradlew :core:updateMetadata`.
 
 Looktypes que ainda não estão no Canary continuam renderizando normalmente, só aparecem sem nome (`list --unknown`).
 

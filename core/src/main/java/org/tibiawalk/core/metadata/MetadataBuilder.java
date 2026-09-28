@@ -92,12 +92,20 @@ public final class MetadataBuilder {
         source.addProperty("clientStaticData", client.catalog().staticDataFile() == null
                 ? "" : client.catalog().staticDataFile().getFileName().toString());
         source.addProperty("generated", LocalDate.now().toString());
+        source.addProperty("clientLooktypes", client.outfits().size());
 
         JsonObject root = new JsonObject();
         root.add("source", source);
         Gson gson = MetadataJson.gson();
         root.add("looktypes", gson.toJsonTree(entries.values().stream()
                 .sorted((a, b) -> Integer.compare(a.looktype(), b.looktype())).toList()));
+
+        Metadata previous = null;
+        if (Files.isRegularFile(output)) {
+            try (var reader = Files.newBufferedReader(output, StandardCharsets.UTF_8)) {
+                previous = Metadata.read(reader);
+            }
+        }
 
         Files.createDirectories(output.toAbsolutePath().getParent());
         try (Writer writer = Files.newBufferedWriter(output, StandardCharsets.UTF_8)) {
@@ -119,6 +127,66 @@ public final class MetadataBuilder {
         }
         if (!missing.isEmpty()) {
             System.out.println("Aviso: looktypes que não existem neste cliente: " + missing);
+        }
+        if (previous != null) {
+            printChanges(previous, entries, client.outfits().size());
+        }
+    }
+
+    private static final int MAX_LINES = 25;
+
+    /** O que mudou em relação ao metadata.json anterior, para revisar antes de commitar. */
+    private static void printChanges(Metadata previous, Map<Integer, LooktypeMeta> current, int clientLooktypes) {
+        Map<Integer, LooktypeMeta> old = new java.util.TreeMap<>();
+        previous.all().forEach(m -> old.put(m.looktype(), m));
+
+        List<String> added = new ArrayList<>();
+        List<String> changed = new ArrayList<>();
+        List<String> removed = new ArrayList<>();
+        new java.util.TreeMap<>(current).forEach((lt, now) -> {
+            LooktypeMeta before = old.get(lt);
+            if (before == null) {
+                added.add(lt + " " + describe(now));
+            } else if (!before.name().equals(now.name()) || before.kind() != now.kind()
+                    || !java.util.Objects.equals(before.sex(), now.sex())) {
+                changed.add(lt + " " + describe(before) + " -> " + describe(now));
+            }
+        });
+        old.forEach((lt, before) -> {
+            if (!current.containsKey(lt)) {
+                removed.add(lt + " " + describe(before));
+            }
+        });
+
+        System.out.println();
+        System.out.println("=== Mudanças em relação ao metadata.json anterior ===");
+        if (previous.source().has("clientLooktypes")) {
+            int before = previous.source().get("clientLooktypes").getAsInt();
+            if (before != clientLooktypes) {
+                System.out.printf("Cliente: %d -> %d looktypes (%+d)%n", before, clientLooktypes, clientLooktypes - before);
+            }
+        }
+        if (added.isEmpty() && changed.isEmpty() && removed.isEmpty()) {
+            System.out.println("Nenhuma mudança de nome, categoria ou sexo.");
+            return;
+        }
+        printList("Ganharam nome", added);
+        printList("Mudaram", changed);
+        printList("Perderam nome", removed);
+    }
+
+    private static String describe(LooktypeMeta m) {
+        return m.name() + " [" + m.kind().name().toLowerCase() + (m.sex() != null ? ", " + m.sex() : "") + "]";
+    }
+
+    private static void printList(String title, List<String> lines) {
+        if (lines.isEmpty()) {
+            return;
+        }
+        System.out.println(title + " (" + lines.size() + "):");
+        lines.stream().limit(MAX_LINES).forEach(line -> System.out.println("  " + line));
+        if (lines.size() > MAX_LINES) {
+            System.out.println("  … e mais " + (lines.size() - MAX_LINES));
         }
     }
 

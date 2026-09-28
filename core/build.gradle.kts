@@ -52,11 +52,17 @@ tasks.register<JavaExec>("tool") {
 tasks.register<JavaExec>("updateMetadata") {
     group = "tibiawalk"
     description = "Junta TibiaWiki, Canary, staticdata e metadata-overrides.json em metadata.json."
-    classpath = sourceSets["main"].runtimeClasspath
+    // Só classes e bibliotecas: sem os resources, que contêm justamente o metadata.json que esta task gera.
+    classpath = sourceSets["main"].output.classesDirs + configurations["runtimeClasspath"]
     mainClass.set("org.tibiawalk.core.metadata.MetadataBuilder")
     jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8")
     val assets = providers.gradleProperty("assets").orElse(providers.environmentVariable("TIBIA_ASSETS"))
     val output = layout.projectDirectory.file("src/main/resources/org/tibiawalk/core/metadata.json").asFile
     val overrides = layout.projectDirectory.file("metadata-overrides.json").asFile
     args(assets.getOrElse(""), output.path, providers.gradleProperty("canaryRef").getOrElse("main"), overrides.path)
+}
+
+// Se updateMetadata rodar no mesmo build (ex. updateAll), o jar do core precisa pegar o JSON novo.
+tasks.named("processResources") {
+    mustRunAfter("updateMetadata")
 }
