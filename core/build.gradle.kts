@@ -10,6 +10,7 @@ repositories {
 dependencies {
     api(libs.protobuf.java)
     implementation(libs.gson)
+    implementation(libs.xz)
 }
 
 java {
@@ -35,4 +36,13 @@ tasks.register<JavaExec>("outfitReport") {
     val assets = providers.gradleProperty("assets").orElse(providers.environmentVariable("TIBIA_ASSETS"))
     val ids = providers.gradleProperty("ids").orElse("")
     args(assets.getOrElse(""), ids.get())
+}
+
+// Roda uma ferramenta de org.tibiawalk.core.tools: -Ptool=SpriteDump -Pargs="a b c"
+tasks.register<JavaExec>("tool") {
+    group = "tibiawalk"
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set(providers.gradleProperty("tool").map { "org.tibiawalk.core.tools.$it" })
+    jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8")
+    args(providers.gradleProperty("args").getOrElse("").split(" ").filter { it.isNotBlank() })
 }

@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,10 +18,12 @@ public final class ClientAssets {
 
     private final AssetCatalog catalog;
     private final Map<Integer, OutfitInfo> outfits;
+    private final Map<Integer, Appearance> appearances;
 
-    private ClientAssets(AssetCatalog catalog, Map<Integer, OutfitInfo> outfits) {
+    private ClientAssets(AssetCatalog catalog, Map<Integer, OutfitInfo> outfits, Map<Integer, Appearance> appearances) {
         this.catalog = catalog;
         this.outfits = outfits;
+        this.appearances = appearances;
     }
 
     public static ClientAssets open(Path assetsDir) throws IOException {
@@ -32,10 +35,12 @@ public final class ClientAssets {
         }
 
         Map<Integer, OutfitInfo> outfits = new TreeMap<>();
+        Map<Integer, Appearance> raw = new HashMap<>();
         for (Appearance outfit : appearances.getOutfitList()) {
             outfits.put(outfit.getId(), OutfitInfo.from(outfit));
+            raw.put(outfit.getId(), outfit);
         }
-        return new ClientAssets(catalog, Collections.unmodifiableMap(outfits));
+        return new ClientAssets(catalog, Collections.unmodifiableMap(outfits), raw);
     }
 
     public AssetCatalog catalog() {
@@ -45,6 +50,11 @@ public final class ClientAssets {
     /** O outfit do looktype, ou null se o cliente não tiver esse looktype. */
     public OutfitInfo outfit(int looktype) {
         return outfits.get(looktype);
+    }
+
+    /** A entrada crua do appearances.dat para o looktype, ou null. */
+    public Appearance appearance(int looktype) {
+        return appearances.get(looktype);
     }
 
     public Collection<OutfitInfo> outfits() {
