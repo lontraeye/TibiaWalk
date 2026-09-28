@@ -327,8 +327,36 @@ textarea {
 /* Coleção */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 4px;
+}
+
+.count {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.tiles-count {
+  color: var(--muted);
+  font-size: 12px;
+  min-height: 1.2em;
+}
+
+.speed {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.speed input {
+  width: 110px;
+  accent-color: var(--accent);
+}
+
+#speed-value {
+  color: var(--muted);
+  min-width: 48px;
 }
 
 .tab {

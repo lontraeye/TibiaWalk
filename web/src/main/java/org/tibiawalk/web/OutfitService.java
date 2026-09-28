@@ -304,6 +304,16 @@ final class OutfitService {
     Map<String, Object> info() {
         Map<String, Object> info = new LinkedHashMap<>();
         info.put("looktypes", assets.outfits().size());
+        Map<String, Object> counts = new LinkedHashMap<>();
+        counts.put("players", looktypes("player", null, null).size());
+        counts.put("mounts", looktypes("mount", null, null).size());
+        counts.put("npcs", characters("npc", null).size());
+        counts.put("monsters", characters("monster", null).size());
+        counts.put("bosses", metadata.characters().stream()
+                .filter(c -> c.kind() == GameCharacter.Kind.BOSS && assets.outfit(c.looktype()) != null).count());
+        counts.put("unknown", looktypes("unknown", null, null).size());
+        counts.put("all", looktypes("all", null, null).size());
+        info.put("counts", counts);
         info.put("metadataSource", metadata.source());
         return info;
     }

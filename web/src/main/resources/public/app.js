@@ -3,7 +3,7 @@
 
   var DIRECTIONS = ["north", "east", "south", "west"];
   var DEFAULT_COLORS = [78, 69, 58, 76];
-  var FRAME_MS = 100;
+  var DEFAULT_FRAME_MS = 100;
 
   var $ = function (id) { return document.getElementById(id); };
 
@@ -16,13 +16,16 @@
     mount: 0,
     mountOn: false,
     direction: 2,
-    walking: true
+    walking: true,
+    frameMs: DEFAULT_FRAME_MS
   };
 
   var palette = [];
   var outfits = [];  // [{name, male, female, addons, mountable, colorable}]
   var mounts = [];   // [{looktype, name}]
-  var characters = { npcs: null, monsters: null }; // carregados na primeira vez que a aba abre
+  // Abas carregadas na primeira vez que abrem: personagens (npcs, monsters) e looktypes (unknown, all).
+  var lists = { npcs: null, monsters: null, unknown: null, all: null };
+  var counts = {};
   var tab = "outfits";
   var bossOnly = false; // aba Monstros: mostrar só bosses
 
@@ -43,7 +46,7 @@
       mount: state.mountOn && o.mountable ? state.mount : 0,
       direction: DIRECTIONS[state.direction],
       idle: !state.walking,
-      frameMs: FRAME_MS,
+      frameMs: state.frameMs,
       format: format
     };
   }
@@ -103,6 +106,7 @@
     var dir = DIRECTIONS.indexOf(query.get("direction"));
     if (dir >= 0) state.direction = dir;
     if (query.get("idle") === "1") state.walking = false;
+    if (query.has("frameMs")) state.frameMs = clamp(+query.get("frameMs"), 40, 400);
   }
 
   function writeHash() {
@@ -114,6 +118,7 @@
     if (p.mount) query.set("mount", p.mount);
     query.set("direction", p.direction);
     if (p.idle) query.set("idle", "1");
+    if (p.frameMs !== DEFAULT_FRAME_MS) query.set("frameMs", p.frameMs);
     history.replaceState(null, "", "#" + query.toString());
   }
 
@@ -132,8 +137,8 @@
     $("outfit-name").textContent = o.name;
     setPressed($("sex-male"), state.sex === "male");
     setPressed($("sex-female"), state.sex === "female");
-    $("sex-male").disabled = !o.male || !!o.character;
-    $("sex-female").disabled = !o.female || !!o.character;
+    $("sex-male").disabled = !o.male || !!o.character || !!o.single;
+    $("sex-female").disabled = !o.female || !!o.character || !!o.single;
 
     // Addon de NPC/monstro é fixo: as caixas mostram o que ele usa, mas não mudam.
     var character = !!o.character;
@@ -145,6 +150,9 @@
     $("addon1").checked = (state.addons & 1) !== 0;
     $("addon2").checked = (state.addons & 2) !== 0;
     $("walking").checked = state.walking;
+    $("speed").value = state.frameMs;
+    $("speed").disabled = !state.walking;
+    $("speed-value").textContent = state.frameMs + " ms";
 
     var mount = mounts.find(function (m) { return m.looktype === state.mount; });
     $("mount-on").disabled = !o.mountable || !mount;
@@ -208,6 +216,7 @@
     if (p.mount) attrs.push('mount="' + p.mount + '"');
     if (p.direction !== "south") attrs.push('direction="' + p.direction + '"');
     if (p.idle) attrs.push("idle");
+    else if (p.frameMs !== DEFAULT_FRAME_MS) attrs.push('frame-ms="' + p.frameMs + '"');
     attrs.push('scale="2"');
     return '<script src="' + TibiaWalk.server + '/tibiawalk.js"></' + 'script>\n' +
       "<tibia-outfit " + attrs.join(" ") + "></tibia-outfit>";
@@ -263,17 +272,24 @@
     renderTiles();
   }
 
+  /** "Mostrando 12 de 435 bosses" ou "957 itens". */
+  function showCount(shown, total, what) {
+    $("tiles-count").textContent = total == null ? ""
+      : shown === total ? total + " " + (what || "itens") : "Mostrando " + shown + " de " + total + (what ? " " + what : "");
+  }
+
   function renderCharacterTiles(list) {
     var q = $("search").value.trim().toLowerCase();
     var tiles = $("tiles");
     tiles.innerHTML = "";
     if (!list) {
       tiles.innerHTML = '<div class="empty">Carregando…</div>';
+      showCount(0, null);
       return;
     }
-    var items = list.filter(function (c) {
-      return (!q || c.name.toLowerCase().indexOf(q) >= 0) && (!bossOnly || tab !== "monsters" || c.kind === "boss");
-    });
+    var scope = list.filter(function (c) { return !bossOnly || tab !== "monsters" || c.kind === "boss"; });
+    var items = scope.filter(function (c) { return !q || c.name.toLowerCase().indexOf(q) >= 0; });
+    showCount(items.length, scope.length, bossOnly && tab === "monsters" ? "bosses" : null);
     if (!items.length) {
       tiles.innerHTML = '<div class="empty">Nada encontrado</div>';
       return;
@@ -305,18 +321,76 @@
     tiles.appendChild(fragment);
   }
 
+  /** Looktype avulso (abas Sem nome / Todos): um outfit editável, sem par masculino/feminino. */
+  function applyLooktype(row) {
+    state.outfit = {
+      name: row.name || "#" + row.looktype, male: row.looktype, female: row.looktype, addons: row.addons,
+      mountable: row.mountable, colorable: row.colorable, single: true, looktype: row.looktype
+    };
+  }
+
+  function renderLooktypeTiles(list) {
+    var q = $("search").value.trim().toLowerCase();
+    var tiles = $("tiles");
+    tiles.innerHTML = "";
+    if (!list) {
+      tiles.innerHTML = '<div class="empty">Carregando…</div>';
+      showCount(0, null);
+      return;
+    }
+    var items = list.filter(function (row) {
+      return !q || String(row.looktype) === q || (row.name && row.name.toLowerCase().indexOf(q) >= 0);
+    });
+    showCount(items.length, list.length);
+    if (!items.length) {
+      tiles.innerHTML = '<div class="empty">Nada encontrado</div>';
+      return;
+    }
+    var fragment = document.createDocumentFragment();
+    items.forEach(function (row) {
+      var tile = document.createElement("button");
+      tile.className = "btn tile";
+      tile.classList.toggle("active", !!(state.outfit && state.outfit.single && state.outfit.looktype === row.looktype));
+      tile.title = (row.name || "Sem nome") + " — looktype " + row.looktype + (row.kind ? " (" + row.kind + ")" : "");
+      var img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = "";
+      img.src = TibiaWalk.url({ looktype: row.looktype, idle: true, format: "png" });
+      var label = document.createElement("span");
+      label.textContent = row.name ? row.name + " (" + row.looktype + ")" : "#" + row.looktype;
+      tile.appendChild(img);
+      tile.appendChild(label);
+      tile.addEventListener("click", function () {
+        applyLooktype(row);
+        render();
+        renderTiles();
+      });
+      fragment.appendChild(tile);
+    });
+    tiles.appendChild(fragment);
+  }
+
+  var SOURCES = {
+    npcs: "api/characters?kind=npc",
+    monsters: "api/characters?kind=monster",
+    unknown: "api/looktypes?kind=unknown",
+    all: "api/looktypes?kind=all"
+  };
+
   function renderTiles() {
     $("boss-only").hidden = tab !== "monsters";
-    if (tab === "npcs" || tab === "monsters") {
-      if (!characters[tab]) {
-        renderCharacterTiles(null);
-        getJson("api/characters?kind=" + (tab === "npcs" ? "npc" : "monster")).then(function (list) {
-          characters[tab] = list;
-          renderTiles();
+    if (SOURCES[tab]) {
+      var current = tab;
+      var draw = current === "unknown" || current === "all" ? renderLooktypeTiles : renderCharacterTiles;
+      if (!lists[current]) {
+        draw(null);
+        getJson(SOURCES[current]).then(function (list) {
+          lists[current] = current === "all" ? list.sort(function (a, b) { return a.looktype - b.looktype; }) : list;
+          if (tab === current) renderTiles();
         });
         return;
       }
-      renderCharacterTiles(characters[tab]);
+      draw(lists[current]);
       return;
     }
     var q = $("search").value.trim().toLowerCase();
@@ -327,6 +401,8 @@
       : [{ looktype: 0, name: "Sem montaria" }].concat(mounts.filter(function (m) {
         return !q || m.name.toLowerCase().indexOf(q) >= 0;
       }));
+    showCount(tab === "outfits" ? items.length : items.length - 1, tab === "outfits" ? outfits.length : mounts.length,
+      tab === "outfits" ? "outfits" : "montarias");
     if (!items.length) {
       tiles.innerHTML = '<div class="empty">Nada encontrado</div>';
       return;
@@ -425,6 +501,8 @@
     $("addon1").addEventListener("change", function (e) { state.addons = (state.addons & 2) | (e.target.checked ? 1 : 0); render(); });
     $("addon2").addEventListener("change", function (e) { state.addons = (state.addons & 1) | (e.target.checked ? 2 : 0); render(); });
     $("walking").addEventListener("change", function (e) { state.walking = e.target.checked; render(); });
+    $("speed").addEventListener("input", function (e) { $("speed-value").textContent = e.target.value + " ms"; });
+    $("speed").addEventListener("change", function (e) { state.frameMs = +e.target.value; render(); });
     $("mount-on").addEventListener("change", function (e) { state.mountOn = e.target.checked; render(); renderTiles(); });
     $("rotate-left").addEventListener("click", function () { state.direction = (state.direction + 3) % 4; render(); });
     $("rotate-right").addEventListener("click", function () { state.direction = (state.direction + 1) % 4; render(); });
@@ -465,14 +543,29 @@
     $("preview").addEventListener("tibiawalk-error", function (e) { toast(e.detail); });
   }
 
+  function showTabCounts() {
+    var byTab = {
+      outfits: outfits.length, mounts: mounts.length, npcs: counts.npcs, monsters: counts.monsters,
+      unknown: counts.unknown, all: counts.all
+    };
+    document.querySelectorAll(".tab").forEach(function (button) {
+      var n = byTab[button.dataset.tab];
+      button.querySelector(".count").textContent = n == null ? "" : "(" + n + ")";
+    });
+    $("boss-only").title = "Mostrar só os bosses" + (counts.bosses ? " (" + counts.bosses + ")" : "");
+  }
+
   Promise.all([
     getJson("api/palette"),
     getJson("api/looktypes?kind=player"),
-    getJson("api/mounts")
+    getJson("api/mounts"),
+    getJson("api/info")
   ]).then(function (results) {
     palette = results[0];
     outfits = groupOutfits(results[1]);
     mounts = results[2].map(function (m) { return { looktype: m.looktype, name: m.name }; });
+    counts = results[3].counts || {};
+    showTabCounts();
     state.outfit = outfits.find(function (o) { return o.male === 128; }) || outfits[0];
     state.mount = mounts.length ? mounts[0].looktype : 0;
     readHash();
