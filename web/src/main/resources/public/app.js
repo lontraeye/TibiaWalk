@@ -134,8 +134,13 @@
     $("sex-male").disabled = !o.male || !!o.character;
     $("sex-female").disabled = !o.female || !!o.character;
 
-    $("addon1").disabled = o.addons < 1;
-    $("addon2").disabled = o.addons < 2;
+    // Addon de NPC é fixo: as caixas mostram o que ele usa, mas não mudam.
+    var npc = !!(o.character && o.character.kind === "npc");
+    $("addon1").disabled = o.addons < 1 || npc;
+    $("addon2").disabled = o.addons < 2 || npc;
+    var target = npc ? playerOutfitOf(o.character) : null;
+    $("goto-outfit").hidden = !target;
+    if (target) $("goto-outfit").textContent = "Ir para o outfit: " + target.name;
     $("addon1").checked = (state.addons & 1) !== 0;
     $("addon2").checked = (state.addons & 2) !== 0;
     $("walking").checked = state.walking;
@@ -234,6 +239,27 @@
     state.colors = [c.head, c.body, c.legs, c.feet];
     state.mountOn = c.mount > 0 && c.mountable;
     if (c.mount > 0) state.mount = c.mount;
+  }
+
+  /** O outfit de player com o mesmo looktype do NPC, se houver. */
+  function playerOutfitOf(c) {
+    return outfits.find(function (g) { return g.male === c.looktype || g.female === c.looktype; }) || null;
+  }
+
+  /** Vai para o outfit de player que o NPC veste, mantendo cores e addons. */
+  function goToPlayerOutfit() {
+    var c = state.outfit && state.outfit.character;
+    var target = c ? playerOutfitOf(c) : null;
+    if (!target) return;
+    state.outfit = target;
+    state.sex = target.female === c.looktype && target.male !== c.looktype ? "female" : "male";
+    tab = "outfits";
+    document.querySelectorAll(".tab").forEach(function (b) {
+      b.setAttribute("aria-selected", String(b.dataset.tab === "outfits"));
+    });
+    $("search").value = "";
+    render();
+    renderTiles();
   }
 
   function renderCharacterTiles(list) {
@@ -399,6 +425,7 @@
     $("rotate-left").addEventListener("click", function () { state.direction = (state.direction + 3) % 4; render(); });
     $("rotate-right").addEventListener("click", function () { state.direction = (state.direction + 1) % 4; render(); });
     $("randomize").addEventListener("click", randomize);
+    $("goto-outfit").addEventListener("click", goToPlayerOutfit);
     document.querySelectorAll(".part").forEach(function (button) {
       button.addEventListener("click", function () { state.part = +button.dataset.part; render(); });
     });

@@ -137,6 +137,8 @@ final class MainWindow extends JFrame {
 
     private final JCheckBox addon1 = new JCheckBox("Addon 1");
     private final JCheckBox addon2 = new JCheckBox("Addon 2");
+    /** Em NPC vestido com um outfit de player: pula para esse outfit, mantendo cores e addons. */
+    private final JButton goToOutfit = new JButton("Ir para o outfit");
     private final ColorButton head = new ColorButton("Cabeça", c -> refresh());
     private final ColorButton body = new ColorButton("Corpo", c -> refresh());
     private final ColorButton legs = new ColorButton("Pernas", c -> refresh());
@@ -295,7 +297,10 @@ final class MainWindow extends JFrame {
 
         addon1.addActionListener(e -> refresh());
         addon2.addActionListener(e -> refresh());
-        panel.add(section("Addons", addon1, addon2));
+        goToOutfit.setEnabled(false);
+        goToOutfit.setToolTipText("Disponível em NPCs que usam um outfit de player");
+        goToOutfit.addActionListener(e -> goToPlayerOutfit());
+        panel.add(section("Addons", addon1, addon2, goToOutfit));
 
         panel.add(section("Cores", head, body, legs, feet));
 
@@ -459,6 +464,46 @@ final class MainWindow extends JFrame {
         if (entry.character() != null) {
             applyPreset(entry.character(), info);
         }
+        boolean npc = entry.character() != null && entry.character().kind() == GameCharacter.Kind.NPC;
+        if (npc) {
+            // Addon de NPC é fixo: as caixas mostram o que ele usa, mas não mudam.
+            addon1.setEnabled(false);
+            addon2.setEnabled(false);
+        }
+        Entry outfit = npc ? playerOutfitOf(entry) : null;
+        goToOutfit.setEnabled(outfit != null);
+        goToOutfit.setText(outfit != null ? "Ir para o outfit: " + outfit.name() : "Ir para o outfit");
+        adjusting = false;
+        refresh();
+    }
+
+    /** O item de outfit de player com o mesmo looktype do personagem, se houver. */
+    private Entry playerOutfitOf(Entry entry) {
+        return entries.stream()
+                .filter(e -> e.character() == null && e.looktype() == entry.looktype())
+                .filter(e -> Filter.PLAYERS.test.test(e))
+                .findFirst().orElse(null);
+    }
+
+    private void goToPlayerOutfit() {
+        Entry current = list.getSelectedValue();
+        Entry target = current == null ? null : playerOutfitOf(current);
+        if (target == null) {
+            return;
+        }
+        // A troca de filtro seleciona outro item no caminho; guarda os addons do NPC para reaplicar no fim.
+        int addons = (addon1.isSelected() ? 1 : 0) | (addon2.isSelected() ? 2 : 0);
+        if ("female".equals(target.sex())) {
+            female.setSelected(true);
+        } else {
+            male.setSelected(true);
+        }
+        search.setText("");
+        filter.setSelectedItem(Filter.PLAYERS);
+        list.setSelectedValue(target, true);
+        adjusting = true;
+        addon1.setSelected(addon1.isEnabled() && (addons & 1) != 0);
+        addon2.setSelected(addon2.isEnabled() && (addons & 2) != 0);
         adjusting = false;
         refresh();
     }
