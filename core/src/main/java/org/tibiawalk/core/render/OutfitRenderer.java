@@ -101,8 +101,10 @@ public final class OutfitRenderer {
             z = 1;
         }
 
+        // reverse_addons_<direção>: nessa direção o addon 2 é desenhado antes do addon 1 (os dois continuam
+        // por cima do corpo). Ex.: Captains (1940) virado para o sul, em que o chapéu fica atrás da luneta.
         AppearanceFlags flags = assets.appearance(outfit.looktype()).getFlags();
-        boolean addonsBehind = switch (request.direction()) {
+        boolean reverseAddons = switch (request.direction()) {
             case NORTH -> flags.getReverseAddonsNorth();
             case EAST -> flags.getReverseAddonsEast();
             case SOUTH -> flags.getReverseAddonsSouth();
@@ -116,14 +118,12 @@ public final class OutfitRenderer {
             }
         }
 
-        if (!addonsBehind) {
-            add(pieces, request, outfit, type, phase, direction, 0, z, anchor);
+        if (reverseAddons) {
+            java.util.Collections.reverse(addonLayers);
         }
+        add(pieces, request, outfit, type, phase, direction, 0, z, anchor);
         for (int y : addonLayers) {
             add(pieces, request, outfit, type, phase, direction, y, z, anchor);
-        }
-        if (addonsBehind) {
-            add(pieces, request, outfit, type, phase, direction, 0, z, anchor);
         }
         return pieces;
     }
