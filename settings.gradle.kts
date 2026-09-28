@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "TibiaWalk"
-include("app", "core")
+include("core")
