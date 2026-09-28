@@ -154,14 +154,23 @@
     $("speed").disabled = !state.walking;
     $("speed-value").textContent = state.frameMs + " ms";
 
-    // Quem não tem versão montada (NPCs, monstros, objetos) nem mostra a caixa da montaria.
-    $("mount-box").hidden = !o.mountable;
-    document.querySelector(".previews").classList.toggle("single", !o.mountable);
+    // Aba Montarias: só a montaria, em destaque. Fora dela, quem não tem versão montada
+    // (NPCs, monstros, objetos) nem mostra a caixa da montaria.
+    var mountsTab = tab === "mounts";
+    $("outfit-box").hidden = mountsTab;
+    $("mount-box").hidden = !mountsTab && !o.mountable;
+    document.querySelector(".previews").classList.toggle("single", mountsTab || !o.mountable);
+    $("mount-preview").setAttribute("scale", mountsTab ? "3" : "2");
+    // Na aba Montarias, o botão leva a montaria escolhida para o outfit (e volta para ele).
+    $("mount-on-label").hidden = mountsTab;
+    $("use-mount").hidden = !mountsTab;
 
     var mount = mounts.find(function (m) { return m.looktype === state.mount; });
     $("mount-on").disabled = !o.mountable || !mount;
     $("mount-on").checked = state.mountOn && o.mountable && !!mount;
     $("mount-name").textContent = mount ? mount.name : "Sem montaria";
+    $("use-mount").disabled = !o.mountable || !mount;
+    $("use-mount").textContent = !o.mountable ? "O outfit atual não monta" : "Usar no outfit: " + o.name;
     var mountPreview = $("mount-preview");
     if (mount) {
       mountPreview.setAttribute("looktype", mount.looktype);
@@ -297,6 +306,18 @@
     });
     el.addEventListener("tibiawalk-load", function () { box.classList.remove("busy"); });
     el.addEventListener("tibiawalk-error", function () { box.classList.remove("busy"); });
+  }
+
+  /** Aba Montarias: monta o outfit na montaria escolhida e volta para a aba Outfits. */
+  function useMount() {
+    state.mountOn = true;
+    tab = "outfits";
+    document.querySelectorAll(".tab").forEach(function (b) {
+      b.setAttribute("aria-selected", String(b.dataset.tab === "outfits"));
+    });
+    $("search").value = "";
+    render();
+    renderTiles();
   }
 
   function renderCharacterTiles(list) {
@@ -534,6 +555,7 @@
     $("rotate-right").addEventListener("click", function () { state.direction = (state.direction + 1) % 4; render(); });
     $("randomize").addEventListener("click", randomize);
     $("goto-outfit").addEventListener("click", goToPlayerOutfit);
+    $("use-mount").addEventListener("click", useMount);
     $("boss-only").addEventListener("click", function () {
       bossOnly = !bossOnly;
       $("boss-only").setAttribute("aria-pressed", String(bossOnly));
@@ -558,6 +580,7 @@
           b.setAttribute("aria-selected", String(b === button));
         });
         $("search").value = "";
+        render(); // a aba Montarias muda o que aparece nos previews
         renderTiles();
       });
     });

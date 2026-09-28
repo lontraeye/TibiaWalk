@@ -16,7 +16,7 @@
       <header class="window-title" id="outfit-title">Selecionar outfit</header>
       <div class="window-body">
         <div class="previews">
-          <div class="preview-box">
+          <div class="preview-box" id="outfit-box">
             <div class="preview-label" id="outfit-name">…</div>
             <div class="preview inset checker busy" id="preview-box">
               <tibia-outfit id="preview" scale="3"></tibia-outfit>
@@ -40,7 +40,8 @@
             </div>
             <div class="cycle">
               <button class="btn arrow" id="mount-prev" aria-label="Montaria anterior">◀</button>
-              <label class="check"><input type="checkbox" id="mount-on"> Montar</label>
+              <label class="check" id="mount-on-label"><input type="checkbox" id="mount-on"> Montar</label>
+              <button class="btn" id="use-mount" hidden>Usar no outfit</button>
               <button class="btn arrow" id="mount-next" aria-label="Próxima montaria">▶</button>
             </div>
           </div>
