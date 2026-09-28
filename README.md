@@ -62,7 +62,8 @@ java -jar web/build/libs/tibiawalk-web.jar --assets "C:/.../Tibia/packages/Tibia
 Abra `http://localhost:7070/` para o outfitter (visual inspirado nas janelas do Tibia). O estado fica na URL,
 então dá para compartilhar o link de um outfit montado.
 
-Para publicar na internet (Oracle Cloud grátis + Cloudflare Tunnel), veja [deploy/README.md](deploy/README.md).
+No ar em **https://outfits.lontraeye.com** (Oracle Cloud Always Free + Caddy); como montar e atualizar em
+[deploy/README.md](deploy/README.md).
 
 ### Colocar num site
 

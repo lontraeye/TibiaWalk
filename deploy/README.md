@@ -1,15 +1,28 @@
-# Deploy: Oracle Cloud (Always Free) + Cloudflare Tunnel
+# Deploy: Oracle Cloud (Always Free) + Caddy
 
-O servidor web roda numa VM da Oracle e fica publicado em `https://outfits.lontraeye.com` por um
-Cloudflare Tunnel. A VM não precisa de porta aberta: o `cloudflared` sai para o Cloudflare, e o TibiaWalk
-escuta só em `127.0.0.1:7070`.
+No ar em **https://outfits.lontraeye.com**, numa VM `VM.Standard.E2.1.Micro` (Ubuntu 24.04, x86, 1 GB).
+O TibiaWalk escuta só em `127.0.0.1:7070`; o Caddy, na mesma VM, publica nas portas 80/443 e cuida do
+certificado HTTPS (Let's Encrypt). O DNS do domínio está no Cloudflare.
 
 ```
-navegador ──HTTPS──> Cloudflare (DNS, HTTPS, cache) <──túnel── cloudflared ──> 127.0.0.1:7070 (TibiaWalk)
-                                                              └──────────── VM Oracle ─────────────┘
+navegador ──HTTPS──> Caddy :443 (VM Oracle) ──> 127.0.0.1:7070 (serviço tibiawalk)
 ```
 
-## 0. Reconhecer a VM
+| Onde | O quê |
+|---|---|
+| `/opt/tibiawalk/` | jar e `assets/` do cliente |
+| `/etc/tibiawalk.env` | porta, host, memória (`JAVA_OPTS`) |
+| `/etc/systemd/system/tibiawalk.service` | serviço |
+| `/etc/caddy/Caddyfile` | `outfits.lontraeye.com { reverse_proxy 127.0.0.1:7070 }` |
+| `~/tibiawalk/` (usuário `ubuntu`) | último pacote enviado |
+
+A micro tem pouca CPU: cada imagem nova leva ~1 s para gerar na primeira vez; depois sai do cache do servidor.
+Ligar o proxy do Cloudflare no registro DNS (nuvem laranja, SSL **Full (strict)**) põe as imagens também no cache
+da borda.
+
+Os passos abaixo são para montar do zero (ou numa VM nova).
+
+## 0. Reconhecer a VM (VM já usada antes)
 
 Na VM (via SSH ou pelo Cloud Shell do console da Oracle), rode e guarde a saída:
 
@@ -37,7 +50,8 @@ docker rm -f CONTAINER          # e, se não quiser mais a imagem: docker rmi IM
 pm2 delete NOME && pm2 save
 ```
 
-Se ele usava um `cloudflared` ou nginx para publicar, veja no passo 4.
+Se ele usava Caddy, nginx ou `cloudflared` para publicar, reaproveite no passo 4 trocando o destino para
+`127.0.0.1:7070`.
 
 ## 2. Montar e enviar o pacote
 
@@ -69,7 +83,27 @@ O script instala o Java 21 se faltar, cria o usuário `tibiawalk`, põe tudo em 
 
 Teste na própria VM: `curl -s http://127.0.0.1:7070/api/info`.
 
-## 4. Publicar com o Cloudflare Tunnel
+## 4. Publicar
+
+### Com Caddy (o que está em uso)
+
+Requer as portas 80 e 443 liberadas na VM (iptables e *Security List* da Oracle).
+
+```bash
+sudo apt-get install -y caddy          # se ainda não tiver
+sudo tee /etc/caddy/Caddyfile >/dev/null <<'EOF'
+outfits.lontraeye.com {
+    encode gzip
+    reverse_proxy 127.0.0.1:7070
+}
+EOF
+sudo systemctl reload caddy
+```
+
+No Cloudflare, **DNS → Add record**: tipo `A`, nome `outfits`, IP público da VM, proxy **DNS only** (para o
+Caddy conseguir o certificado). Com o certificado emitido, dá para ligar o proxy com SSL em Full (strict).
+
+### Alternativa: Cloudflare Tunnel (sem abrir portas)
 
 No painel do Cloudflare: **Zero Trust → Networks → Tunnels → Create a tunnel**.
 
@@ -79,10 +113,7 @@ No painel do Cloudflare: **Zero Trust → Networks → Tunnels → Create a tunn
    `cloudflared` como serviço.
 3. Em **Public hostname**: subdomínio `outfits`, domínio `lontraeye.com`, tipo `HTTP`, URL `localhost:7070`.
 
-Pronto: `https://outfits.lontraeye.com`. O DNS é criado sozinho.
-
-Se o projeto antigo já usava um túnel, dá para reaproveitar: edite o **Public hostname** dele para
-apontar para `localhost:7070`.
+O DNS é criado sozinho.
 
 As imagens (`/api/outfit.gif|png`) saem com `Cache-Control`; o Cloudflare guarda em cache pela extensão,
 então o servidor só gera cada GIF uma vez por dia (ou por hora, se a URL usar nomes).
