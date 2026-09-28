@@ -20,6 +20,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -35,6 +36,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
@@ -71,13 +73,13 @@ final class MainWindow extends JFrame {
             return meta.map(LooktypeMeta::name).orElse("");
         }
 
+        String sex() {
+            return meta.map(LooktypeMeta::sex).orElse(null);
+        }
+
         @Override
         public String toString() {
-            if (meta.isEmpty()) {
-                return "#" + looktype();
-            }
-            String sex = meta.get().sex() == null ? "" : ("female".equals(meta.get().sex()) ? " ♀" : " ♂");
-            return name() + sex + "  (" + looktype() + ")";
+            return meta.isEmpty() ? "#" + looktype() : name() + "  (" + looktype() + ")";
         }
     }
 
@@ -107,7 +109,6 @@ final class MainWindow extends JFrame {
     }
 
     private static final String[] DIRECTION_LABELS = {"Norte", "Leste", "Sul", "Oeste"};
-    private static final Entry NO_MOUNT = null;
 
     private final OutfitRenderer renderer;
     private final List<Entry> entries = new ArrayList<>();
@@ -115,6 +116,8 @@ final class MainWindow extends JFrame {
 
     private final JComboBox<Filter> filter = new JComboBox<>(Filter.values());
     private final JTextField search = new JTextField();
+    private final JToggleButton male = new JToggleButton("♂ Masculino", true);
+    private final JToggleButton female = new JToggleButton("♀ Feminino");
     private final DefaultListModel<Entry> listModel = new DefaultListModel<>();
     private final JList<Entry> list = new JList<>(listModel);
 
@@ -127,7 +130,10 @@ final class MainWindow extends JFrame {
     private final ColorButton body = new ColorButton("Corpo", c -> refresh());
     private final ColorButton legs = new ColorButton("Pernas", c -> refresh());
     private final ColorButton feet = new ColorButton("Pés", c -> refresh());
-    private final JComboBox<Entry> mount = new JComboBox<>();
+    private final JButton mountButton = new JButton();
+    private final MountPicker mountPicker;
+    private final List<MountPicker.Option> mountOptions = new ArrayList<>();
+    private int mountLooktype;
     private final Map<Direction, JRadioButton> directions = new EnumMap<>(Direction.class);
     private final JCheckBox walking = new JCheckBox("Andando", true);
     private final JSlider speed = new JSlider(40, 400, 100);
@@ -146,9 +152,17 @@ final class MainWindow extends JFrame {
             }
         }
 
+        mountOptions.add(new MountPicker.Option(0, "Sem montaria"));
+        entries.stream()
+                .filter(e -> Filter.MOUNTS.test.test(e))
+                .sorted(Comparator.comparing(Entry::name, String.CASE_INSENSITIVE_ORDER))
+                .forEach(e -> mountOptions.add(new MountPicker.Option(e.looktype(), e.name())));
+        mountPicker = new MountPicker(mountOptions, looktype -> renderer.still(OutfitRequest.of(looktype)));
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setJMenuBar(menu(chooseAssets));
 
+        updateMountButton(); // antes de montar os controles, que calculam a altura com o ícone já no botão
         JPanel root = new JPanel(new BorderLayout(8, 8));
         root.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
         root.add(buildListPanel(), BorderLayout.WEST);
@@ -161,8 +175,9 @@ final class MainWindow extends JFrame {
         body.setColor(TibiaColor.palette(69));
         legs.setColor(TibiaColor.palette(58));
         feet.setColor(TibiaColor.palette(76));
-        fillMounts();
         applyFilter();
+        mountPicker.onThumbnail(this::updateMountButton);
+        mountPicker.preload();
 
         pack();
         setMinimumSize(getSize());
@@ -209,8 +224,18 @@ final class MainWindow extends JFrame {
             }
         });
 
+        ButtonGroup sexGroup = new ButtonGroup();
+        sexGroup.add(male);
+        sexGroup.add(female);
+        male.addActionListener(e -> applyFilter());
+        female.addActionListener(e -> applyFilter());
+        JPanel sex = new JPanel(new GridLayout(1, 2, 4, 0));
+        sex.add(male);
+        sex.add(female);
+
         JPanel top = new JPanel(new GridLayout(0, 1, 4, 4));
         top.add(filter);
+        top.add(sex);
         top.add(search);
 
         JPanel panel = new JPanel(new BorderLayout(4, 4));
@@ -231,16 +256,16 @@ final class MainWindow extends JFrame {
 
         panel.add(section("Cores", head, body, legs, feet));
 
-        mount.addActionListener(e -> refresh());
-        mount.setRenderer(new javax.swing.DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> l, Object value, int index,
-                                                          boolean selected, boolean focus) {
-                return super.getListCellRendererComponent(l, value == null ? "Sem montaria" : value,
-                        index, selected, focus);
-            }
-        });
-        panel.add(section("Montaria", mount));
+        mountButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        mountButton.setToolTipText("Escolher montaria");
+        mountButton.addActionListener(e -> mountPicker.open(mountButton, mountLooktype, this::setMount));
+        JButton noMount = new JButton("✕");
+        noMount.setToolTipText("Remover montaria");
+        noMount.addActionListener(e -> setMount(0));
+        JPanel mountRow = new JPanel(new BorderLayout(4, 0));
+        mountRow.add(mountButton, BorderLayout.CENTER);
+        mountRow.add(noMount, BorderLayout.EAST);
+        panel.add(section("Montaria", mountRow));
 
         ButtonGroup group = new ButtonGroup();
         JPanel dirs = new JPanel(new GridLayout(2, 2));
@@ -288,22 +313,36 @@ final class MainWindow extends JFrame {
         return panel;
     }
 
-    private void fillMounts() {
-        mount.addItem(NO_MOUNT);
-        entries.stream()
-                .filter(e -> Filter.MOUNTS.test.test(e))
-                .sorted(Comparator.comparing(Entry::name, String.CASE_INSENSITIVE_ORDER))
-                .forEach(mount::addItem);
+    private void setMount(int looktype) {
+        mountLooktype = looktype;
+        updateMountButton();
+        refresh();
+    }
+
+    private void updateMountButton() {
+        String name = mountOptions.stream().filter(o -> o.looktype() == mountLooktype)
+                .map(MountPicker.Option::name).findFirst().orElse("#" + mountLooktype);
+        mountButton.setText(name);
+        // Sempre um ícone de 32x32 (vazio quando não há miniatura) para o botão não mudar de altura.
+        javax.swing.Icon thumb = mountLooktype == 0 ? null : mountPicker.thumbnail(mountLooktype);
+        mountButton.setIcon(thumb == null ? new ImageIcon(new java.awt.image.BufferedImage(32, 32,
+                java.awt.image.BufferedImage.TYPE_INT_ARGB)) : new ImageIcon(((ImageIcon) thumb).getImage()
+                .getScaledInstance(32, 32, java.awt.Image.SCALE_FAST)));
     }
 
     private void applyFilter() {
         Entry previous = list.getSelectedValue();
         Filter selected = (Filter) filter.getSelectedItem();
         String query = search.getText().trim().toLowerCase(Locale.ROOT);
+        boolean bySex = selected == Filter.PLAYERS;
+        male.setEnabled(bySex);
+        female.setEnabled(bySex);
+        String sex = female.isSelected() ? "female" : "male";
 
         listModel.clear();
         entries.stream()
                 .filter(selected.test)
+                .filter(e -> !bySex || sex.equals(e.sex()))
                 .filter(e -> query.isEmpty()
                         || e.name().toLowerCase(Locale.ROOT).contains(query)
                         || Integer.toString(e.looktype()).equals(query)
@@ -315,13 +354,32 @@ final class MainWindow extends JFrame {
                                 .thenComparingInt(Entry::looktype))
                 .forEach(listModel::addElement);
 
+        Entry counterpart = previous == null ? null : counterpart(previous);
         if (previous != null && listModel.contains(previous)) {
             list.setSelectedValue(previous, true);
+        } else if (counterpart != null) {
+            // Trocou o sexo: mantém o mesmo outfit (ex. Citizen 128 -> 136) com addons e cores.
+            list.setSelectedValue(counterpart, true);
         } else if (!listModel.isEmpty()) {
             list.setSelectedIndex(0);
         } else {
             preview.showMessage("Nada encontrado");
         }
+    }
+
+    /** O item da lista atual com o mesmo nome e categoria (a versão do outro sexo). */
+    private Entry counterpart(Entry entry) {
+        if (entry.meta().isEmpty()) {
+            return null;
+        }
+        for (int i = 0; i < listModel.size(); i++) {
+            Entry candidate = listModel.get(i);
+            if (candidate.meta().isPresent() && candidate.meta().get().kind() == entry.meta().get().kind()
+                    && candidate.name().equalsIgnoreCase(entry.name())) {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     private void onOutfitSelected() {
@@ -339,7 +397,7 @@ final class MainWindow extends JFrame {
         if (!addon2.isEnabled()) {
             addon2.setSelected(false);
         }
-        mount.setEnabled(info.mountable());
+        mountButton.setEnabled(info.mountable());
         for (ColorButton button : List.of(head, body, legs, feet)) {
             button.setEnabled(info.colorable());
         }
@@ -350,13 +408,12 @@ final class MainWindow extends JFrame {
     private OutfitRequest request() {
         Entry entry = list.getSelectedValue();
         int addons = (addon1.isSelected() ? 1 : 0) | (addon2.isSelected() ? 2 : 0);
-        Entry mountEntry = (Entry) mount.getSelectedItem();
         Direction direction = directions.entrySet().stream()
                 .filter(e -> e.getValue().isSelected()).map(Map.Entry::getKey).findFirst().orElse(Direction.SOUTH);
         return OutfitRequest.of(entry.looktype())
                 .withAddons(addons)
                 .withColors(head.color(), body.color(), legs.color(), feet.color())
-                .withMount(mount.isEnabled() && mountEntry != null ? mountEntry.looktype() : 0)
+                .withMount(entry.info().mountable() ? mountLooktype : 0)
                 .withDirection(direction);
     }
 
@@ -425,11 +482,9 @@ final class MainWindow extends JFrame {
         for (ColorButton button : List.of(head, body, legs, feet)) {
             button.setColor(TibiaColor.palette(random.nextInt(TibiaColor.PALETTE_SIZE)));
         }
-        if (info.mountable() && mount.getItemCount() > 1 && random.nextBoolean()) {
-            mount.setSelectedIndex(1 + random.nextInt(mount.getItemCount() - 1));
-        } else {
-            mount.setSelectedIndex(0);
-        }
+        mountLooktype = info.mountable() && mountOptions.size() > 1 && random.nextBoolean()
+                ? mountOptions.get(1 + random.nextInt(mountOptions.size() - 1)).looktype() : 0;
+        updateMountButton();
         directions.get(Direction.values()[random.nextInt(4)]).setSelected(true);
         adjusting = false;
         refresh();

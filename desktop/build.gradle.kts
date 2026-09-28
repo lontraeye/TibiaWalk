@@ -36,12 +36,12 @@ tasks.register<Jar>("fatJar") {
     exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
 }
 
-// Depuração: ./gradlew :desktop:snapshot -Passets=... -Pout=janela.png -Pclicks=1
+// Depuração: ./gradlew :desktop:snapshot -Passets=... -Pactions=...
 tasks.register<JavaExec>("snapshot") {
     group = "tibiawalk"
     classpath = sourceSets["test"].runtimeClasspath
     mainClass.set("org.tibiawalk.desktop.WindowSnapshot")
     val assets = providers.gradleProperty("assets").orElse(providers.environmentVariable("TIBIA_ASSETS"))
-    args(assets.getOrElse(""), providers.gradleProperty("out").getOrElse("janela.png"),
-        providers.gradleProperty("clicks").getOrElse("0"))
+    // -Pactions="click:Aleatório|wait:2000|shot:janela.png" (ações separadas por |)
+    args(listOf(assets.getOrElse("")) + providers.gradleProperty("actions").getOrElse("shot:janela.png").split("|"))
 }
