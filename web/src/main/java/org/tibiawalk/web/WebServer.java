@@ -14,7 +14,8 @@ import java.util.Map;
 /**
  * Servidor HTTP: API de imagens, a página de outfitter e o componente &lt;tibia-outfit&gt;.
  *
- * <p>Args: --assets &lt;pasta&gt; (ou TIBIA_ASSETS) e --port &lt;porta&gt; (ou PORT, padrão 7070).
+ * <p>Args: --assets &lt;pasta&gt; (ou TIBIA_ASSETS), --port &lt;porta&gt; (ou PORT, padrão 7070) e
+ * --host &lt;endereço&gt; (ou HOST, padrão 0.0.0.0).
  */
 public final class WebServer {
 
@@ -27,14 +28,16 @@ public final class WebServer {
             System.exit(1);
         }
         int port = Integer.parseInt(option(args, "--port", System.getenv().getOrDefault("PORT", "7070")));
+        // 127.0.0.1 quando fica atrás de um proxy/túnel no mesmo host (só ele alcança a porta).
+        String host = option(args, "--host", System.getenv().getOrDefault("HOST", "0.0.0.0"));
 
         ClientAssets assets = ClientAssets.open(Path.of(assetsArg));
         OutfitService service = new OutfitService(assets);
-        start(service, port);
-        System.out.println("TibiaWalk web em http://localhost:" + port + "/");
+        start(service, host, port);
+        System.out.println("TibiaWalk web em http://" + ("0.0.0.0".equals(host) ? "localhost" : host) + ":" + port + "/");
     }
 
-    static Javalin start(OutfitService service, int port) {
+    static Javalin start(OutfitService service, String host, int port) {
         Javalin app = Javalin.create(config -> {
             config.showJavalinBanner = false;
             config.staticFiles.add(files -> {
@@ -68,7 +71,7 @@ public final class WebServer {
             json(ctx, Map.of("error", "Erro ao renderizar: " + e.getMessage()));
         });
 
-        return app.start(port);
+        return app.start(host, port);
     }
 
     private static void image(Context ctx, OutfitService service, boolean png) throws Exception {

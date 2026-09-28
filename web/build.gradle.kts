@@ -43,3 +43,42 @@ tasks.register<Jar>("fatJar") {
     from({ configurations.runtimeClasspath.get().filter { it.name.endsWith(".jar") }.map { zipTree(it) } })
     exclude("META-INF/*.SF", "META-INF/*.DSA", "META-INF/*.RSA")
 }
+
+// Pacote de deploy em generated/deploy: jar + install.sh + tibiawalk.service (+ assets com -Passets).
+//   ./gradlew :web:deployBundle -Passets="C:/.../Tibia/packages/Tibia/assets"
+val assetsDir = providers.gradleProperty("assets").orElse(providers.environmentVariable("TIBIA_ASSETS"))
+val deployDir = rootProject.layout.projectDirectory.dir("generated/deploy")
+
+tasks.register<Tar>("assetsTar") {
+    group = "tibiawalk"
+    description = "Compacta a pasta assets do cliente (sem os tiles de minimapa) em generated/deploy."
+    compression = Compression.GZIP
+    archiveFileName.set("tibia-assets.tar.gz")
+    destinationDirectory.set(deployDir)
+    if (assetsDir.isPresent) {
+        from(assetsDir.get()) {
+            into("assets")
+            exclude("minimap-*")
+        }
+    }
+    doFirst {
+        require(assetsDir.isPresent) { "Informe -Passets=<pasta assets do cliente> ou TIBIA_ASSETS" }
+    }
+}
+
+tasks.register<Copy>("deployBundle") {
+    group = "tibiawalk"
+    description = "Monta generated/deploy para enviar à VM."
+    dependsOn("fatJar")
+    if (assetsDir.isPresent) {
+        dependsOn("assetsTar")
+    }
+    from(layout.buildDirectory.file("libs/tibiawalk-web.jar"))
+    from(rootProject.file("deploy")) {
+        include("install.sh", "tibiawalk.service")
+    }
+    into(deployDir)
+    doLast {
+        println("Pacote em ${deployDir.asFile}")
+    }
+}
