@@ -115,6 +115,8 @@ final class MainWindow extends JFrame {
     private final Random random = new Random();
 
     private final JComboBox<Filter> filter = new JComboBox<>(Filter.values());
+    private final Map<Filter, Integer> counts = new EnumMap<>(Filter.class);
+    private final JLabel listCount = new JLabel(" ");
     private final JTextField search = new JTextField();
     private final JToggleButton male = new JToggleButton("♂ Masculino", true);
     private final JToggleButton female = new JToggleButton("♀ Feminino");
@@ -159,6 +161,8 @@ final class MainWindow extends JFrame {
                 .forEach(e -> mountOptions.add(new MountPicker.Option(e.looktype(), e.name())));
         mountPicker = new MountPicker(mountOptions, looktype -> renderer.still(OutfitRequest.of(looktype)));
 
+        countCategories();
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setJMenuBar(menu(chooseAssets));
 
@@ -198,7 +202,29 @@ final class MainWindow extends JFrame {
         return bar;
     }
 
+    /** Total por categoria (no combo) e, entre os players, por sexo (nos botões). */
+    private void countCategories() {
+        for (Filter f : Filter.values()) {
+            counts.put(f, (int) entries.stream().filter(f.test).count());
+        }
+        List<Entry> players = entries.stream().filter(Filter.PLAYERS.test).toList();
+        // Sem sexo definido conta nos dois, como aparece na lista.
+        long males = players.stream().filter(e -> e.sex() == null || "male".equals(e.sex())).count();
+        long females = players.stream().filter(e -> e.sex() == null || "female".equals(e.sex())).count();
+        male.setText("♂ Masculino (" + males + ")");
+        female.setText("♀ Feminino (" + females + ")");
+    }
+
     private JComponent buildListPanel() {
+        filter.setRenderer(new javax.swing.DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> l, Object value, int index,
+                                                          boolean selected, boolean focus) {
+                Filter f = (Filter) value;
+                String text = f == null ? "" : f.label + "  (" + counts.getOrDefault(f, 0) + ")";
+                return super.getListCellRendererComponent(l, text, index, selected, focus);
+            }
+        });
         filter.addActionListener(e -> applyFilter());
         search.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -243,6 +269,8 @@ final class MainWindow extends JFrame {
         JScrollPane scroll = new JScrollPane(list);
         scroll.setPreferredSize(new Dimension(260, 420));
         panel.add(scroll, BorderLayout.CENTER);
+        listCount.setForeground(java.awt.Color.GRAY);
+        panel.add(listCount, BorderLayout.SOUTH);
         return panel;
     }
 
@@ -353,6 +381,7 @@ final class MainWindow extends JFrame {
                         : Comparator.comparing(Entry::name, String.CASE_INSENSITIVE_ORDER)
                                 .thenComparingInt(Entry::looktype))
                 .forEach(listModel::addElement);
+        updateListCount(selected, bySex, sex);
 
         Entry counterpart = previous == null ? null : counterpart(previous);
         if (previous != null && listModel.contains(previous)) {
@@ -365,6 +394,16 @@ final class MainWindow extends JFrame {
         } else {
             preview.showMessage("Nada encontrado");
         }
+    }
+
+    /** "Mostrando 12 de 142 (feminino)": o que está na lista contra o total da categoria/sexo. */
+    private void updateListCount(Filter selected, boolean bySex, String sex) {
+        long total = entries.stream().filter(selected.test)
+                .filter(e -> !bySex || e.sex() == null || sex.equals(e.sex())).count();
+        String suffix = bySex ? ("female".equals(sex) ? " (feminino)" : " (masculino)") : "";
+        listCount.setText(listModel.size() == total
+                ? total + " itens" + suffix
+                : "Mostrando " + listModel.size() + " de " + total + suffix);
     }
 
     /** O item da lista atual com o mesmo nome e categoria (a versão do outro sexo). */
