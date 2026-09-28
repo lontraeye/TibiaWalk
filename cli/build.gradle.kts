@@ -9,6 +9,7 @@ repositories {
 dependencies {
     implementation(project(":core"))
     implementation(libs.picocli)
+    implementation(libs.gson)
 }
 
 java {

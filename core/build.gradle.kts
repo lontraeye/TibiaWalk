@@ -46,3 +46,16 @@ tasks.register<JavaExec>("tool") {
     jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8")
     args(providers.gradleProperty("args").getOrElse("").split(" ").filter { it.isNotBlank() })
 }
+
+// Regenera o metadata.json (nomes/categorias dos looktypes) a partir do Canary + staticdata do cliente.
+// Ex.: ./gradlew :core:updateMetadata -Passets="C:/.../assets" [-PcanaryRef=main]
+tasks.register<JavaExec>("updateMetadata") {
+    group = "tibiawalk"
+    description = "Baixa outfits/mounts do Canary e gera src/main/resources/.../metadata.json."
+    classpath = sourceSets["main"].runtimeClasspath
+    mainClass.set("org.tibiawalk.core.metadata.MetadataBuilder")
+    jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8")
+    val assets = providers.gradleProperty("assets").orElse(providers.environmentVariable("TIBIA_ASSETS"))
+    val output = layout.projectDirectory.file("src/main/resources/org/tibiawalk/core/metadata.json").asFile
+    args(assets.getOrElse(""), output.path, providers.gradleProperty("canaryRef").getOrElse("main"))
+}

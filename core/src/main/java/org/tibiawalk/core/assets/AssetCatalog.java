@@ -20,11 +20,13 @@ public final class AssetCatalog {
 
     private final Path assetsDir;
     private final Path appearancesFile;
+    private final Path staticDataFile;
     private final List<SpriteSheet> sheets;
 
-    private AssetCatalog(Path assetsDir, Path appearancesFile, List<SpriteSheet> sheets) {
+    private AssetCatalog(Path assetsDir, Path appearancesFile, Path staticDataFile, List<SpriteSheet> sheets) {
         this.assetsDir = assetsDir;
         this.appearancesFile = appearancesFile;
+        this.staticDataFile = staticDataFile;
         this.sheets = sheets;
     }
 
@@ -41,6 +43,7 @@ public final class AssetCatalog {
         }
 
         Path appearances = null;
+        Path staticData = null;
         List<SpriteSheet> sheets = new ArrayList<>();
         for (JsonElement element : entries) {
             JsonObject entry = element.getAsJsonObject();
@@ -48,12 +51,13 @@ public final class AssetCatalog {
             String file = entry.get("file").getAsString();
             switch (type) {
                 case "appearances" -> appearances = assetsDir.resolve(file);
+                case "staticdata" -> staticData = assetsDir.resolve(file);
                 case "sprite" -> sheets.add(new SpriteSheet(
                         file,
                         entry.get("spritetype").getAsInt(),
                         entry.get("firstspriteid").getAsInt(),
                         entry.get("lastspriteid").getAsInt()));
-                default -> { /* mapa, staticdata etc. não interessam aqui */ }
+                default -> { /* mapa, proficiências etc. não interessam aqui */ }
             }
         }
 
@@ -61,7 +65,7 @@ public final class AssetCatalog {
             throw new IOException(CATALOG_FILE + " não tem uma entrada do tipo 'appearances'");
         }
         sheets.sort(Comparator.comparingInt(SpriteSheet::firstSpriteId));
-        return new AssetCatalog(assetsDir, appearances, List.copyOf(sheets));
+        return new AssetCatalog(assetsDir, appearances, staticData, List.copyOf(sheets));
     }
 
     public Path assetsDir() {
@@ -70,6 +74,11 @@ public final class AssetCatalog {
 
     public Path appearancesFile() {
         return appearancesFile;
+    }
+
+    /** Dados do Cyclopedia (monstros, bosses...); null se o cliente não tiver. */
+    public Path staticDataFile() {
+        return staticDataFile;
     }
 
     public List<SpriteSheet> sheets() {

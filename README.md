@@ -20,14 +20,34 @@ Os sprites são da CipSoft e não fazem parte deste repositório.
 export TIBIA_ASSETS="C:/.../Tibia/packages/Tibia/assets"   # ou use --assets em cada comando
 
 java -jar cli/build/libs/tibiawalk.jar render -l 130 -a 3 --head ff0000 --body 94 --legs 0055ff --feet 76 -m 651 -d east
+java -jar cli/build/libs/tibiawalk.jar render -l Citizen --female -a 3 -m "Widow Queen" -d west
 java -jar cli/build/libs/tibiawalk.jar render -l 128 -a 1 --idle -o knight.png
-java -jar cli/build/libs/tibiawalk.jar info 128
-java -jar cli/build/libs/tibiawalk.jar list --mountable --with-addons
+java -jar cli/build/libs/tibiawalk.jar info "Midnight Panther"
+java -jar cli/build/libs/tibiawalk.jar list --players --female --with-addons
+java -jar cli/build/libs/tibiawalk.jar list --mounts --json
+java -jar cli/build/libs/tibiawalk.jar list -s dragon
 ```
 
 - Cores: índice da paleta do jogo (`0`–`132`, o mesmo que `lookHead` etc. no servidor) ou hex (`ff0000`).
 - Addons: `0` nenhum, `1` primeiro, `2` segundo, `3` ambos.
+- Outfits e montarias aceitam número ou nome; com nome de outfit de player, `--female` escolhe a versão feminina.
 - Sem `-o`, a saída vai para `generated/`.
+
+## Nomes e categorias
+
+O cliente só sabe *desenhar* cada looktype; ele não diz o que é outfit de player, montaria ou criatura, nem os nomes.
+Isso fica em `core/src/main/resources/org/tibiawalk/core/metadata.json`, gerado a partir de:
+
+- `data/XML/outfits.xml` e `data/XML/mounts.xml` do [Canary](https://github.com/opentibiabr/canary) (outfits e montarias);
+- `staticdata-*.dat` do cliente (monstros e bosses do Cyclopedia).
+
+Para atualizar (por exemplo, depois de uma atualização do Tibia):
+
+```bash
+./gradlew :core:updateMetadata -Passets="C:/.../Tibia/packages/Tibia/assets"
+```
+
+Looktypes que ainda não estão no Canary continuam renderizando normalmente, só aparecem sem nome (`list --unknown`).
 
 ## Módulos
 

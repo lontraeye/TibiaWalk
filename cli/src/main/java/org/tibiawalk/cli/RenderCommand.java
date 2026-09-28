@@ -1,6 +1,9 @@
 package org.tibiawalk.cli;
 
 import org.tibiawalk.core.assets.ClientAssets;
+import org.tibiawalk.core.metadata.LooktypeKind;
+import org.tibiawalk.core.metadata.LooktypeMeta;
+import org.tibiawalk.core.metadata.Metadata;
 import org.tibiawalk.core.render.AnimationType;
 import org.tibiawalk.core.render.Direction;
 import org.tibiawalk.core.render.GifWriter;
@@ -25,8 +28,12 @@ final class RenderCommand implements Callable<Integer> {
     @Mixin
     TibiaWalkCli.AssetsOption assets;
 
-    @Option(names = {"-l", "--looktype"}, required = true, description = "Looktype do outfit.")
-    int looktype;
+    @Option(names = {"-l", "--looktype"}, required = true,
+            description = "Looktype do outfit: número ou nome (ex.: 128, Citizen, \"orc warlord\").")
+    String looktypeArg;
+
+    @Option(names = "--female", description = "Com nome de outfit de player, usa a versão feminina.")
+    boolean female;
 
     @Option(names = {"-a", "--addons"}, defaultValue = "0",
             description = "Addons: 0 = nenhum, 1 = primeiro, 2 = segundo, 3 = ambos. Padrão: ${DEFAULT-VALUE}.")
@@ -44,8 +51,9 @@ final class RenderCommand implements Callable<Integer> {
     @Option(names = "--feet", defaultValue = "ffffff", description = "Cor dos pés.")
     TibiaColor feet;
 
-    @Option(names = {"-m", "--mount"}, defaultValue = "0", description = "Looktype da montaria (0 = sem).")
-    int mount;
+    @Option(names = {"-m", "--mount"}, defaultValue = "0",
+            description = "Montaria: looktype ou nome (ex.: 368, \"Widow Queen\"). 0 = sem.")
+    String mountArg;
 
     @Option(names = {"-d", "--direction"}, defaultValue = "south",
             description = "north, east, south ou west. Padrão: ${DEFAULT-VALUE}.")
@@ -64,7 +72,19 @@ final class RenderCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        Metadata metadata = Metadata.bundled();
+        int looktype = metadata.resolve(looktypeArg, null, female ? "female" : "male")
+                .orElseThrow(() -> new IllegalArgumentException("Outfit desconhecido: " + looktypeArg));
+        int mount = metadata.resolve(mountArg, LooktypeKind.MOUNT, null)
+                .orElseThrow(() -> new IllegalArgumentException("Montaria desconhecida: " + mountArg));
+        if (mount > 0 && metadata.get(mount).map(LooktypeMeta::kind).orElse(null) != LooktypeKind.MOUNT) {
+            System.err.println("Aviso: o looktype " + mount + " não está na lista de montarias.");
+        }
+
         ClientAssets client = assets.open();
+        if (mount > 0 && client.outfit(looktype) != null && !client.outfit(looktype).mountable()) {
+            System.err.println("Aviso: o looktype " + looktype + " não tem versão montada; a montaria foi ignorada.");
+        }
         OutfitRenderer renderer = new OutfitRenderer(client);
         OutfitRequest request = OutfitRequest.of(looktype)
                 .withAddons(addons)
