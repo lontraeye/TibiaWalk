@@ -30,9 +30,15 @@ public final class Metadata {
     private static volatile Metadata bundled;
 
     private final Map<Integer, LooktypeMeta> byLooktype;
+    private final List<GameCharacter> characters;
     private final JsonObject source;
 
     Metadata(Collection<LooktypeMeta> entries, JsonObject source) {
+        this(entries, List.of(), source);
+    }
+
+    Metadata(Collection<LooktypeMeta> entries, List<GameCharacter> characters, JsonObject source) {
+        this.characters = List.copyOf(characters);
         Map<Integer, LooktypeMeta> map = new TreeMap<>();
         for (LooktypeMeta entry : entries) {
             map.put(entry.looktype(), entry);
@@ -58,7 +64,7 @@ public final class Metadata {
     private static Metadata loadBundled() {
         try (InputStream in = Metadata.class.getResourceAsStream(RESOURCE)) {
             if (in == null) {
-                return new Metadata(List.of(), new JsonObject());
+                return new Metadata(List.of(), List.of(), new JsonObject());
             }
             return read(new InputStreamReader(in, StandardCharsets.UTF_8));
         } catch (IOException e) {
@@ -72,7 +78,10 @@ public final class Metadata {
         List<LooktypeMeta> entries = gson.fromJson(root.get("looktypes"),
                 new TypeToken<List<LooktypeMeta>>() { }.getType());
         JsonObject source = root.has("source") ? root.getAsJsonObject("source") : new JsonObject();
-        return new Metadata(entries, source);
+        List<GameCharacter> characters = root.has("characters")
+                ? gson.fromJson(root.get("characters"), new TypeToken<List<GameCharacter>>() { }.getType())
+                : List.of();
+        return new Metadata(entries, characters, source);
     }
 
     public Optional<LooktypeMeta> get(int looktype) {
@@ -81,6 +90,31 @@ public final class Metadata {
 
     public Collection<LooktypeMeta> all() {
         return byLooktype.values();
+    }
+
+    /** NPCs, monstros e bosses com o outfit completo, em ordem de tipo e nome. */
+    public List<GameCharacter> characters() {
+        return characters;
+    }
+
+    /**
+     * Personagem pelo nome (sem diferenciar maiúsculas); exato primeiro, depois "começa com".
+     *
+     * @param kind null aceita qualquer tipo
+     */
+    public Optional<GameCharacter> character(String name, GameCharacter.Kind kind) {
+        String wanted = name.trim().toLowerCase(Locale.ROOT);
+        Optional<GameCharacter> exact = characters.stream()
+                .filter(c -> kind == null || c.kind() == kind)
+                .filter(c -> c.name().toLowerCase(Locale.ROOT).equals(wanted))
+                .findFirst();
+        if (exact.isPresent()) {
+            return exact;
+        }
+        return characters.stream()
+                .filter(c -> kind == null || c.kind() == kind)
+                .filter(c -> c.name().toLowerCase(Locale.ROOT).startsWith(wanted))
+                .findFirst();
     }
 
     /** De onde os dados vieram (commit do Canary, data da geração). */

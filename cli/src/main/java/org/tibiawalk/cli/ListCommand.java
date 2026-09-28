@@ -3,6 +3,7 @@ package org.tibiawalk.cli;
 import com.google.gson.GsonBuilder;
 import org.tibiawalk.core.assets.ClientAssets;
 import org.tibiawalk.core.assets.OutfitInfo;
+import org.tibiawalk.core.metadata.GameCharacter;
 import org.tibiawalk.core.metadata.LooktypeKind;
 import org.tibiawalk.core.metadata.LooktypeMeta;
 import org.tibiawalk.core.metadata.Metadata;
@@ -36,8 +37,11 @@ final class ListCommand implements Callable<Integer> {
         @Option(names = "--creatures", description = "Só monstros e bosses.")
         boolean creatures;
 
-        @Option(names = "--npcs", description = "Só NPCs.")
+        @Option(names = "--npcs", description = "NPCs, com o outfit completo de cada um.")
         boolean npcs;
+
+        @Option(names = "--monsters", description = "Monstros e bosses, com o outfit completo de cada um.")
+        boolean monsters;
 
         @Option(names = "--unknown", description = "Só looktypes sem nome conhecido.")
         boolean unknown;
@@ -73,8 +77,11 @@ final class ListCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        ClientAssets client = assets.open();
         Metadata metadata = Metadata.bundled();
+        if (kind != null && (kind.npcs || kind.monsters)) {
+            return listCharacters(metadata, kind.npcs);
+        }
+        ClientAssets client = assets.open();
 
         Stream<Row> rows = client.outfits().stream().map(o -> new Row(o, metadata.get(o.looktype())));
         if (kind != null) {
@@ -84,8 +91,6 @@ final class ListCommand implements Callable<Integer> {
                 rows = rows.filter(r -> is(r, LooktypeKind.MOUNT));
             } else if (kind.creatures) {
                 rows = rows.filter(r -> is(r, LooktypeKind.CREATURE));
-            } else if (kind.npcs) {
-                rows = rows.filter(r -> is(r, LooktypeKind.NPC));
             } else if (kind.unknown) {
                 rows = rows.filter(r -> r.meta().isEmpty());
             }
@@ -118,6 +123,27 @@ final class ListCommand implements Callable<Integer> {
                     o.addonCount(), o.mountable() ? "sim" : "-", o.colorable() ? "sim" : "-");
         }
         System.out.printf("%d looktypes%n", list.size());
+        return 0;
+    }
+
+    /** Personagens (não looktypes): nome, looktype e o outfit que usam. */
+    private int listCharacters(Metadata metadata, boolean npcs) {
+        String q = search == null ? "" : search.toLowerCase(Locale.ROOT);
+        List<GameCharacter> list = metadata.characters().stream()
+                .filter(c -> npcs == (c.kind() == GameCharacter.Kind.NPC))
+                .filter(c -> q.isEmpty() || c.name().toLowerCase(Locale.ROOT).contains(q))
+                .toList();
+        if (json) {
+            System.out.println(new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(list));
+            return 0;
+        }
+        System.out.println("nome                                tipo      looktype  cores (h/b/l/f)  addons  montaria");
+        for (GameCharacter c : list) {
+            System.out.printf("%-35s %-8s  %8d  %3d/%3d/%3d/%3d  %6d  %s%n", truncate(c.name(), 35),
+                    c.kind().name().toLowerCase(Locale.ROOT), c.looktype(), c.head(), c.body(), c.legs(), c.feet(),
+                    c.addons(), c.mount() > 0 ? c.mount() : "-");
+        }
+        System.out.printf("%d %s%n", list.size(), npcs ? "NPCs" : "monstros e bosses");
         return 0;
     }
 

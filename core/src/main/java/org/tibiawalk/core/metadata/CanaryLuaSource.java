@@ -28,7 +28,9 @@ final class CanaryLuaSource {
 
     enum Type { MONSTER, NPC }
 
-    record Creature(Type type, String name, int looktype) {
+    /** Cores são índices da paleta; boss = monstro com bloco bosstiary. */
+    record Creature(Type type, String name, int looktype, int head, int body, int legs, int feet,
+                    int addons, int mount, boolean boss) {
     }
 
     private static final Pattern MONSTER_NAME = Pattern.compile("createMonsterType\\(\\s*\"([^\"]+)\"");
@@ -37,6 +39,8 @@ final class CanaryLuaSource {
     /** O primeiro bloco outfit; lookType dentro dele (lookTypeEx é item, não interessa). */
     private static final Pattern OUTFIT = Pattern.compile("\\.outfit\\s*=\\s*\\{([^}]*)}", Pattern.DOTALL);
     private static final Pattern LOOKTYPE = Pattern.compile("\\blookType\\s*=\\s*(\\d+)");
+    private static final Pattern LOOK_FIELD = Pattern.compile("\\blook(Head|Body|Legs|Feet|Addons|Mount)\\s*=\\s*(\\d+)");
+    private static final Pattern BOSSTIARY = Pattern.compile("\\.bosstiary\\s*=");
     private static final int PARALLEL = 16;
 
     private final HttpClient http;
@@ -121,6 +125,27 @@ final class CanaryLuaSource {
             return null;
         }
         String n = name.group(1) != null ? name.group(1) : name.group(2);
-        return new Creature(npc ? Type.NPC : Type.MONSTER, n.trim(), lt);
+        int[] look = new int[6]; // head, body, legs, feet, addons, mount
+        Matcher field = LOOK_FIELD.matcher(outfit.group(1));
+        while (field.find()) {
+            int index = switch (field.group(1)) {
+                case "Head" -> 0;
+                case "Body" -> 1;
+                case "Legs" -> 2;
+                case "Feet" -> 3;
+                case "Addons" -> 4;
+                default -> 5;
+            };
+            look[index] = Integer.parseInt(field.group(2));
+        }
+        // Valores fora da faixa do jogo viram 0 em vez de quebrar a renderização.
+        for (int i = 0; i < 4; i++) {
+            if (look[i] > 132) {
+                look[i] = 0;
+            }
+        }
+        look[4] &= 3;
+        return new Creature(npc ? Type.NPC : Type.MONSTER, n.trim(), lt, look[0], look[1], look[2], look[3],
+                look[4], look[5], !npc && BOSSTIARY.matcher(lua).find());
     }
 }

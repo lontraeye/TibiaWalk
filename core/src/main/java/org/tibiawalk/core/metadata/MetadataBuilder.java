@@ -74,7 +74,9 @@ public final class MetadataBuilder {
         int canaryMounts = readMounts(download(commit, "mounts.xml"), entries);
         int creatures = readCreatures(client, entries);
         List<Integer> guessed = guessPlayers(client, entries);
-        int[] fromLua = readCanaryCreatures(new CanaryLuaSource(http, CANARY_REPO).creatures(commit), entries);
+        List<CanaryLuaSource.Creature> luaCreatures = new CanaryLuaSource(http, CANARY_REPO).creatures(commit);
+        int[] fromLua = readCanaryCreatures(luaCreatures, entries);
+        List<GameCharacter> characters = buildCharacters(client, luaCreatures);
         int overridden = applyOverrides(overrides, entries);
         guessed.removeIf(lt -> !"heuristic".equals(entries.get(lt).source()));
 
@@ -99,6 +101,7 @@ public final class MetadataBuilder {
         Gson gson = MetadataJson.gson();
         root.add("looktypes", gson.toJsonTree(entries.values().stream()
                 .sorted((a, b) -> Integer.compare(a.looktype(), b.looktype())).toList()));
+        root.add("characters", gson.toJsonTree(characters));
 
         Metadata previous = null;
         if (Files.isRegularFile(output)) {
@@ -130,7 +133,113 @@ public final class MetadataBuilder {
         }
         if (previous != null) {
             printChanges(previous, entries, client.outfits().size());
+            printCharacterChanges(previous.characters(), characters);
         }
+    }
+
+    /**
+     * NPCs (Canary), monstros e bosses (staticdata do cliente + Canary), com o outfit completo.
+     * Mesmo nome nas duas fontes: outfit e tipo do staticdata (é o oficial do cliente), nome com a grafia
+     * do Canary (o bestiário vem em minúsculas).
+     */
+    private List<GameCharacter> buildCharacters(ClientAssets client, List<CanaryLuaSource.Creature> lua)
+            throws IOException {
+        Map<String, GameCharacter> byKey = new LinkedHashMap<>();
+        Map<String, String> canaryNames = new java.util.HashMap<>();
+        for (CanaryLuaSource.Creature c : lua) {
+            if (!c.name().matches(".*\\p{L}.*")) {
+                continue; // arquivos de exemplo/placeholder, ex. "...".lua
+            }
+            GameCharacter.Kind kind = c.type() == CanaryLuaSource.Type.NPC ? GameCharacter.Kind.NPC
+                    : c.boss() ? GameCharacter.Kind.BOSS : GameCharacter.Kind.MONSTER;
+            String key = characterKey(kind, c.name());
+            canaryNames.putIfAbsent(key, c.name());
+            byKey.putIfAbsent(key, new GameCharacter(c.name(), kind, c.looktype(), c.head(), c.body(), c.legs(),
+                    c.feet(), c.addons(), c.mount(), "canary"));
+        }
+
+        StaticData data = staticData(client);
+        if (data != null) {
+            addStatic(data.getMonsterList(), GameCharacter.Kind.MONSTER, byKey, canaryNames);
+            addStatic(data.getBossList(), GameCharacter.Kind.BOSS, byKey, canaryNames);
+        }
+
+        int dropped = 0;
+        List<GameCharacter> result = new ArrayList<>();
+        for (GameCharacter c : byKey.values()) {
+            OutfitInfo info = client.outfit(c.looktype());
+            if (info == null || info.idle() == null) {
+                dropped++;
+                continue;
+            }
+            // Montaria que não existe no cliente (ou outfit que não monta) é descartada.
+            int mount = c.mount() > 0 && info.mountable() && client.outfit(c.mount()) != null ? c.mount() : 0;
+            result.add(mount == c.mount() ? c : new GameCharacter(c.name(), c.kind(), c.looktype(), c.head(),
+                    c.body(), c.legs(), c.feet(), c.addons(), mount, c.source()));
+        }
+        result.sort(java.util.Comparator.comparing(GameCharacter::kind)
+                .thenComparing(GameCharacter::name, String.CASE_INSENSITIVE_ORDER));
+        long npcs = result.stream().filter(c -> c.kind() == GameCharacter.Kind.NPC).count();
+        long monsters = result.stream().filter(c -> c.kind() == GameCharacter.Kind.MONSTER).count();
+        long bosses = result.stream().filter(c -> c.kind() == GameCharacter.Kind.BOSS).count();
+        System.out.printf("Personagens: %d NPCs, %d monstros, %d bosses%s%n", npcs, monsters, bosses,
+                dropped > 0 ? " (" + dropped + " com looktype que não existe neste cliente, ignorados)" : "");
+        return result;
+    }
+
+    private static void addStatic(List<Creature> creatures, GameCharacter.Kind kind, Map<String, GameCharacter> byKey,
+                                  Map<String, String> canaryNames) {
+        for (Creature c : creatures) {
+            int looktype = c.getOutfit().getLooktype();
+            if (looktype == 0) {
+                continue;
+            }
+            // Um boss do bestiário pode estar no Canary como monstro comum, e vice-versa: procura nos dois.
+            String key = characterKey(kind, c.getName());
+            String other = characterKey(kind == GameCharacter.Kind.BOSS ? GameCharacter.Kind.MONSTER
+                    : GameCharacter.Kind.BOSS, c.getName());
+            if (!byKey.containsKey(key) && byKey.containsKey(other)) {
+                byKey.remove(other);
+                canaryNames.putIfAbsent(key, canaryNames.get(other));
+            }
+            var colors = c.getOutfit().getColors();
+            String name = canaryNames.getOrDefault(key, c.getName());
+            String source = canaryNames.containsKey(key) ? "staticdata+canary" : "staticdata";
+            GameCharacter previous = byKey.get(key);
+            byKey.put(key, new GameCharacter(name, kind, looktype, Math.min(colors.getHead(), 132),
+                    Math.min(colors.getBody(), 132), Math.min(colors.getLegs(), 132), Math.min(colors.getFeet(), 132),
+                    c.getOutfit().getAddons() & 3, previous != null ? previous.mount() : 0, source));
+        }
+    }
+
+    /** NPC e criatura com o mesmo nome são personagens diferentes; monstro e boss disputam o mesmo nome. */
+    private static String characterKey(GameCharacter.Kind kind, String name) {
+        return (kind == GameCharacter.Kind.NPC ? "npc:" : kind.name().toLowerCase() + ":")
+                + name.trim().toLowerCase(java.util.Locale.ROOT);
+    }
+
+    private StaticData staticData;
+
+    private StaticData staticData(ClientAssets client) throws IOException {
+        if (staticData == null && client.catalog().staticDataFile() != null) {
+            try (InputStream in = Files.newInputStream(client.catalog().staticDataFile())) {
+                staticData = StaticData.parseFrom(in);
+            }
+        }
+        return staticData;
+    }
+
+    private static void printCharacterChanges(List<GameCharacter> before, List<GameCharacter> now) {
+        java.util.Set<String> old = new java.util.HashSet<>();
+        before.forEach(c -> old.add(characterKey(c.kind(), c.name())));
+        java.util.Set<String> current = new java.util.HashSet<>();
+        now.forEach(c -> current.add(characterKey(c.kind(), c.name())));
+        List<String> added = now.stream().filter(c -> !old.contains(characterKey(c.kind(), c.name())))
+                .map(c -> c.name() + " [" + c.kind().name().toLowerCase() + "]").toList();
+        List<String> removed = before.stream().filter(c -> !current.contains(characterKey(c.kind(), c.name())))
+                .map(c -> c.name() + " [" + c.kind().name().toLowerCase() + "]").toList();
+        printList("Personagens novos", added);
+        printList("Personagens removidos", removed);
     }
 
     private static final int MAX_LINES = 25;
@@ -388,10 +497,7 @@ public final class MetadataBuilder {
             System.out.println("Aviso: cliente sem staticdata, criaturas ficam sem nome");
             return 0;
         }
-        StaticData data;
-        try (InputStream in = Files.newInputStream(file)) {
-            data = StaticData.parseFrom(in);
-        }
+        StaticData data = staticData(client);
 
         // Vários monstros usam o mesmo looktype: o primeiro vira o nome, o resto vira alias.
         Map<Integer, List<String>> names = new LinkedHashMap<>();

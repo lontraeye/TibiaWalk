@@ -23,6 +23,17 @@ final class MetadataJson {
                         return LooktypeKind.valueOf(in.nextString().toUpperCase());
                     }
                 })
+                .registerTypeAdapter(GameCharacter.Kind.class, new com.google.gson.TypeAdapter<GameCharacter.Kind>() {
+                    @Override
+                    public void write(com.google.gson.stream.JsonWriter out, GameCharacter.Kind value) throws java.io.IOException {
+                        out.value(value.name().toLowerCase());
+                    }
+
+                    @Override
+                    public GameCharacter.Kind read(com.google.gson.stream.JsonReader in) throws java.io.IOException {
+                        return GameCharacter.Kind.valueOf(in.nextString().toUpperCase());
+                    }
+                })
                 .disableHtmlEscaping()
                 .create();
     }
