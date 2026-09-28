@@ -342,7 +342,7 @@ final class MainWindow extends JFrame {
         listModel.clear();
         entries.stream()
                 .filter(selected.test)
-                .filter(e -> !bySex || sex.equals(e.sex()))
+                .filter(e -> !bySex || e.sex() == null || sex.equals(e.sex())) // sem sexo definido: nos dois
                 .filter(e -> query.isEmpty()
                         || e.name().toLowerCase(Locale.ROOT).contains(query)
                         || Integer.toString(e.looktype()).equals(query)

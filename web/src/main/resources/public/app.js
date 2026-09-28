@@ -67,7 +67,12 @@
       var group = byName[key] || (byName[key] = {
         name: row.name, addons: row.addons, mountable: row.mountable, colorable: row.colorable
       });
-      group[row.sex] = row.looktype;
+      if (row.sex) {
+        group[row.sex] = row.looktype;
+      } else {
+        group.male = group.male || row.looktype; // sem sexo definido: vale para os dois
+        group.female = group.female || row.looktype;
+      }
       group.addons = Math.max(group.addons, row.addons);
     });
     return Object.keys(byName).map(function (k) { return byName[k]; })

@@ -51,11 +51,12 @@ tasks.register<JavaExec>("tool") {
 // Ex.: ./gradlew :core:updateMetadata -Passets="C:/.../assets" [-PcanaryRef=main]
 tasks.register<JavaExec>("updateMetadata") {
     group = "tibiawalk"
-    description = "Baixa outfits/mounts do Canary e gera src/main/resources/.../metadata.json."
+    description = "Junta TibiaWiki, Canary, staticdata e metadata-overrides.json em metadata.json."
     classpath = sourceSets["main"].runtimeClasspath
     mainClass.set("org.tibiawalk.core.metadata.MetadataBuilder")
     jvmArgs("-Dstdout.encoding=UTF-8", "-Dstderr.encoding=UTF-8")
     val assets = providers.gradleProperty("assets").orElse(providers.environmentVariable("TIBIA_ASSETS"))
     val output = layout.projectDirectory.file("src/main/resources/org/tibiawalk/core/metadata.json").asFile
-    args(assets.getOrElse(""), output.path, providers.gradleProperty("canaryRef").getOrElse("main"))
+    val overrides = layout.projectDirectory.file("metadata-overrides.json").asFile
+    args(assets.getOrElse(""), output.path, providers.gradleProperty("canaryRef").getOrElse("main"), overrides.path)
 }

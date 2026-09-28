@@ -82,10 +82,25 @@ As imagens saem com `Cache-Control` de 1 dia e ficam em cache no servidor; CORS 
 ## Nomes e categorias
 
 O cliente só sabe *desenhar* cada looktype; ele não diz o que é outfit de player, montaria ou criatura, nem os nomes.
-Isso fica em `core/src/main/resources/org/tibiawalk/core/metadata.json`, gerado a partir de:
+Isso fica em `core/src/main/resources/org/tibiawalk/core/metadata.json`, gerado juntando, nesta ordem:
 
-- `data/XML/outfits.xml` e `data/XML/mounts.xml` do [Canary](https://github.com/opentibiabr/canary) (outfits e montarias);
-- `staticdata-*.dat` do cliente (monstros e bosses do Cyclopedia).
+1. [TibiaWiki](https://tibia.fandom.com) (conteúdo CC BY-SA): outfits (`male_id`/`female_id`) e montarias, o mais atualizado;
+2. `outfits.xml` e `mounts.xml` do [Canary](https://github.com/opentibiabr/canary): completa o que faltar e dá o id interno
+   da montaria. Se as fontes discordarem no sexo, vale o Canary (conferido nos sprites), a não ser que ele mesmo dê o
+   mesmo sexo aos dois lados do par;
+3. `staticdata-*.dat` do cliente: monstros e bosses do Cyclopedia;
+4. heurística: looktype sem nome que tem versão montada e cores é outfit de player (`Outfit #1640/1641`); pares
+   consecutivos viram masculino/feminino (menor = masculino, provisório);
+5. [`core/metadata-overrides.json`](core/metadata-overrides.json): correções manuais, com prioridade sobre tudo.
+
+Cada entrada guarda a fonte em `source`. Para nomear um outfit novo ou corrigir um sexo, edite o overrides:
+
+```json
+[
+  {"looktype": 1640, "name": "Nome do outfit", "sex": "male"},
+  {"looktype": 1641, "name": "Nome do outfit", "sex": "female"}
+]
+```
 
 Para atualizar (por exemplo, depois de uma atualização do Tibia):
 
