@@ -5,7 +5,9 @@
  *   <tibia-outfit looktype="Citizen" female addons="3" head="78" body="69" legs="58" feet="76"
  *                 mount="Widow Queen" direction="west" scale="2"></tibia-outfit>
  *
- * Atributos: looktype (número ou nome), female, addons (0-3), head/body/legs/feet (0-132 ou hex),
+ *   <tibia-outfit npc="A Bearded Woman"></tibia-outfit>   (NPC/monstro já com as cores e addons dele)
+ *
+ * Atributos: looktype (número ou nome) ou npc / monster (nome), female, addons (0-3), head/body/legs/feet (0-132 ou hex),
  * mount (número ou nome), direction (north/east/south/west), idle, frame-ms, format (gif/png),
  * scale (ampliação na tela) e server (endereço do servidor; padrão: de onde veio este script).
  */
@@ -15,7 +17,7 @@
   var script = document.currentScript;
   var DEFAULT_SERVER = script && script.src ? new URL(script.src).origin : location.origin;
 
-  var PARAMS = ["looktype", "addons", "head", "body", "legs", "feet", "mount", "direction"];
+  var PARAMS = ["looktype", "npc", "monster", "addons", "head", "body", "legs", "feet", "mount", "direction"];
   var FLAGS = ["female", "idle"];
 
   /** Monta a URL da imagem. params: {looktype, addons, head, ..., female, idle, frameMs, format} */
@@ -89,7 +91,7 @@
     }
 
     _update() {
-      if (!this.hasAttribute("looktype")) {
+      if (!this.hasAttribute("looktype") && !this.hasAttribute("npc") && !this.hasAttribute("monster")) {
         return;
       }
       var next = url(this._params(), this.getAttribute("server"));
@@ -97,7 +99,7 @@
         this._img.style.visibility = "";
         this._img.src = next;
       }
-      var name = this.getAttribute("looktype");
+      var name = this.getAttribute("npc") || this.getAttribute("monster") || this.getAttribute("looktype");
       this._img.alt = "Outfit " + name;
       this._resize();
     }

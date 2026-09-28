@@ -323,8 +323,13 @@ textarea {
 /* Coleção */
 .tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 4px;
+}
+
+.tab {
+  padding: 4px 4px;
+  font-size: 12px;
 }
 
 .search {

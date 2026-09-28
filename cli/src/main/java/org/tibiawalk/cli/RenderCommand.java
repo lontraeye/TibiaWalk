@@ -94,8 +94,7 @@ final class RenderCommand implements Callable<Integer> {
             preset = metadata.character(target.npc, GameCharacter.Kind.NPC)
                     .orElseThrow(() -> new IllegalArgumentException("NPC desconhecido: " + target.npc));
         } else if (target.monster != null) {
-            preset = metadata.character(target.monster, GameCharacter.Kind.MONSTER)
-                    .or(() -> metadata.character(target.monster, GameCharacter.Kind.BOSS))
+            preset = metadata.character(target.monster, GameCharacter.Kind.MONSTER, GameCharacter.Kind.BOSS)
                     .orElseThrow(() -> new IllegalArgumentException("Monstro desconhecido: " + target.monster));
         }
         if (preset != null) {

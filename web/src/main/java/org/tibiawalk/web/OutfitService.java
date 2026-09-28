@@ -4,6 +4,7 @@ import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import org.tibiawalk.core.assets.ClientAssets;
 import org.tibiawalk.core.assets.OutfitInfo;
+import org.tibiawalk.core.metadata.GameCharacter;
 import org.tibiawalk.core.metadata.LooktypeKind;
 import org.tibiawalk.core.metadata.LooktypeMeta;
 import org.tibiawalk.core.metadata.Metadata;
@@ -84,25 +85,28 @@ final class OutfitService {
     }
 
     private Params parse(Context ctx, boolean png) {
+        // npc=/monster= trazem o outfit completo do personagem; parâmetros explícitos sobrescrevem.
+        GameCharacter preset = character(ctx);
         String sex = bool(ctx, "female") ? "female" : "male";
-        int looktype = looktype(required(ctx, "looktype"), null, sex, "looktype");
+        int looktype = preset != null && isBlank(ctx.queryParam("looktype")) ? preset.looktype()
+                : looktype(required(ctx, "looktype"), null, sex, "looktype");
         OutfitInfo info = assets.outfit(looktype);
         if (info == null || info.idle() == null) {
             throw new BadRequestResponse("Looktype não existe no cliente: " + looktype);
         }
 
-        int addons = intParam(ctx, "addons", 0, 0, 3);
+        int addons = intParam(ctx, "addons", preset != null ? preset.addons() : 0, 0, 3);
         String mountParam = ctx.queryParam("mount");
-        int mount = mountParam == null || mountParam.isBlank() ? 0
+        int mount = isBlank(mountParam) ? (preset != null ? preset.mount() : 0)
                 : looktype(mountParam, LooktypeKind.MOUNT, null, "mount");
         if (mount > 0 && assets.outfit(mount) == null) {
             throw new BadRequestResponse("Montaria não existe no cliente: " + mount);
         }
 
-        TibiaColor head = color(ctx, "head", DEFAULT_COLORS[0]);
-        TibiaColor body = color(ctx, "body", DEFAULT_COLORS[1]);
-        TibiaColor legs = color(ctx, "legs", DEFAULT_COLORS[2]);
-        TibiaColor feet = color(ctx, "feet", DEFAULT_COLORS[3]);
+        TibiaColor head = color(ctx, "head", preset != null ? preset.head() : DEFAULT_COLORS[0]);
+        TibiaColor body = color(ctx, "body", preset != null ? preset.body() : DEFAULT_COLORS[1]);
+        TibiaColor legs = color(ctx, "legs", preset != null ? preset.legs() : DEFAULT_COLORS[2]);
+        TibiaColor feet = color(ctx, "feet", preset != null ? preset.feet() : DEFAULT_COLORS[3]);
 
         AnimationType animation = bool(ctx, "idle") || png ? AnimationType.IDLE : AnimationType.MOVING;
         int frameMs = animation == AnimationType.MOVING ? intParam(ctx, "frameMs", 100, 20, 2000) : 0;
@@ -113,6 +117,66 @@ final class OutfitService {
                 .withMount(mount)
                 .withDirection(direction(ctx.queryParam("direction")));
         return new Params(request, animation, frameMs, png);
+    }
+
+    private GameCharacter character(Context ctx) {
+        String npc = ctx.queryParam("npc");
+        String monster = ctx.queryParam("monster");
+        if (!isBlank(npc)) {
+            checkLength(npc, "npc");
+            return metadata.character(npc, GameCharacter.Kind.NPC)
+                    .orElseThrow(() -> new BadRequestResponse("NPC desconhecido: " + npc));
+        }
+        if (!isBlank(monster)) {
+            checkLength(monster, "monster");
+            return metadata.character(monster, GameCharacter.Kind.MONSTER, GameCharacter.Kind.BOSS)
+                    .orElseThrow(() -> new BadRequestResponse("Monstro desconhecido: " + monster));
+        }
+        return null;
+    }
+
+    private static boolean isBlank(String value) {
+        return value == null || value.isBlank();
+    }
+
+    private static void checkLength(String value, String param) {
+        if (value.length() > 64) {
+            throw new BadRequestResponse(param + " muito longo");
+        }
+    }
+
+    /** Personagens para a interface, com o que o looktype deles suporta. */
+    List<Map<String, Object>> characters(String kind, String query) {
+        String q = query == null ? "" : query.trim().toLowerCase(Locale.ROOT);
+        boolean npcs = "npc".equalsIgnoreCase(kind);
+        List<Map<String, Object>> result = new ArrayList<>();
+        for (GameCharacter c : metadata.characters()) {
+            if (kind != null && !kind.isBlank() && npcs != (c.kind() == GameCharacter.Kind.NPC)) {
+                continue;
+            }
+            if (!q.isEmpty() && !c.name().toLowerCase(Locale.ROOT).contains(q)) {
+                continue;
+            }
+            OutfitInfo info = assets.outfit(c.looktype());
+            if (info == null || info.idle() == null) {
+                continue;
+            }
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("name", c.name());
+            row.put("kind", c.kind().name().toLowerCase(Locale.ROOT));
+            row.put("looktype", c.looktype());
+            row.put("head", c.head());
+            row.put("body", c.body());
+            row.put("legs", c.legs());
+            row.put("feet", c.feet());
+            row.put("addons", c.addons());
+            row.put("mount", c.mount());
+            row.put("addonCount", info.addonCount());
+            row.put("mountable", info.mountable());
+            row.put("colorable", info.colorable());
+            result.add(row);
+        }
+        return result;
     }
 
     private int looktype(String value, LooktypeKind kind, String sex, String param) {

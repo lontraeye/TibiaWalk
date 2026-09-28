@@ -98,21 +98,24 @@ public final class Metadata {
     }
 
     /**
-     * Personagem pelo nome (sem diferenciar maiúsculas); exato primeiro, depois "começa com".
+     * Personagem pelo nome (sem diferenciar maiúsculas): nome exato em qualquer um dos tipos primeiro,
+     * só depois "começa com". Assim "Ferumbras" acha o boss, e não o monstro "Ferumbras Essence".
      *
-     * @param kind null aceita qualquer tipo
+     * @param kinds tipos aceitos; vazio aceita qualquer um
      */
-    public Optional<GameCharacter> character(String name, GameCharacter.Kind kind) {
+    public Optional<GameCharacter> character(String name, GameCharacter.Kind... kinds) {
         String wanted = name.trim().toLowerCase(Locale.ROOT);
+        java.util.Set<GameCharacter.Kind> accepted = kinds.length == 0
+                ? java.util.EnumSet.allOf(GameCharacter.Kind.class) : java.util.EnumSet.copyOf(java.util.List.of(kinds));
         Optional<GameCharacter> exact = characters.stream()
-                .filter(c -> kind == null || c.kind() == kind)
+                .filter(c -> accepted.contains(c.kind()))
                 .filter(c -> c.name().toLowerCase(Locale.ROOT).equals(wanted))
                 .findFirst();
         if (exact.isPresent()) {
             return exact;
         }
         return characters.stream()
-                .filter(c -> kind == null || c.kind() == kind)
+                .filter(c -> accepted.contains(c.kind()))
                 .filter(c -> c.name().toLowerCase(Locale.ROOT).startsWith(wanted))
                 .findFirst();
     }

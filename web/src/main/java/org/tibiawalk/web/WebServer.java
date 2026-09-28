@@ -51,6 +51,7 @@ public final class WebServer {
         app.get("/api/looktypes", ctx -> json(ctx, service.looktypes(
                 ctx.queryParam("kind"), ctx.queryParam("sex"), ctx.queryParam("q"))));
         app.get("/api/mounts", ctx -> json(ctx, service.looktypes("mount", null, ctx.queryParam("q"))));
+        app.get("/api/characters", ctx -> json(ctx, service.characters(ctx.queryParam("kind"), ctx.queryParam("q"))));
         app.get("/api/palette", ctx -> json(ctx, service.palette()));
         app.get("/api/info", ctx -> json(ctx, service.info()));
 
@@ -72,9 +73,18 @@ public final class WebServer {
 
     private static void image(Context ctx, OutfitService service, boolean png) throws Exception {
         OutfitService.Rendered rendered = service.render(ctx, png);
-        ctx.header("Cache-Control", "public, max-age=86400");
+        // Por nome (npc=Rashid, looktype=Citizen) o resultado pode mudar quando o metadata for atualizado;
+        // só com números a imagem é fixa para a versão do cliente.
+        boolean byName = ctx.queryParam("npc") != null || ctx.queryParam("monster") != null
+                || !numeric(ctx.queryParam("looktype")) || !numeric(ctx.queryParam("mount"));
+        ctx.header("Cache-Control", byName ? "public, max-age=3600" : "public, max-age=86400");
         ctx.contentType(rendered.contentType());
         ctx.result(rendered.bytes());
+    }
+
+    /** Ausente ou só dígitos. */
+    private static boolean numeric(String value) {
+        return value == null || value.isBlank() || value.trim().chars().allMatch(Character::isDigit);
     }
 
     private static void json(Context ctx, Object value) {

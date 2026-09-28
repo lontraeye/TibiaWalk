@@ -22,6 +22,7 @@
   var palette = [];
   var outfits = [];  // [{name, male, female, addons, mountable, colorable}]
   var mounts = [];   // [{looktype, name}]
+  var characters = { npcs: null, monsters: null }; // carregados na primeira vez que a aba abre
   var tab = "outfits";
 
   function looktype() {
@@ -130,8 +131,8 @@
     $("outfit-name").textContent = o.name;
     setPressed($("sex-male"), state.sex === "male");
     setPressed($("sex-female"), state.sex === "female");
-    $("sex-male").disabled = !o.male;
-    $("sex-female").disabled = !o.female;
+    $("sex-male").disabled = !o.male || !!o.character;
+    $("sex-female").disabled = !o.female || !!o.character;
 
     $("addon1").disabled = o.addons < 1;
     $("addon2").disabled = o.addons < 2;
@@ -223,7 +224,71 @@
     });
   }
 
+  /** Personagem vira um "outfit" avulso, já vestido com as cores, addons e montaria dele. */
+  function applyCharacter(c) {
+    state.outfit = {
+      name: c.name, male: c.looktype, female: c.looktype, addons: c.addonCount,
+      mountable: c.mountable, colorable: c.colorable, character: c
+    };
+    state.addons = c.addons;
+    state.colors = [c.head, c.body, c.legs, c.feet];
+    state.mountOn = c.mount > 0 && c.mountable;
+    if (c.mount > 0) state.mount = c.mount;
+  }
+
+  function renderCharacterTiles(list) {
+    var q = $("search").value.trim().toLowerCase();
+    var tiles = $("tiles");
+    tiles.innerHTML = "";
+    if (!list) {
+      tiles.innerHTML = '<div class="empty">Carregando…</div>';
+      return;
+    }
+    var items = list.filter(function (c) { return !q || c.name.toLowerCase().indexOf(q) >= 0; });
+    if (!items.length) {
+      tiles.innerHTML = '<div class="empty">Nada encontrado</div>';
+      return;
+    }
+    var fragment = document.createDocumentFragment();
+    items.forEach(function (c) {
+      var tile = document.createElement("button");
+      tile.className = "btn tile";
+      tile.classList.toggle("active", !!(state.outfit && state.outfit.character === c));
+      tile.title = c.name + (c.kind === "boss" ? " (boss)" : "") + " — looktype " + c.looktype;
+      var img = document.createElement("img");
+      img.loading = "lazy";
+      img.alt = "";
+      img.src = TibiaWalk.url({
+        looktype: c.looktype, addons: c.addons, head: c.head, body: c.body, legs: c.legs, feet: c.feet,
+        idle: true, format: "png"
+      });
+      var label = document.createElement("span");
+      label.textContent = (c.kind === "boss" ? "★ " : "") + c.name;
+      tile.appendChild(img);
+      tile.appendChild(label);
+      tile.addEventListener("click", function () {
+        applyCharacter(c);
+        render();
+        renderTiles();
+      });
+      fragment.appendChild(tile);
+    });
+    tiles.appendChild(fragment);
+  }
+
   function renderTiles() {
+    if (tab === "npcs" || tab === "monsters") {
+      if (!characters[tab]) {
+        renderCharacterTiles(null);
+        getJson("api/characters?kind=" + (tab === "npcs" ? "npc" : "monster")).then(function (list) {
+          characters[tab] = list;
+          renderTiles();
+        });
+        return;
+      }
+      renderCharacterTiles(characters[tab]);
+      return;
+    }
     var q = $("search").value.trim().toLowerCase();
     var tiles = $("tiles");
     tiles.innerHTML = "";

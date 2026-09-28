@@ -26,11 +26,17 @@ java -jar cli/build/libs/tibiawalk.jar info "Midnight Panther"
 java -jar cli/build/libs/tibiawalk.jar list --players --female --with-addons
 java -jar cli/build/libs/tibiawalk.jar list --mounts --json
 java -jar cli/build/libs/tibiawalk.jar list -s dragon
+java -jar cli/build/libs/tibiawalk.jar render --npc "A Bearded Woman"          # NPC com as cores e addons dele
+java -jar cli/build/libs/tibiawalk.jar render --monster "Black Knight" --head 0 # preset + ajuste
+java -jar cli/build/libs/tibiawalk.jar list --npcs -s rashid
+java -jar cli/build/libs/tibiawalk.jar list --monsters --json
 ```
 
 - Cores: índice da paleta do jogo (`0`–`132`, o mesmo que `lookHead` etc. no servidor) ou hex (`ff0000`).
 - Addons: `0` nenhum, `1` primeiro, `2` segundo, `3` ambos.
 - Outfits e montarias aceitam número ou nome; com nome de outfit de player, `--female` escolhe a versão feminina.
+- `--npc` / `--monster` usam o outfit completo do personagem (looktype, cores, addons, montaria); qualquer opção
+  informada junto sobrescreve o que vem dele. Monstro inclui bosses.
 - Sem `-o`, a saída vai para `generated/`.
 
 ## Desktop
@@ -64,7 +70,7 @@ então dá para compartilhar o link de um outfit montado.
               mount="Widow Queen" direction="west" scale="2"></tibia-outfit>
 ```
 
-Atributos: `looktype` (número ou nome), `female`, `addons`, `head`/`body`/`legs`/`feet` (0–132 ou hex), `mount`
+Atributos: `looktype` (número ou nome) ou `npc` / `monster` (nome, já com o outfit do personagem), `female`, `addons`, `head`/`body`/`legs`/`feet` (0–132 ou hex), `mount`
 (número ou nome), `direction`, `idle`, `frame-ms`, `format` (`gif`/`png`), `scale` e `server`.
 Em caso de erro o elemento dispara o evento `tibiawalk-error` com a mensagem em `event.detail`.
 
@@ -75,9 +81,11 @@ Em caso de erro o elemento dispara o evento `tibiawalk-error` com a mensagem em 
 | `GET /api/outfit.gif?looktype=…` | GIF animado (mesmos parâmetros do componente; `frameMs` em vez de `frame-ms`) |
 | `GET /api/outfit.png?looktype=…` | PNG parado |
 | `GET /api/looktypes?kind=player\|mount\|creature\|unknown&sex=male\|female&q=…` | lista com nome e capacidades |
+| `GET /api/characters?kind=npc\|monster&q=…` | NPCs ou monstros/bosses com o outfit completo |
 | `GET /api/mounts`, `GET /api/palette`, `GET /api/info` | montarias, as 133 cores, versão dos dados |
 
-As imagens saem com `Cache-Control` de 1 dia e ficam em cache no servidor; CORS liberado para qualquer site.
+As imagens aceitam `npc=`/`monster=` no lugar de `looktype=`. Saem com `Cache-Control` de 1 dia (1 hora quando
+a URL usa nomes, que podem mudar numa atualização do metadata) e ficam em cache no servidor; CORS liberado.
 
 ## Nomes e categorias
 
@@ -88,12 +96,16 @@ Isso fica em `core/src/main/resources/org/tibiawalk/core/metadata.json`, gerado 
 2. `outfits.xml` e `mounts.xml` do [Canary](https://github.com/opentibiabr/canary): completa o que faltar e dá o id interno
    da montaria. Se as fontes discordarem no sexo, vale o Canary (conferido nos sprites), a não ser que ele mesmo dê o
    mesmo sexo aos dois lados do par;
-3. `staticdata-*.dat` do cliente: monstros e bosses do Cyclopedia;
+3. `staticdata-*.dat` do cliente: monstros e bosses do Cyclopedia (também com cores e addons, para a lista de
+   personagens);
 4. arquivos de monstros e NPCs do Canary (`*/monster/**.lua`, `*/npc/**.lua`): nomeia criaturas fora do bestiário e
    NPCs (categoria própria, `list --npcs`);
 5. heurística: looktype sem nome que tem versão montada e cores é outfit de player (`Outfit #1640/1641`); pares
    consecutivos viram masculino/feminino (menor = masculino, provisório);
 6. [`core/metadata-overrides.json`](core/metadata-overrides.json): correções manuais, com prioridade sobre tudo.
+
+Além dos looktypes, o arquivo tem uma lista `characters`: NPCs, monstros e bosses com o outfit completo
+(looktype, cores, addons, montaria), usada por `--npc`/`--monster` e pelas abas de NPCs e monstros.
 
 Cada entrada guarda a fonte em `source`. Para nomear um outfit novo ou corrigir um sexo, edite o overrides:
 
@@ -127,5 +139,5 @@ Looktypes que ainda não estão no Canary continuam renderizando normalmente, s�
 
 - `core`: leitura do `catalog-content.json`, `appearances.dat` (protobuf) e das folhas `sprites-*.bmp.lzma`; renderização e GIF.
 - `cli`: linha de comando.
-- `desktop`: interface Swing.
+- `desktop`: interface Swing (categorias de outfits, montarias, NPCs e monstros/bosses).
 - `web`: servidor HTTP (Javalin), página de outfitter e o componente `<tibia-outfit>`.
