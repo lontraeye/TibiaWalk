@@ -33,6 +33,19 @@ java -jar cli/build/libs/tibiawalk.jar list -s dragon
 - Outfits e montarias aceitam número ou nome; com nome de outfit de player, `--female` escolhe a versão feminina.
 - Sem `-o`, a saída vai para `generated/`.
 
+## Desktop
+
+```bash
+./gradlew :desktop:fatJar                   # gera desktop/build/libs/tibiawalk-desktop.jar
+java -jar desktop/build/libs/tibiawalk-desktop.jar   # ou duplo clique no jar
+```
+
+Na primeira vez ele procura a pasta do cliente (`TIBIA_ASSETS`, `%LOCALAPPDATA%\Tibia\...`) e, se não achar,
+pergunta. Pode apontar para a pasta de instalação do launcher, não precisa ser a `assets` exata; a escolha fica salva.
+
+Lista com busca (por nome, alias ou número) e filtro por categoria, preview animado, addons, cores da paleta do jogo
+ou hex livre, montaria, direção, velocidade, botão "Aleatório" e exportação em GIF/PNG.
+
 ## Nomes e categorias
 
 O cliente só sabe *desenhar* cada looktype; ele não diz o que é outfit de player, montaria ou criatura, nem os nomes.
@@ -53,3 +66,4 @@ Looktypes que ainda não estão no Canary continuam renderizando normalmente, s�
 
 - `core`: leitura do `catalog-content.json`, `appearances.dat` (protobuf) e das folhas `sprites-*.bmp.lzma`; renderização e GIF.
 - `cli`: linha de comando.
+- `desktop`: interface Swing.
