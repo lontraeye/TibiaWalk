@@ -83,7 +83,11 @@
           <button class="btn tab" data-tab="npcs" role="tab" aria-selected="false">NPCs</button>
           <button class="btn tab" data-tab="monsters" role="tab" aria-selected="false">Monstros</button>
         </div>
-        <input type="search" class="search inset" id="search" placeholder="Buscar…" spellcheck="false">
+        <div class="search-row">
+          <input type="search" class="search inset" id="search" placeholder="Buscar…" spellcheck="false">
+          <button class="btn toggle" id="boss-only" aria-pressed="false" hidden
+                  title="Mostrar só os bosses">★ Só bosses</button>
+        </div>
         <div class="tiles inset" id="tiles"></div>
       </div>
     </section>

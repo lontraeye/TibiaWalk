@@ -24,6 +24,7 @@
   var mounts = [];   // [{looktype, name}]
   var characters = { npcs: null, monsters: null }; // carregados na primeira vez que a aba abre
   var tab = "outfits";
+  var bossOnly = false; // aba Monstros: mostrar só bosses
 
   function looktype() {
     var o = state.outfit;
@@ -134,11 +135,11 @@
     $("sex-male").disabled = !o.male || !!o.character;
     $("sex-female").disabled = !o.female || !!o.character;
 
-    // Addon de NPC é fixo: as caixas mostram o que ele usa, mas não mudam.
-    var npc = !!(o.character && o.character.kind === "npc");
-    $("addon1").disabled = o.addons < 1 || npc;
-    $("addon2").disabled = o.addons < 2 || npc;
-    var target = npc ? playerOutfitOf(o.character) : null;
+    // Addon de NPC/monstro é fixo: as caixas mostram o que ele usa, mas não mudam.
+    var character = !!o.character;
+    $("addon1").disabled = o.addons < 1 || character;
+    $("addon2").disabled = o.addons < 2 || character;
+    var target = character ? playerOutfitOf(o.character) : null;
     $("goto-outfit").hidden = !target;
     if (target) $("goto-outfit").textContent = "Ir para o outfit: " + target.name;
     $("addon1").checked = (state.addons & 1) !== 0;
@@ -241,12 +242,12 @@
     if (c.mount > 0) state.mount = c.mount;
   }
 
-  /** O outfit de player com o mesmo looktype do NPC, se houver. */
+  /** O outfit de player com o mesmo looktype do NPC/monstro, se houver. */
   function playerOutfitOf(c) {
     return outfits.find(function (g) { return g.male === c.looktype || g.female === c.looktype; }) || null;
   }
 
-  /** Vai para o outfit de player que o NPC veste, mantendo cores e addons. */
+  /** Vai para o outfit de player que o NPC/monstro veste, mantendo cores e addons. */
   function goToPlayerOutfit() {
     var c = state.outfit && state.outfit.character;
     var target = c ? playerOutfitOf(c) : null;
@@ -270,7 +271,9 @@
       tiles.innerHTML = '<div class="empty">Carregando…</div>';
       return;
     }
-    var items = list.filter(function (c) { return !q || c.name.toLowerCase().indexOf(q) >= 0; });
+    var items = list.filter(function (c) {
+      return (!q || c.name.toLowerCase().indexOf(q) >= 0) && (!bossOnly || tab !== "monsters" || c.kind === "boss");
+    });
     if (!items.length) {
       tiles.innerHTML = '<div class="empty">Nada encontrado</div>';
       return;
@@ -303,6 +306,7 @@
   }
 
   function renderTiles() {
+    $("boss-only").hidden = tab !== "monsters";
     if (tab === "npcs" || tab === "monsters") {
       if (!characters[tab]) {
         renderCharacterTiles(null);
@@ -426,6 +430,11 @@
     $("rotate-right").addEventListener("click", function () { state.direction = (state.direction + 1) % 4; render(); });
     $("randomize").addEventListener("click", randomize);
     $("goto-outfit").addEventListener("click", goToPlayerOutfit);
+    $("boss-only").addEventListener("click", function () {
+      bossOnly = !bossOnly;
+      $("boss-only").setAttribute("aria-pressed", String(bossOnly));
+      renderTiles();
+    });
     document.querySelectorAll(".part").forEach(function (button) {
       button.addEventListener("click", function () { state.part = +button.dataset.part; render(); });
     });

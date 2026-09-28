@@ -336,8 +336,19 @@ textarea {
   font-size: 12px;
 }
 
+.search-row {
+  display: flex;
+  gap: 4px;
+}
+
 .search {
   width: 100%;
+  min-width: 0;
+  flex: 1;
+}
+
+#boss-only {
+  white-space: nowrap;
 }
 
 .tiles {

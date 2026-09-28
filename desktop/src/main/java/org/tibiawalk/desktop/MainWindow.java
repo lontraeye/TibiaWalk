@@ -137,7 +137,7 @@ final class MainWindow extends JFrame {
 
     private final JCheckBox addon1 = new JCheckBox("Addon 1");
     private final JCheckBox addon2 = new JCheckBox("Addon 2");
-    /** Em NPC vestido com um outfit de player: pula para esse outfit, mantendo cores e addons. */
+    /** Em NPC/monstro vestido com um outfit de player: pula para esse outfit, mantendo cores e addons. */
     private final JButton goToOutfit = new JButton("Ir para o outfit");
     private final ColorButton head = new ColorButton("Cabeça", c -> refresh());
     private final ColorButton body = new ColorButton("Corpo", c -> refresh());
@@ -298,7 +298,7 @@ final class MainWindow extends JFrame {
         addon1.addActionListener(e -> refresh());
         addon2.addActionListener(e -> refresh());
         goToOutfit.setEnabled(false);
-        goToOutfit.setToolTipText("Disponível em NPCs que usam um outfit de player");
+        goToOutfit.setToolTipText("Disponível em NPCs e monstros que usam um outfit de player");
         goToOutfit.addActionListener(e -> goToPlayerOutfit());
         panel.add(section("Addons", addon1, addon2, goToOutfit));
 
@@ -464,13 +464,13 @@ final class MainWindow extends JFrame {
         if (entry.character() != null) {
             applyPreset(entry.character(), info);
         }
-        boolean npc = entry.character() != null && entry.character().kind() == GameCharacter.Kind.NPC;
-        if (npc) {
-            // Addon de NPC é fixo: as caixas mostram o que ele usa, mas não mudam.
+        boolean character = entry.character() != null;
+        if (character) {
+            // Addon de NPC/monstro é fixo: as caixas mostram o que ele usa, mas não mudam.
             addon1.setEnabled(false);
             addon2.setEnabled(false);
         }
-        Entry outfit = npc ? playerOutfitOf(entry) : null;
+        Entry outfit = character ? playerOutfitOf(entry) : null;
         goToOutfit.setEnabled(outfit != null);
         goToOutfit.setText(outfit != null ? "Ir para o outfit: " + outfit.name() : "Ir para o outfit");
         adjusting = false;
