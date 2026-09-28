@@ -10,3 +10,7 @@
 # Binary files should be left untouched
 *.jar           binary
 
+
+# Scripts e units que rodam no Linux (deploy) precisam de LF
+*.sh            text eol=lf
+*.service       text eol=lf

@@ -1,0 +1,32 @@
+// Parte do staticdata-*.dat do cliente (dados do Cyclopedia), deduzida com protoc --decode_raw.
+// Só monstros e bosses; as demais seções (achievements, casas, quests...) são ignoradas.
+syntax = "proto2";
+
+package tibiawalk.staticdata;
+
+option java_package = "org.tibiawalk.core.proto";
+option java_outer_classname = "StaticDataProto";
+
+message StaticData {
+	repeated Creature monster = 1;
+	repeated Creature boss = 5;
+}
+
+message Creature {
+	optional uint32 id = 1;
+	optional string name = 2;
+	optional CreatureOutfit outfit = 3;
+}
+
+message CreatureOutfit {
+	optional uint32 looktype = 1;
+	optional OutfitColors colors = 2;
+	optional uint32 addons = 3;
+}
+
+message OutfitColors {
+	optional uint32 head = 1;
+	optional uint32 body = 2;
+	optional uint32 legs = 3;
+	optional uint32 feet = 4;
+}

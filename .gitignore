@@ -3,3 +3,10 @@
 
 # Ignore Gradle build output directory
 build
+
+# Saída de build das IDEs (VS Code / Eclipse / IntelliJ)
+bin
+out
+
+# Imagens e GIFs gerados pelas ferramentas
+generated

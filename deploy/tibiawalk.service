@@ -1,0 +1,23 @@
+[Unit]
+Description=TibiaWalk web (outfitter e API de imagens)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=tibiawalk
+Group=tibiawalk
+EnvironmentFile=/etc/tibiawalk.env
+# $JAVA_OPTS sem chaves: o systemd separa as opções por espaço.
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /opt/tibiawalk/tibiawalk-web.jar
+Restart=on-failure
+RestartSec=5
+
+# O serviço só lê o jar e os assets; o resto do sistema fica fora do alcance dele.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadOnlyPaths=/opt/tibiawalk
+
+[Install]
+WantedBy=multi-user.target

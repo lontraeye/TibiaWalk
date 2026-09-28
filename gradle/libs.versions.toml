@@ -4,7 +4,23 @@
 [versions]
 guava = "33.1.0-jre"
 junit-jupiter = "5.10.2"
+protobuf = "3.25.5"
+gradle-protobuf = "0.9.4"
+gson = "2.11.0"
+xz = "1.10"
+picocli = "4.7.6"
+javalin = "6.7.0"
+slf4j = "2.0.20"
 
 [libraries]
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf" }
+xz = { module = "org.tukaani:xz", version.ref = "xz" }
+picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
+javalin = { module = "io.javalin:javalin", version.ref = "javalin" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+[plugins]
+protobuf = { id = "com.google.protobuf", version.ref = "gradle-protobuf" }
